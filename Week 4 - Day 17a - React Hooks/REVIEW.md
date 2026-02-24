@@ -105,6 +105,111 @@ const filtered = items.filter(i => i.inStock);
 
 ---
 
+## useReducer
+
+`useReducer` is an alternative to `useState` for managing **complex state logic** — especially when multiple action types modify the same state object, or when the next state depends on previous state through conditional logic.
+
+### Basic Syntax
+
+```jsx
+import { useReducer } from 'react';
+
+// 1. Define the reducer — pure function: (currentState, action) => nextState
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment': return { count: state.count + 1 };
+    case 'decrement': return { count: state.count - 1 };
+    case 'reset':     return { count: 0 };
+    default: throw new Error(`Unknown action: ${action.type}`);
+  }
+}
+
+// 2. Wire it up
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+  //     ↑ state      ↑ dispatch fn   ↑ reducer  ↑ initial state
+
+  return (
+    <>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>−</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </>
+  );
+}
+```
+
+- `useReducer(reducer, initialState)` returns `[state, dispatch]`
+- `dispatch({ type: 'ACTION_TYPE', payload: data })` triggers a state transition
+- The reducer must be **pure** — never mutate state, always return a new object
+
+### useState vs useReducer
+
+| | `useState` | `useReducer` |
+|---|---|---|
+| Best for | Simple, independent values | Related state with multiple transition types |
+| Update logic | Inline setters | Centralized reducer function |
+| Testing | Test component directly | Reducer is a plain function — easy to unit test |
+| Traceability | Hard to trace state changes | Action types make transitions explicit |
+
+**Rule of thumb:** If you find yourself writing 3+ `useState` calls that always change together, or if setter logic has conditionals, reach for `useReducer`.
+
+### Real-World Pattern — Form State with Loading and Errors
+
+```jsx
+const initialState = { name: '', email: '', loading: false, error: null };
+
+function formReducer(state, action) {
+  switch (action.type) {
+    case 'SET_FIELD':
+      return { ...state, [action.field]: action.value };
+    case 'SUBMIT_START':
+      return { ...state, loading: true, error: null };
+    case 'SUBMIT_SUCCESS':
+      return initialState;  // reset everything
+    case 'SUBMIT_ERROR':
+      return { ...state, loading: false, error: action.error };
+    default:
+      return state;
+  }
+}
+
+function SignupForm() {
+  const [state, dispatch] = useReducer(formReducer, initialState);
+
+  const handleChange = (e) =>
+    dispatch({ type: 'SET_FIELD', field: e.target.name, value: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch({ type: 'SUBMIT_START' });
+    try {
+      await api.post('/users', { name: state.name, email: state.email });
+      dispatch({ type: 'SUBMIT_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'SUBMIT_ERROR', error: err.message });
+    }
+  };
+}
+```
+
+⚠️ **Never mutate state in the reducer:**
+```jsx
+// ❌ Mutation — React won't detect the change
+function reducer(state, action) {
+  state.count++;   // mutates existing object
+  return state;
+}
+
+// ✅ Return a new object every time
+function reducer(state, action) {
+  return { ...state, count: state.count + 1 };
+}
+```
+
+---
+
 ## useEffect
 
 ### Dependency Array: Three Configurations
@@ -629,6 +734,10 @@ function NotesApp() {
 // State
 const [value, setValue] = useState(initialValue);
 const [value, setValue] = useState(() => expensiveInit()); // lazy
+
+// Reducer (for complex state with multiple transition types)
+const [state, dispatch] = useReducer(reducer, initialState);
+dispatch({ type: 'ACTION_TYPE', payload: data });
 
 // Effects
 useEffect(() => { /* side effect */ });              // every render
