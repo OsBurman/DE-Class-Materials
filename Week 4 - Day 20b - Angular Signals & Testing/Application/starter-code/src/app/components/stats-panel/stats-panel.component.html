@@ -1,0 +1,26 @@
+<!-- stats-panel.component.html -->
+<div class="stats-panel">
+  <h2>Statistics</h2>
+
+  <!-- TODO Task 4: Display current count, doubled, isPositive text -->
+  <!-- isPositive → show "Positive" / "Zero or Negative" conditionally -->
+  <div class="stat-row">
+    <span>Current:</span>
+    <strong>{{ counterService.count() }}</strong>
+  </div>
+  <div class="stat-row">
+    <span>Doubled:</span>
+    <strong>{{ counterService.doubled() }}</strong>
+  </div>
+  <div class="stat-row">
+    <span>Status:</span>
+    <!-- TODO Task 4: Use *ngIf to show "Positive" or "Zero or Negative" based on isPositive() -->
+    <strong>--</strong>
+  </div>
+
+  <!-- TODO Task 4: Show history — last 5 values from counterService.history() -->
+  <h3>History (last 5)</h3>
+  <ul>
+    <!-- TODO: *ngFor over counterService.history().slice(-5) -->
+  </ul>
+</div>

@@ -1,0 +1,41 @@
+# Kubernetes — Service + HorizontalPodAutoscaler
+# TODO Task 6: Complete the Service and HPA
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: academy-app-service
+  namespace: academy
+spec:
+  # TODO Task 6a: Choose selector — must match Deployment labels
+  selector:
+    app: academy-app
+  # TODO Task 6b: Choose type — ClusterIP (internal) or LoadBalancer (external)
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+# TODO Task 6c: HorizontalPodAutoscaler — scale between 2 and 5 pods based on CPU
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: academy-app-hpa
+  namespace: academy
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: academy-app
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70

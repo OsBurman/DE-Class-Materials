@@ -1,0 +1,115 @@
+# Test Queries for GraphiQL — Day 31
+# Visit: http://localhost:8080/graphiql after running mvn spring-boot:run
+
+# -----------------------------------------------
+# QUERY 1: Get all books (basic)
+# -----------------------------------------------
+query GetAllBooks {
+  books {
+    id
+    title
+    genre
+    publishedYear
+  }
+}
+
+# -----------------------------------------------
+# QUERY 2: Get a book with nested author
+# -----------------------------------------------
+query GetBookWithAuthor {
+  book(id: "1") {
+    id
+    title
+    author {
+      id
+      name
+      bio
+    }
+    reviews {
+      rating
+      comment
+      reviewer
+    }
+    averageRating
+  }
+}
+
+# -----------------------------------------------
+# QUERY 3: Get all authors with their books
+# -----------------------------------------------
+query GetAuthorsWithBooks {
+  authors {
+    id
+    name
+    books {
+      id
+      title
+      publishedYear
+    }
+  }
+}
+
+# -----------------------------------------------
+# QUERY 4: Search books by title
+# -----------------------------------------------
+query SearchBooks {
+  searchBooks(titleContains: "the") {
+    id
+    title
+    genre
+  }
+}
+
+# -----------------------------------------------
+# MUTATION 1: Add a new book
+# -----------------------------------------------
+mutation AddBook {
+  addBook(input: {
+    title: "Animal Farm"
+    genre: "Satire"
+    publishedYear: 1945
+    authorId: "2"
+  }) {
+    id
+    title
+    author {
+      name
+    }
+  }
+}
+
+# -----------------------------------------------
+# MUTATION 2: Add a review
+# -----------------------------------------------
+mutation AddReview {
+  addReview(bookId: "1", input: {
+    rating: 5
+    comment: "Absolutely brilliant"
+    reviewer: "Charlie"
+  }) {
+    id
+    rating
+    comment
+    reviewer
+  }
+}
+
+# -----------------------------------------------
+# MUTATION 3: Update a book
+# -----------------------------------------------
+mutation UpdateBook {
+  updateBook(id: "2", input: {
+    genre: "Children's Fantasy"
+  }) {
+    id
+    title
+    genre
+  }
+}
+
+# -----------------------------------------------
+# MUTATION 4: Delete a book
+# -----------------------------------------------
+mutation DeleteBook {
+  deleteBook(id: "4")
+}

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: graphql-books
+  graphql:
+    graphiql:
+      enabled: true      # Visit http://localhost:8080/graphiql
+    schema:
+      printer:
+        enabled: true
+server:
+  port: 8080

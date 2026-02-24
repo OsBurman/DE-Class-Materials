@@ -1,0 +1,31 @@
+# Production profile configuration
+# Active when: -Dspring.profiles.active=prod
+# In AWS/Kubernetes, set SPRING_PROFILES_ACTIVE=prod environment variable
+
+server:
+  port: ${PORT:8080}  # Allow PORT env variable override (Heroku/EB style)
+
+# TODO Task 6: Add prod-specific settings
+# - Never show health details (security)
+# - Only expose health endpoint
+# - Set logging level to WARN (reduce noise)
+# - Tighten task limits
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health  # minimal exposure in prod
+  endpoint:
+    health:
+      show-details: never
+
+logging:
+  level:
+    root: WARN
+    com.academy: INFO
+
+app:
+  environment: production
+  tasks:
+    max-per-user: 20  # stricter limit in prod

@@ -1,0 +1,48 @@
+# .github/workflows/pr-checks.yml — Day 37 CI/CD
+# TODO Task 3: Complete the PR quality checks workflow
+
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # TODO Task 3a: Run Checkstyle
+      # run: mvn checkstyle:check -B
+
+      # TODO Task 3b: Run SpotBugs static analysis
+      # run: mvn spotbugs:check -B
+
+      # Placeholder
+      - name: Format check (placeholder)
+        run: mvn validate -B
+
+  # TODO Task 3c: Add a second job that checks if PR description is not empty
+  # Hint: use GitHub context — ${{ github.event.pull_request.body }}
+  pr-description:
+    name: PR Description Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR body
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [ -z "$PR_BODY" ]; then
+            echo "❌ PR description is empty. Please describe your changes."
+            exit 1
+          else
+            echo "✅ PR description present."
+          fi

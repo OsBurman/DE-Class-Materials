@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: aws-app
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+server:
+  port: ${PORT:8080}   # PORT env var used by Elastic Beanstalk
+
+# AWS configuration — loaded from environment variables (never hardcode keys!)
+aws:
+  region: ${AWS_REGION:us-east-1}
+  s3:
+    bucket: ${S3_BUCKET_NAME:your-bucket-name-here}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,31 @@
+# Development profile configuration
+# Active when: -Dspring.profiles.active=dev
+
+server:
+  port: 8080
+
+# TODO Task 6: Add dev-specific settings
+# - Show full health details
+# - Enable all Actuator endpoints
+# - Set logging level to DEBUG for com.academy package
+# - Add a banner message or custom property
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # expose ALL actuator endpoints in dev
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.academy: DEBUG
+    org.springframework.web: DEBUG
+
+# Custom property to identify the environment
+app:
+  environment: development
+  tasks:
+    max-per-user: 100  # generous limit in dev

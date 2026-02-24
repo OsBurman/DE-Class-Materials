@@ -1,0 +1,24 @@
+<!-- news-feed.component.html -->
+<div class="news-page">
+  <header class="news-header">
+    <h1>📰 News Feed</h1>
+  </header>
+
+  <!-- Category filter — listen for categoryChange @Output event -->
+  <app-category-filter
+    [selectedCategory]="selectedCategory"
+    (categoryChange)="onCategoryChange($event)"
+  ></app-category-filter>
+
+  <!-- TODO Task 5: Show spinner while loading$ | async is true -->
+  <!-- <div *ngIf="newsService.loading$ | async" class="spinner">Loading...</div> -->
+
+  <!-- TODO Task 5: Render article cards using async pipe
+       <app-article-card
+         *ngFor="let article of newsService.articles$ | async"
+         [article]="article"
+       ></app-article-card>
+  -->
+  <!-- Remove this placeholder when you implement the *ngFor above -->
+  <p class="placeholder">Add your async pipe + *ngFor here</p>
+</div>

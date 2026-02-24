@@ -1,0 +1,25 @@
+<!-- TODO Task 5: Build the product card template -->
+<div class="product-card">
+  <!-- TODO: Property bind [src] and [alt] on the image -->
+  <!-- <img [src]="product.imageUrl" [alt]="product.name" /> -->
+
+  <!-- TODO Task 7: *ngSwitch on product.category for badge color -->
+  <!-- <span *ngSwitch="product.category">
+    <span *ngSwitchCase="'Electronics'" class="badge blue">Electronics</span>
+    <span *ngSwitchCase="'Clothing'" class="badge green">Clothing</span>
+    <span *ngSwitchCase="'Books'" class="badge yellow">Books</span>
+    <span *ngSwitchDefault class="badge gray">Other</span>
+  </span> -->
+
+  <!-- TODO: Interpolation for name and description -->
+  <h3>Product Name</h3>
+  <p>Description</p>
+
+  <!-- TODO: Use the currencyFormat pipe for price -->
+  <!-- <p class="price">{{ product.price | currencyFormat }}</p> -->
+
+  <!-- TODO Task 5: "Add to Cart" button — [disabled]="isInCart", (click)="onAdd()" -->
+  <button>Add to Cart</button>
+
+  <!-- TODO Task 5: "Remove" button — only show *ngIf="isInCart", (click)="onRemove()" -->
+</div>

@@ -1,0 +1,51 @@
+# .github/workflows/ci.yml — Day 37 CI/CD
+# TODO Task 1: Complete the CI workflow
+
+name: CI — Build & Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (Java 17)
+    runs-on: ubuntu-latest
+
+    steps:
+      # TODO Task 1a: Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # TODO Task 1b: Set up Java 17 with Maven cache
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven   # TODO: what does this cache?
+
+      # TODO Task 1c: Run tests
+      - name: Run tests
+        run: mvn test -B
+
+      # TODO Task 1d: Build JAR (skip tests — already ran above)
+      - name: Build JAR
+        run: mvn package -DskipTests -B
+
+      # TODO Task 1e: Upload the JAR as a workflow artifact
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
+          retention-days: 5
+
+      # TODO Task 1f: Add a code coverage step
+      # Hint: run: mvn jacoco:report
+      # Then upload target/site/jacoco/ as artifact
+
+  # TODO Task 1g: Add a second job that runs ONLY on main, after build-and-test
+  # Name it "notify" — it should print "Deployment ready!"

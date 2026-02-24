@@ -1,0 +1,63 @@
+# .github/workflows/docker.yml — Day 37 CI/CD
+# TODO Task 2: Complete the Docker build & push workflow
+
+name: Docker — Build & Push
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*.*.*'   # e.g., v1.0.0
+
+env:
+  # TODO Task 2a: Set your Docker Hub username
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  IMAGE_NAME: academy-app
+
+jobs:
+  docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # TODO Task 2b: Set up QEMU (for multi-platform builds)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # TODO Task 2c: Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # TODO Task 2d: Login to Docker Hub using secrets
+      # Secrets needed: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # TODO Task 2e: Extract metadata (tags and labels)
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=ref,event=branch
+            type=sha,prefix=sha-
+
+      # TODO Task 2f: Build and push the image
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

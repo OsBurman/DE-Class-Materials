@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: # TODO Task 1: Give your API a title (e.g., "Bookstore API")
+  description: |
+    # TODO Task 1: Write a 2-3 sentence description of what this API does.
+    
+    Built for Day 23 - REST & API Tools
+  version: 1.0.0
+  contact:
+    name: # TODO: your name
+    email: # TODO: your email
+
+servers:
+  - url: https://jsonplaceholder.typicode.com
+    description: Mock server (JSONPlaceholder — used for testing)
+  - url: http://localhost:8080/api
+    description: Local development server
+
+# ============================================================
+# TODO Task 2: Define TAGS to group related endpoints
+# Example:
+# tags:
+#   - name: Books
+#     description: Operations on the book catalog
+# ============================================================
+tags: []
+
+paths:
+  # ============================================================
+  # TODO Task 3: Define the /posts endpoint (maps to JSONPlaceholder /posts)
+  # GET  /posts — list all posts (with optional ?userId= filter)
+  # POST /posts — create a new post
+  # ============================================================
+  /posts:
+    get:
+      summary: # TODO: brief summary
+      tags: []  # TODO: add tag
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Filter posts by user ID
+        # TODO Task 4: Add a "_limit" query parameter for pagination
+      responses:
+        '200':
+          description: # TODO
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'  # TODO: define Post schema below
+              example:
+                - id: 1
+                  userId: 1
+                  title: "Sample post title"
+                  body: "Sample post body text"
+        # TODO: add a 400 response for invalid query params
+    
+    post:
+      summary: # TODO
+      tags: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'  # TODO: define below
+            example:
+              # TODO: provide an example request body
+      responses:
+        # TODO Task 5: Define 201, 400, and 422 responses
+
+  # ============================================================
+  # TODO Task 6: Define /posts/{id} endpoint
+  # GET    /posts/{id}  — get single post
+  # PUT    /posts/{id}  — full update
+  # PATCH  /posts/{id}  — partial update
+  # DELETE /posts/{id}  — delete
+  # ============================================================
+  /posts/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: The post ID
+    
+    get:
+      summary: # TODO
+      tags: []
+      responses:
+        # TODO: 200 with Post schema, 404 with Error schema
+    
+    put:
+      # TODO Task 7: Full update — requires all fields
+      summary: ''
+      tags: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}  # TODO
+      responses: {}  # TODO
+    
+    patch:
+      # TODO Task 8: Partial update — all fields optional
+      summary: ''
+      tags: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {}  # TODO
+      responses: {}  # TODO
+    
+    delete:
+      summary: # TODO
+      tags: []
+      responses:
+        # TODO: 204 No Content, 404
+
+  # ============================================================
+  # TODO Task 9: Define /users/{id}/posts endpoint
+  # GET /users/{id}/posts — get all posts by a specific user
+  # ============================================================
+  # /users/{id}/posts:
+  #   TODO
+
+# ============================================================
+# COMPONENTS — Reusable schemas, responses, and parameters
+# ============================================================
+components:
+  schemas:
+    # TODO Task 10: Define the Post schema
+    Post:
+      type: object
+      properties:
+        # TODO: id, userId, title, body — include types and descriptions
+    
+    # TODO: Define CreatePostRequest (same fields as Post minus id)
+    CreatePostRequest:
+      type: object
+      required:
+        # TODO: list required fields
+      properties:
+        # TODO
+
+    # TODO Task 11: Define a reusable Error schema
+    # Used for 400, 404, 422 responses
+    Error:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "Post not found"
+        timestamp:
+          type: string
+          format: date-time
+
+  # TODO Task 12: Define reusable responses
+  responses:
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    
+    BadRequest:
+      # TODO: similar to NotFound
+
+  # TODO Task 13 (Bonus): Define a Bearer token security scheme
+  securitySchemes: {}

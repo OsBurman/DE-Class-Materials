@@ -1,0 +1,63 @@
+# Kubernetes — Deployment
+# TODO Task 5: Complete the Deployment spec
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: academy-app
+  namespace: academy
+  labels:
+    app: academy-app
+spec:
+  # TODO Task 5a: Set replicas to 2
+  replicas: 2
+  selector:
+    matchLabels:
+      app: academy-app
+  template:
+    metadata:
+      labels:
+        app: academy-app
+    spec:
+      containers:
+        - name: academy-app
+          # TODO Task 5b: Replace with your actual Docker Hub image
+          image: your-dockerhub-username/academy-app:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: academy-config
+          env:
+            # TODO Task 5c: Inject secret values as env vars
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: academy-secret
+                  key: DB_PASSWORD
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: academy-secret
+                  key: DB_USERNAME
+          # TODO Task 5d: Add resource limits
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          # TODO Task 5e: Add readiness and liveness probes
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20

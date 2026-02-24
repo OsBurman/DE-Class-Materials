@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: recipe-book
+  data:
+    mongodb:
+      # Flapdoodle embedded MongoDB is auto-configured for dev — no URI needed
+      # For a real MongoDB instance, uncomment the line below:
+      # uri: mongodb://localhost:27017/recipedb
+      database: recipedb
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org.springframework.data.mongodb: DEBUG

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🌤️ Weather Dashboard</h1>
+
+    <form id="search-form">
+      <input type="text" id="city-input" placeholder="Enter city name..." />
+      <button type="submit">Search</button>
+      <button type="button" id="multi-btn">Search 3 Cities</button>
+    </form>
+
+    <div id="error-msg" hidden></div>
+    <div id="loading" hidden>Loading...</div>
+
+    <div id="weather-display"></div>
+
+    <section id="recent-searches">
+      <h3>Recent Searches</h3>
+      <ul id="history-list"></ul>
+    </section>
+  </div>
+
+  <!-- type="module" enables ES module imports -->
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

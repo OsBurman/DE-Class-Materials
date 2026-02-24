@@ -1,0 +1,30 @@
+# Base configuration (shared across all profiles)
+spring:
+  application:
+    name: tasks-api
+
+# TODO Task 6: Configure Spring profiles
+# This file is the BASE. Profile-specific files override these values.
+# Active profile is set by: -Dspring.profiles.active=dev
+# or by the SPRING_PROFILES_ACTIVE environment variable.
+
+server:
+  port: 8080
+
+# TODO Task 7: Configure Actuator endpoints
+# Expose health, info, metrics, and env endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info  # TODO: add more endpoints
+  endpoint:
+    health:
+      show-details: when-authorized  # TODO: change per profile (always in dev, never in prod)
+
+# TODO Task 6: Add custom info for /actuator/info
+info:
+  app:
+    name: ${spring.application.name}
+    version: 0.0.1
+    description: "Task Management REST API"

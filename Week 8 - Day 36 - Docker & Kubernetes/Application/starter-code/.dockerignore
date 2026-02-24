@@ -1,0 +1,10 @@
+# Docker ignore — keeps the image small and build context fast
+# TODO: Review and add any additional entries your project needs
+
+target/
+.git/
+.gitignore
+*.md
+.env
+.env.*
+**/*.log

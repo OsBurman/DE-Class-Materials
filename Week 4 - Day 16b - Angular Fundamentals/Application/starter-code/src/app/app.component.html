@@ -1,0 +1,17 @@
+<!-- TODO Task 9: Use interpolation {{ title }} to display the page title -->
+<header>
+  <h1><!-- TODO: {{ title }} --></h1>
+  <p>Our talented engineers</p>
+</header>
+
+<div class="filter-bar">
+  <!-- TODO Task 10: Add two-way binding [(ngModel)]="filterText" to the input below -->
+  <input
+    type="text"
+    placeholder="Search by name..."
+  />
+  <!-- TODO Task 10: Show a "Showing X of Y members" count using interpolation -->
+</div>
+
+<!-- TODO: Pass filteredMembers to app-team-list using property binding [members]="..." -->
+<app-team-list></app-team-list>

@@ -1,0 +1,19 @@
+<!-- counter-panel.component.html -->
+<div class="counter-panel">
+  <h2>Counter</h2>
+
+  <!-- TODO Task 2: Read signal values using () — e.g., counterService.count() -->
+  <div class="count-display">{{ counterService.count() }}</div>
+  <p class="doubled">Doubled: {{ counterService.doubled() }}</p>
+
+  <!-- TODO Task 3: Add a comment explaining why no async pipe is needed with signals -->
+
+  <div class="button-row">
+    <!-- TODO Task 2: Wire up buttons to service methods -->
+    <button (click)="counterService.decrement()">-1</button>
+    <button (click)="counterService.stepBy(-5)">-5</button>
+    <button (click)="counterService.reset()" class="reset-btn">Reset</button>
+    <button (click)="counterService.stepBy(5)">+5</button>
+    <button (click)="counterService.increment()">+1</button>
+  </div>
+</div>

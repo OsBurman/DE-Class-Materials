@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Java compiled files
+*.class
+*.jar
+*.war
+*.ear
+
+# Node / npm
+node_modules/
+npm-debug.log*
+
+# Build output
+build/
+dist/
+out/
+target/
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.iml
+*.suo
+*.user
+.DS_Store
+Thumbs.db
+
+# Environment / secrets — NEVER commit these
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V7
+.Trashes
+ehthumbs.db

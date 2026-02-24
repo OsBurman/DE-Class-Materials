@@ -1,0 +1,14 @@
+<!-- category-filter.component.html -->
+<div class="category-filter">
+  <!-- TODO Task 6: Render a button for each category using *ngFor -->
+  <!-- Add 'active' class when category === selectedCategory -->
+  <!-- Call selectCategory(category) on click -->
+  <button
+    *ngFor="let cat of categories"
+    [class.active]="cat === selectedCategory"
+    (click)="selectCategory(cat)"
+    class="category-btn"
+  >
+    {{ cat | titlecase }}
+  </button>
+</div>

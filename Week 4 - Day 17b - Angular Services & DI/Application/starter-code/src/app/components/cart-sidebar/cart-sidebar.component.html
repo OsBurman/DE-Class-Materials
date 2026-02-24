@@ -1,0 +1,14 @@
+<!-- TODO Task 9: Build the cart sidebar using CartService data -->
+<div class="cart-sidebar">
+  <h2>🛒 Cart (<span>{{ cartService.getCount() }}</span>)</h2>
+
+  <!-- TODO: Use *ngIf to show empty message when getCount() === 0 -->
+  <!-- TODO: Use *ngFor to list cart items from cartService.getItems() -->
+  <!-- Each item shows: product.name, quantity, price with currencyFormat pipe -->
+
+  <!-- TODO: Show total using cartService.getTotal() with currencyFormat pipe -->
+  <div class="cart-total">Total: $0.00</div>
+
+  <!-- TODO: Clear cart button that calls cartService.clearCart() -->
+  <button>Clear Cart</button>
+</div>

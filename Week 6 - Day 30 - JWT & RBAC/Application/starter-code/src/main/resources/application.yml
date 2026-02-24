@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: jwt-auth-api
+server:
+  port: 8080
+
+# JWT configuration
+# TODO Task 1: Use these values in JwtService with @Value
+jwt:
+  # Use a strong secret in production (min 256 bits for HS256)
+  # Generate one with: openssl rand -base64 64
+  secret: "change-me-to-a-strong-secret-key-at-least-256-bits-long-for-production"
+  expiration-ms: 900000        # 15 minutes (access token)
+  refresh-expiration-ms: 604800000  # 7 days (refresh token)

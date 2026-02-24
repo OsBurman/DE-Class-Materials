@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: kafka-orders
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      # TODO Task 1: Complete producer config
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: academy-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.academy.kafka.model"
+
+server:
+  port: 8080
+
+# Topic names — referenced via @Value
+kafka:
+  topics:
+    orders: orders
+    notifications: notifications
+    inventory: inventory
+    orders-dlq: orders.DLQ

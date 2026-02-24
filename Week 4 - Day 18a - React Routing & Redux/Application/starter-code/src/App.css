@@ -1,0 +1,39 @@
+/* App.css */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f5f7fa; color: #333; }
+
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: white; border-bottom: 1px solid #e0e0e0; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.nav-brand { font-size: 1.3rem; font-weight: 700; }
+.nav-links { display: flex; gap: 1rem; }
+.nav-link { color: #666; text-decoration: none; padding: 0.4rem 0.8rem; border-radius: 6px; }
+.nav-link.active { color: #6c63ff; background: #f0eeff; font-weight: 600; }
+
+.page { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+.page-header h1 { font-size: 1.8rem; }
+
+.btn-primary { background: #6c63ff; color: white; padding: 0.5rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.95rem; }
+.btn-secondary { background: #f0f0f0; color: #555; padding: 0.5rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; font-size: 0.95rem; }
+
+.category-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.filter-btn { padding: 0.35rem 0.8rem; border: 1px solid #ddd; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85rem; }
+.filter-btn.active { background: #6c63ff; color: white; border-color: #6c63ff; }
+
+.posts-grid { display: grid; gap: 1rem; }
+.post-card { background: white; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.post-card h2 a { text-decoration: none; color: #333; }
+.post-card h2 a:hover { color: #6c63ff; }
+.post-meta { color: #aaa; font-size: 0.85rem; margin: 0.5rem 0 0.75rem; }
+.post-excerpt { color: #666; font-size: 0.95rem; }
+.category-badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 10px; background: #e8f4fd; color: #2980b9; font-size: 0.75rem; font-weight: 600; margin-left: 0.5rem; }
+
+.post-detail h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+.post-detail .content { margin-top: 1.5rem; line-height: 1.8; font-size: 1.05rem; }
+.back-link { display: inline-block; margin-bottom: 1.5rem; color: #6c63ff; text-decoration: none; }
+.delete-btn { background: #e74c3c; color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; margin-top: 2rem; }
+
+.post-form { display: flex; flex-direction: column; gap: 1rem; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.form-input, .form-textarea, .form-select { padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; width: 100%; font-family: inherit; }
+.form-actions { display: flex; gap: 1rem; justify-content: flex-end; }
+
+.empty { color: #aaa; text-align: center; padding: 2rem; }

@@ -1,0 +1,15 @@
+{
+  "name": "typescript-task-manager",
+  "version": "1.0.0",
+  "description": "Type-Safe Task Manager — Day 15 TypeScript application",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.0.0"
+  }
+}

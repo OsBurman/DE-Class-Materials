@@ -1,0 +1,77 @@
+/* ── TODO Task 4: Define CSS custom properties in :root ───────────── */
+:root {
+  /* Add at least 5 custom properties, for example: */
+  /* --primary-color: #2563eb; */
+  /* --bg-color: #f8fafc; */
+  /* --text-color: #1e293b; */
+  /* --card-bg: #ffffff; */
+  /* --border-radius: 12px; */
+}
+
+/* ── TODO: Base reset & body styles ──────────────────────────────── */
+
+
+/* ── TODO Task 7: Flexbox for <nav> (horizontal, space-between) ─── */
+nav ul {
+  /* display: flex; */
+  /* list-style: none; */
+  /* justify-content: space-between; */
+}
+
+
+/* ── TODO Task 7: Flexbox for <header> (center content vertically) ─ */
+header {
+  /* display: flex; */
+  /* align-items: center; */
+}
+
+
+/* ── TODO Task 8: CSS Grid for projects section ─────────────────── */
+/* 3 columns on desktop, collapses to 1 on mobile */
+#projects .projects-grid {
+  /* display: grid; */
+  /* grid-template-columns: repeat(3, 1fr); */
+  /* gap: 1.5rem; */
+}
+
+
+/* ── TODO Task 5: Use element, class, id, attribute, pseudo-class selectors */
+/* Examples to fill in:
+   a[href]:hover { ... }
+   section:nth-child(odd) { ... }
+   #contact { ... }
+   .card { ... }
+   h1, h2 { ... }
+*/
+
+
+/* ── TODO Task 6: Box Model — explicitly set margin, padding, border on 3 elements */
+/* Add a comment labeling which part of the box model each property targets */
+
+
+/* ── TODO Task 10: Transition on project card hover ─────────────── */
+.card {
+  /* transition: transform 0.25s ease, box-shadow 0.25s ease; */
+}
+.card:hover {
+  /* transform: translateY(-4px) scale(1.02); */
+  /* box-shadow: ...; */
+}
+
+
+/* ── TODO Task 10: @keyframes animation — fade in on load ─────────── */
+/* @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+} */
+/* header { animation: fadeIn 0.6s ease forwards; } */
+
+
+/* ── TODO Task 9: Media queries ──────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Single column layout, stacked nav */
+}
+
+@media (max-width: 480px) {
+  /* Smaller font sizes, full-width buttons */
+}

@@ -1,0 +1,24 @@
+<!-- TODO Task 2: Build the card template using all four binding types -->
+
+<!-- TODO: Property binding — bind [class.selected]="selected" on the root div -->
+<div class="member-card">
+
+  <!-- TODO Task 2: Property binding [src] and [alt] for the avatar image -->
+  <!-- <img [src]="???" [alt]="???" /> -->
+
+  <!-- TODO Task 2: Interpolation for name and role -->
+  <h3>{{ /* TODO: name */ }}</h3>
+  <p class="role">{{ /* TODO: role */ }}</p>
+
+  <!-- TODO Task 2: *ngIf — show green badge if isAvailable, otherwise gray badge -->
+  <!-- HINT: Use *ngIf="isAvailable; else unavailableTpl" and <ng-template #unavailableTpl> -->
+  <span class="availability-badge available">Available</span>
+
+  <!-- TODO Task 2: *ngFor — render a skill tag for each skill in the skills array -->
+  <div class="skills">
+    <!-- <span *ngFor="let skill of ???" class="skill-tag">{{ skill }}</span> -->
+  </div>
+
+  <!-- TODO Task 3: Event binding (click) calls onViewProfile() -->
+  <button class="view-btn">View Profile</button>
+</div>
