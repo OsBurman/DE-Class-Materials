@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Variables, Transitions & Animations</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div style="max-width: 760px; margin: 2rem auto; padding: 0 1rem;">
+
+    <h1>CSS Variables, Transitions &amp; Animations</h1>
+
+    <!-- Part B: Button Transitions -->
+    <h2>Part B: Button Hover Transitions</h2>
+    <button class="btn">Hover over me</button>
+
+    <!-- Part C: Card Hover -->
+    <h2>Part C: Card Hover Transition</h2>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0;">
+      <div class="card" style="flex: 1 1 200px;">
+        <h3>Card One</h3>
+        <p>Hover to see the lift and shadow effect.</p>
+      </div>
+      <div class="card" style="flex: 1 1 200px;">
+        <h3>Card Two</h3>
+        <p>Smooth transition powered by CSS variables.</p>
+      </div>
+    </div>
+
+    <!-- Part D: Theme Toggle -->
+    <h2>Part D: CSS Variable Theme Override</h2>
+    <div class="theme-demo" style="padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+      <p>This box uses <code>var(--color-bg)</code> and <code>var(--color-text)</code>.</p>
+    </div>
+    <div class="theme-demo dark-theme" style="padding: 1rem; border-radius: 6px;">
+      <p>This box has the <code>.dark-theme</code> class — same rules, different variable values.</p>
+    </div>
+
+    <!-- Part E: Keyframe Animations -->
+    <h2>Part E: @keyframes Animations</h2>
+
+    <p class="fade-in">👋 This text fades in on page load.</p>
+
+    <div style="margin: 1.5rem 0;">
+      <span class="bounce" style="display: inline-block; font-size: 2rem;">🏀</span>
+      <span style="margin-left: 1rem; font-size: 0.9rem; color: #666;">bounce animation (infinite)</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0;">
+      <div class="spinner"></div>
+      <span style="font-size: 0.9rem; color: #666;">spinner animation (infinite rotate)</span>
+    </div>
+
+  </div>
+
+</body>
+</html>

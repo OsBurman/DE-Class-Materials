@@ -1,0 +1,29 @@
+# Exercise 09 — Service Manifest Starter
+# Complete every TODO to produce a valid Kubernetes Service.
+
+# TODO: Set the correct apiVersion for core objects (v1)
+apiVersion: # TODO
+# TODO: Set the kind to Service
+kind: # TODO
+
+metadata:
+  # TODO: Set the Service name to spring-service
+  name: # TODO
+  namespace: default
+
+spec:
+  # TODO: Set the Service type to NodePort
+  type: # TODO
+
+  selector:
+    # TODO: Select Pods with label app: springapp
+    app: # TODO
+
+  ports:
+    - protocol: TCP
+      # TODO: Set port (cluster-internal) to 80
+      port: # TODO
+      # TODO: Set targetPort (container port) to 8080
+      targetPort: # TODO
+      # TODO: Set nodePort to 30080
+      nodePort: # TODO

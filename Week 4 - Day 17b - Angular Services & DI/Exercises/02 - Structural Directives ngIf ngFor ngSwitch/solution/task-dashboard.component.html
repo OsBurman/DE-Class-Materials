@@ -1,0 +1,37 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto;">
+  <h2>
+    Task Dashboard
+    <button (click)="toggleCompleted()" style="margin-left: 12px;">Toggle Completed</button>
+  </h2>
+
+  <ul>
+    <!-- *ngFor iterates; *ngIf on a wrapping ng-container filters done tasks -->
+    <ng-container *ngFor="let task of tasks">
+      <li
+        *ngIf="showCompleted || task.status !== 'done'"
+        (click)="selectTask(task)"
+        style="cursor: pointer; padding: 4px 0;">
+        {{ task.title }}
+      </li>
+    </ng-container>
+  </ul>
+
+  <!-- *ngIf — show placeholder only when nothing is selected -->
+  <p *ngIf="!selectedTask"><em>No task selected. Click a task to see details.</em></p>
+
+  <!-- *ngIf — show detail panel only when a task IS selected -->
+  <div *ngIf="selectedTask" style="border: 1px solid #aaa; padding: 12px; border-radius: 6px;">
+    <h3>Selected Task Detail</h3>
+    <p><strong>Title:</strong> {{ selectedTask.title }}</p>
+    <p>
+      <strong>Status:</strong>
+      <!-- *ngSwitch drives a badge based on the status value -->
+      <span [ngSwitch]="selectedTask.status">
+        <span *ngSwitchCase="'todo'">🔲 Not started</span>
+        <span *ngSwitchCase="'in-progress'">⏳ In Progress</span>
+        <span *ngSwitchCase="'done'">✅ Done</span>
+        <span *ngSwitchDefault>Unknown</span>
+      </span>
+    </p>
+  </div>
+</div>

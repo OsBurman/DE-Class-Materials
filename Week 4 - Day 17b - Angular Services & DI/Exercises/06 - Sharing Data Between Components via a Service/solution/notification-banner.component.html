@@ -1,0 +1,10 @@
+<div style="border:2px solid #4a90e2; padding:12px; margin:12px 0; border-radius:6px; min-height:44px; font-family:Arial,sans-serif;">
+  <strong>Notification Banner</strong>
+  <ng-container *ngIf="currentMessage; else noMessage">
+    <span style="margin-left:12px;">{{ currentMessage }}</span>
+    <button (click)="dismiss()" style="margin-left:12px;">Dismiss</button>
+  </ng-container>
+  <ng-template #noMessage>
+    <span style="margin-left:12px; color:#aaa;">(no notifications)</span>
+  </ng-template>
+</div>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 2 | Full Page Demo
+  Ties together all Part 2 CSS topics in one rendered page.
+  Open in a browser and resize the window to see responsive behaviour.
+  ═══════════════════════════════════════════════════════════════════════════════
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 — Full CSS Demo Page</title>
+
+  <!-- Our custom stylesheets (order matters — later file can override earlier) -->
+  <link rel="stylesheet" href="01-css-fundamentals-and-selectors.css" />
+  <link rel="stylesheet" href="02-css-layout-and-responsive.css" />
+
+  <!-- Tiny page-specific overrides so demo sections look distinct -->
+  <style>
+    /* ── Section wrapper ───────────────────────────────────────── */
+    .demo-section {
+      padding: 4rem 0;
+      border-bottom: 2px solid var(--color-border);
+    }
+    .demo-section:last-of-type { border-bottom: none; }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .code-pill {
+      display: inline-block;
+      font-family: var(--font-mono);
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 0.15rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Demo grid cell colour */
+    .demo-cell {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      padding: 1rem;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: 600;
+      color: #1e40af;
+    }
+
+    /* Box model visual */
+    .bm-margin  { background: #fef3c7; border: 2px dashed #d97706; padding: 1rem; border-radius: 4px; }
+    .bm-border  { background: #dbeafe; border: 4px solid #2563eb;  padding: 1rem; border-radius: 4px; }
+    .bm-padding { background: #d1fae5; padding: 1.5rem; border-radius: 4px; }
+    .bm-content { background: #f3f4f6; padding: 1rem; border-radius: 4px; text-align: center; font-weight: 600; }
+    .bm-label   { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #6b7280; margin-bottom: 0.25rem; }
+
+    /* Position demo container */
+    .pos-demo-box {
+      position: relative;
+      height: 200px;
+      background: #f1f5f9;
+      border: 2px dashed #cbd5e1;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .pos-box { position: absolute; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 600; font-size: 0.875rem; }
+    .pos-tl  { top: 12px; left: 12px;  background: #dbeafe; color: #1e40af; }
+    .pos-tr  { top: 12px; right: 12px; background: #d1fae5; color: #065f46; }
+    .pos-bl  { bottom: 12px; left: 12px;  background: #fef3c7; color: #92400e; }
+    .pos-br  { bottom: 12px; right: 12px; background: #ede9fe; color: #5b21b6; }
+    .pos-center { top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fee2e2; color: #991b1b; }
+
+    /* Specificity demo */
+    .spec-box { padding: 0.5rem 1rem; border-radius: 4px; display: inline-block; margin: 0.25rem; }
+    p.spec-element                    { color: #6b7280; }           /* (0,0,0,1)  */
+    .spec-class                       { color: #2563eb; }           /* (0,0,1,0) */
+    .spec-class.spec-double           { color: #7c3aed; }           /* (0,0,2,0) wins */
+    #spec-id                          { color: #059669; }           /* (0,1,0,0) highest */
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+       FIXED NAV — shows position: fixed in action
+       ════════════════════════════════════════════════════════════════════════ -->
+  <nav class="nav-fixed" style="padding: 0.75rem 2rem;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+      <strong style="color: var(--color-primary); font-size: 1.1rem;">CSS Day 11 Demo</strong>
+      <div style="display: flex; gap: 1.5rem; list-style: none;">
+        <a href="#variables"  class="nav-link text-muted" style="font-size: 0.875rem;">Variables</a>
+        <a href="#selectors"  class="nav-link text-muted" style="font-size: 0.875rem;">Selectors</a>
+        <a href="#specificity" class="nav-link text-muted" style="font-size: 0.875rem;">Specificity</a>
+        <a href="#box-model"  class="nav-link text-muted" style="font-size: 0.875rem;">Box Model</a>
+        <a href="#positioning" class="nav-link text-muted" style="font-size: 0.875rem;">Position</a>
+        <a href="#flexbox"    class="nav-link text-muted" style="font-size: 0.875rem;">Flexbox</a>
+        <a href="#grid"       class="nav-link text-muted" style="font-size: 0.875rem;">Grid</a>
+        <a href="#responsive" class="nav-link text-muted" style="font-size: 0.875rem;">Responsive</a>
+        <a href="#animations" class="nav-link text-muted" style="font-size: 0.875rem;">Animations</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Body needs top padding so content isn't behind fixed nav -->
+  <div style="padding-top: 56px;">
+
+    <!-- ─────────────────────────────────────────────────────── HERO ───── -->
+    <div id="hero">
+      <h1>CSS in Action</h1>
+      <p>Every rule in this page comes from <code style="background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:4px">01-css-fundamentals-and-selectors.css</code> and <code style="background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:4px">02-css-layout-and-responsive.css</code></p>
+      <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+        <a href="#variables" class="btn btn-primary" style="background: white; color: #2563eb;">Explore Demos ↓</a>
+      </div>
+    </div>
+
+    <main class="container">
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           CSS VARIABLES
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="variables">
+        <p class="section-label">Section 1</p>
+        <h2 class="section-title">CSS Variables (Custom Properties)</h2>
+        <p>Defined on <span class="code-pill">:root</span> — available everywhere. Change one value, update the whole page.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+          <div style="background: var(--color-primary); color: white; padding: 1rem; border-radius: var(--radius); text-align: center;">
+            <div style="font-size: 0.75rem; opacity: 0.8;">--color-primary</div>
+            <div style="font-weight: 700;">#2563eb</div>
+          </div>
+          <div style="background: var(--color-secondary); color: white; padding: 1rem; border-radius: var(--radius); text-align: center;">
+            <div style="font-size: 0.75rem; opacity: 0.8;">--color-secondary</div>
+            <div style="font-weight: 700;">#10b981</div>
+          </div>
+          <div style="background: var(--color-danger); color: white; padding: 1rem; border-radius: var(--radius); text-align: center;">
+            <div style="font-size: 0.75rem; opacity: 0.8;">--color-danger</div>
+            <div style="font-weight: 700;">#ef4444</div>
+          </div>
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 1rem; border-radius: var(--radius); text-align: center;">
+            <div style="font-size: 0.75rem; color: var(--color-muted);">--color-surface</div>
+            <div style="font-weight: 700;">#f8fafc</div>
+          </div>
+          <div style="background: var(--color-text); color: white; padding: 1rem; border-radius: var(--radius); text-align: center;">
+            <div style="font-size: 0.75rem; opacity: 0.8;">--color-text</div>
+            <div style="font-weight: 700;">#1e293b</div>
+          </div>
+        </div>
+
+        <p class="mt-4 text-muted">Spacing scale using <span class="code-pill">--space-*</span> variables:</p>
+        <div style="display: flex; align-items: flex-end; gap: 0.5rem;">
+          <div style="width: var(--space-1); height: var(--space-1); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-2); height: var(--space-2); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-4); height: var(--space-4); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-6); height: var(--space-6); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-8); height: var(--space-8); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-12); height: var(--space-12); background: var(--color-primary); border-radius: 2px;"></div>
+          <div style="width: var(--space-16); height: var(--space-16); background: var(--color-primary); border-radius: 2px;"></div>
+        </div>
+        <p class="text-muted text-sm mt-2">4px · 8px · 16px · 24px · 32px · 48px · 64px</p>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SELECTORS
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="selectors">
+        <p class="section-label">Section 2</p>
+        <h2 class="section-title">CSS Selectors</h2>
+
+        <div class="card mb-4">
+          <p class="card-title">Card — styled by <span class="code-pill">.card</span> class selector</p>
+          <p class="text-muted">This paragraph gets muted colour from the <span class="code-pill">.card p</span> descendant combinator.</p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <p>Attribute selector demo:
+            <a href="https://example.com" target="_blank" rel="noopener noreferrer">HTTPS link (green)</a> ·
+            <a href="http://example.com">HTTP link (blue)</a> ·
+            <a href="document.pdf">PDF link (adds "(PDF)" via ::after)</a>
+          </p>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <p>Pseudo-class hover demo — hover over these links:</p>
+          <a href="#selectors" class="link-underline" style="margin-right: 1.5rem;">Animated Underline Link</a>
+          <a href="#selectors" style="color: var(--color-primary)">Regular Link (hover to see :hover)</a>
+        </div>
+
+        <div>
+          <p>Pseudo-element demo:</p>
+          <label class="required-label">Email Address</label>
+          <input type="email" class="input-transition" placeholder="jane@example.com" style="max-width: 300px; display: block; margin-top: 0.25rem;" />
+          <span class="badge badge-primary badge mt-2">Badge with ::before</span>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SPECIFICITY
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="specificity">
+        <p class="section-label">Section 3</p>
+        <h2 class="section-title">Specificity &amp; Cascade</h2>
+        <p>Four rules target the same paragraphs. The one with highest specificity wins.</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+          <div>
+            <p class="spec-box spec-element">
+              <code>p</code> selector → gray <small>(0,0,0,1)</small>
+            </p>
+          </div>
+          <div>
+            <p class="spec-box spec-class">
+              <code>.spec-class</code> → blue <small>(0,0,1,0)</small>
+            </p>
+          </div>
+          <div>
+            <p class="spec-box spec-class spec-double">
+              <code>.spec-class.spec-double</code> → purple <small>(0,0,2,0)</small>
+            </p>
+          </div>
+          <div>
+            <p class="spec-box spec-class" id="spec-id">
+              <code>#spec-id</code> → green <small>(0,1,0,0) — wins</small>
+            </p>
+          </div>
+        </div>
+
+        <p class="mt-4 text-muted">
+          Specificity score: <strong>inline style (1,0,0,0)</strong> &gt;
+          <strong>#id (0,1,0,0)</strong> &gt;
+          <strong>.class / [attr] / :pseudo (0,0,1,0)</strong> &gt;
+          <strong>element (0,0,0,1)</strong>
+        </p>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           BOX MODEL
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="box-model">
+        <p class="section-label">Section 4</p>
+        <h2 class="section-title">CSS Box Model</h2>
+        <p>Every element is a rectangle with four layers. Open DevTools → hover an element → see the orange/green/blue overlay.</p>
+
+        <div class="bm-margin" style="max-width: 500px;">
+          <div class="bm-label">MARGIN (transparent, pushes other elements)</div>
+          <div class="bm-border">
+            <div class="bm-label">BORDER (coloured, adds to size in content-box)</div>
+            <div class="bm-padding">
+              <div class="bm-label">PADDING (inside border, same background as content)</div>
+              <div class="bm-content">
+                CONTENT (text, images, children)<br />
+                <small>width × height of actual content area</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-4 text-muted"><strong>box-sizing: border-box</strong> (our global reset) — padding and border are included in the width you set.</p>
+        <p class="text-muted"><strong>box-sizing: content-box</strong> (browser default) — width is content only; total = width + padding + border.</p>
+
+        <div class="box-model-demo mt-4">
+          <p style="margin: 0; font-weight: 600;">This box uses <code>.box-model-demo</code></p>
+          <p class="text-muted" style="margin: 0;">width: 300px · padding: 1rem / 1.5rem · border: 2px solid primary · margin: 1.5rem auto</p>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           POSITIONING
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="positioning">
+        <p class="section-label">Section 5</p>
+        <h2 class="section-title">CSS Positioning</h2>
+
+        <p>Four boxes absolutely positioned inside a <span class="code-pill">position: relative</span> container. Plus a centred box using <span class="code-pill">transform: translate(-50%, -50%)</span>.</p>
+
+        <div class="pos-demo-box mb-4">
+          <div class="pos-box pos-tl">top: 12px; left: 12px</div>
+          <div class="pos-box pos-tr">top: 12px; right: 12px</div>
+          <div class="pos-box pos-center">top:50% left:50%<br/>translate(-50%,-50%)</div>
+          <div class="pos-box pos-bl">bottom: 12px; left: 12px</div>
+          <div class="pos-box pos-br">bottom: 12px; right: 12px</div>
+        </div>
+
+        <p class="text-muted"><strong>Fixed nav:</strong> the nav bar at the top of this page uses <code>position: fixed; top: 0; left: 0; right: 0</code>. Scroll up and down to confirm it stays in place.</p>
+
+        <p class="text-muted"><strong>Sticky demo:</strong> Open DevTools on the sidebar of a long page — <code>position: sticky; top: 2rem</code> lets the sidebar scroll with you until the parent runs out of space.</p>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           FLEXBOX
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="flexbox">
+        <p class="section-label">Section 6</p>
+        <h2 class="section-title">Flexbox</h2>
+
+        <h4 class="mb-2">flex-navbar: <span class="code-pill">justify-content: space-between</span></h4>
+        <nav class="flex-navbar mb-6" style="border-radius: var(--radius); margin-bottom: 1.5rem;">
+          <div class="logo">TechBlog</div>
+          <ul class="nav-links" style="list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0;">
+            <li><a href="#flexbox">Articles</a></li>
+            <li><a href="#flexbox">About</a></li>
+            <li><a href="#flexbox">Contact</a></li>
+          </ul>
+          <button class="btn btn-primary" style="font-size: 0.875rem; padding: 0.4rem 1rem;">Subscribe</button>
+        </nav>
+
+        <h4 class="mb-2">flex-wrap: wrap + flex: 1 1 280px</h4>
+        <div class="flex-card-row mb-6" style="margin-bottom: 1.5rem;">
+          <div class="flex-card"><strong>Java Fundamentals</strong><br/><span class="text-muted text-sm">flex: 1 1 280px</span></div>
+          <div class="flex-card"><strong>React &amp; Hooks</strong><br/><span class="text-muted text-sm">All cards equal width</span></div>
+          <div class="flex-card"><strong>Spring Boot</strong><br/><span class="text-muted text-sm">Wrap on narrow screens</span></div>
+          <div class="flex-card"><strong>SQL &amp; JPA</strong><br/><span class="text-muted text-sm">Resize window to see</span></div>
+        </div>
+
+        <h4 class="mb-2">flex-grow demo: fixed · grow-1 · grow-2</h4>
+        <div class="flex-grow-demo mb-4">
+          <div class="item-fixed">fixed 100px<br/><small>flex: 0 0 100px</small></div>
+          <div class="item-grow">grow: 1<br/><small>flex: 1</small></div>
+          <div class="item-grow-2">grow: 2<br/><small>flex: 2 (2× more)</small></div>
+          <div class="item-grow">grow: 1<br/><small>flex: 1</small></div>
+        </div>
+
+        <h4 class="mb-2">justify-content: center + align-items: center</h4>
+        <div class="flex-center" style="border-radius: var(--radius); border: 2px dashed var(--color-border); margin-bottom: 1.5rem;">
+          <div class="card" style="width: 250px;">
+            <p class="card-title">Centred Card</p>
+            <p class="text-muted text-sm">Both horizontally and vertically inside a flex container.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           GRID
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="grid">
+        <p class="section-label">Section 7</p>
+        <h2 class="section-title">CSS Grid</h2>
+
+        <h4 class="mb-2">repeat(3, 1fr) — three equal columns</h4>
+        <div class="grid-3col mb-6" style="margin-bottom: 1.5rem;">
+          <div class="demo-cell">Col 1</div>
+          <div class="demo-cell">Col 2</div>
+          <div class="demo-cell">Col 3</div>
+          <div class="demo-cell">Col 4</div>
+          <div class="demo-cell">Col 5</div>
+          <div class="demo-cell">Col 6</div>
+        </div>
+
+        <h4 class="mb-2">auto-fill + minmax(250px, 1fr) — responsive auto columns</h4>
+        <div class="grid-auto mb-6" style="margin-bottom: 1.5rem;">
+          <div class="demo-cell">A</div>
+          <div class="demo-cell">B</div>
+          <div class="demo-cell">C</div>
+          <div class="demo-cell">D</div>
+          <div class="demo-cell">E</div>
+        </div>
+
+        <h4 class="mb-2">Magazine layout: col-span + row-span</h4>
+        <div class="grid-magazine mb-4" style="height: auto; min-height: 400px;">
+          <div class="demo-cell feature" style="background: #dbeafe;">Feature<br/>(spans 2 col × 2 row)</div>
+          <div class="demo-cell" style="background: #d1fae5;">Story 2</div>
+          <div class="demo-cell sidebar-top" style="background: #ede9fe;">Sidebar<br/>(col 4, rows 1–2)</div>
+          <div class="demo-cell" style="background: #fef3c7;">Story 3</div>
+          <div class="demo-cell wide" style="background: #fee2e2;">Wide story<br/>(span 2)</div>
+          <div class="demo-cell" style="background: #fde68a;">Story 5</div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           RESPONSIVE
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="responsive">
+        <p class="section-label">Section 8</p>
+        <h2 class="section-title">Responsive Design &amp; Media Queries</h2>
+        <p>Resize this browser window. The grid below changes columns at each breakpoint.</p>
+        <p><strong>Mobile-first</strong> approach: base = 1 column → sm+ = 2 columns → lg+ = 3 columns → xl+ = 4 columns.</p>
+
+        <div class="responsive-grid mb-4">
+          <div class="responsive-card">Card 1<br/><small class="text-muted">1 col → 2 col → 3 col → 4 col</small></div>
+          <div class="responsive-card">Card 2</div>
+          <div class="responsive-card">Card 3</div>
+          <div class="responsive-card">Card 4</div>
+          <div class="responsive-card">Card 5</div>
+          <div class="responsive-card">Card 6</div>
+          <div class="responsive-card">Card 7</div>
+          <div class="responsive-card">Card 8</div>
+        </div>
+
+        <p class="text-muted"><strong>Key media features:</strong></p>
+        <ul class="text-muted">
+          <li><code>min-width</code> / <code>max-width</code> — viewport width</li>
+          <li><code>prefers-color-scheme: dark</code> — user's OS dark mode preference</li>
+          <li><code>prefers-reduced-motion: reduce</code> — disable animations for users with motion sensitivity</li>
+          <li><code>print</code> — styles for printed pages</li>
+        </ul>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           ANIMATIONS & TRANSITIONS
+           ══════════════════════════════════════════════════════════════════ -->
+      <section class="demo-section" id="animations">
+        <p class="section-label">Section 9</p>
+        <h2 class="section-title">Transitions &amp; Animations</h2>
+
+        <!-- Buttons — transition on hover -->
+        <h4 class="mb-3">Transitions (hover to trigger)</h4>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+          <button class="btn btn-primary">Primary Button</button>
+          <a href="#animations" class="btn" style="background: var(--color-secondary); color: white; padding: 0.625rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: background 200ms, transform 150ms, box-shadow 200ms;">Secondary</a>
+          <a href="#animations" class="link-underline" style="font-size: 1.1rem; font-weight: 600; color: var(--color-primary); align-self: center;">Underline slide →</a>
+        </div>
+
+        <!-- Card hover effect -->
+        <h4 class="mb-3">Card hover (lift + shadow)</h4>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+          <div class="card card-hover" style="width: 220px;">
+            <p class="card-title">Hover Me</p>
+            <p class="text-muted text-sm">transform: translateY(-4px)<br/>box-shadow grows on hover</p>
+          </div>
+          <div class="card card-hover" style="width: 220px;">
+            <p class="card-title">Hover Me Too</p>
+            <p class="text-muted text-sm">transition: 250ms ease</p>
+          </div>
+        </div>
+
+        <!-- Keyframe animations — run on page load -->
+        <h4 class="mb-3">Keyframe Animations</h4>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 2rem;">
+          <div class="spinner"></div>
+          <div class="card pulse" style="width: 180px; padding: 1rem; text-align: center;">Pulse Animation</div>
+          <div class="card fade-in" style="width: 180px; padding: 1rem;">Fade In</div>
+          <div class="card bounce-in" style="width: 180px; padding: 1rem;">Bounce In</div>
+          <div class="card slide-in-left" style="width: 180px; padding: 1rem;">Slide In Left</div>
+        </div>
+
+        <!-- Skeleton -->
+        <h4 class="mb-3">Skeleton Loading Screen</h4>
+        <div class="card" style="width: 300px; padding: 1.5rem;">
+          <div class="skeleton skeleton-block mb-4" style="height: 140px;"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text" style="width: 80%;"></div>
+          <div class="skeleton skeleton-text" style="width: 60%;"></div>
+        </div>
+
+        <!-- Progress bar -->
+        <h4 class="mt-4 mb-3">Animated Progress Bar</h4>
+        <p class="text-muted text-sm mb-2">CSS Animation: fills from 0 to --progress value (reload page to replay)</p>
+        <div style="max-width: 500px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 600;">
+            <span>JavaScript</span><span>72%</span>
+          </div>
+          <div class="progress-bar-track mb-3">
+            <div class="progress-bar-fill" style="--progress: 72%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 600;">
+            <span>React</span><span>58%</span>
+          </div>
+          <div class="progress-bar-track mb-3">
+            <div class="progress-bar-fill" style="--progress: 58%; animation-delay: 400ms; background: var(--color-secondary);"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 600;">
+            <span>Spring Boot</span><span>45%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" style="--progress: 45%; animation-delay: 600ms; background: var(--color-danger);"></div>
+          </div>
+        </div>
+
+      </section>
+
+    </main><!-- /container -->
+
+    <!-- Footer -->
+    <footer style="background: #1e293b; color: #94a3b8; padding: 3rem 2rem; text-align: center; margin-top: 4rem;">
+      <p style="font-size: 1.25rem; font-weight: 700; color: white; margin-bottom: 0.5rem;">Day 11 — HTML &amp; CSS</p>
+      <p>CSS fundamentals · Selectors · Specificity · Box Model · Positioning · Flexbox · Grid · Responsive · Variables · Animations</p>
+      <p style="margin-top: 1rem; font-size: 0.875rem;">
+        Part 2 files: <code style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">01-css-fundamentals-and-selectors.css</code> ·
+        <code style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">02-css-layout-and-responsive.css</code> ·
+        <code style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">03-bootstrap-demo.html</code>
+      </p>
+    </footer>
+
+  </div><!-- /padding-top wrapper -->
+</body>
+</html>

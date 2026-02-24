@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Bookstore GraphQL API",
+    "_postman_id": "day32-graphql-bookstore",
+    "description": "GraphQL requests for the Bookstore API — Day 32 Exercise 05",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET_ALL_BOOKS",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "TODO: Replace this string with a JSON body containing a 'query' field that fetches all books with id, title, genre, year, and nested author { name }. Set 'variables' to {}.\nExample shape: {\"query\": \"{ books { id title } }\", \"variables\": {}}"
+        }
+      }
+    },
+    {
+      "name": "GET_BOOK_BY_ID",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "TODO: Write a query that uses the variable $id: ID! to fetch a single book by id. Include id, title, genre, year, author { name } in the selection set. Set variables to {\"id\": \"b1\"}."
+        }
+      }
+    },
+    {
+      "name": "ADD_BOOK",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "TODO: Write a mutation using variables $title: String!, $genre: String!, $year: Int!, $authorId: ID! that calls addBook and returns id, title, genre, year, author { name }. Set variables to sample values."
+        }
+      }
+    },
+    {
+      "name": "GET_BOOKS_BY_GENRE",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "TODO: Write a query using variable $genre: String! that calls booksByGenre and returns id, title, author { name }. Set variables to {\"genre\": \"Programming\"}."
+        }
+      }
+    },
+    {
+      "name": "INTROSPECTION",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "TODO: Write the standard GraphQL introspection query that returns __schema { types { name } }. Set variables to {}."
+        }
+      }
+    }
+  ]
+}

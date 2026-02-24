@@ -1,0 +1,398 @@
+# GraphQL Queries, Mutations & Subscriptions — Day 31
+# Bookstore API examples — all syntax demonstrated here
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HOW TO READ THIS FILE
+# ─────────────────────────────────────────────────────────────────────────────
+# This file contains pure GraphQL operation documents — what a CLIENT sends.
+# There are three kinds of operations:
+#   query     → read data (equivalent to HTTP GET)
+#   mutation  → write data (equivalent to HTTP POST/PUT/DELETE)
+#   subscription → subscribe to real-time events (WebSocket)
+#
+# Every operation follows this structure:
+#   <operation-type> <OperationName> {
+#     <field>(<arguments>) {
+#       <sub-fields>
+#     }
+#   }
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# =============================================================================
+# SECTION 1: BASIC QUERIES
+# =============================================================================
+
+# ── 1a. The simplest possible query ──────────────────────
+# Fetch all books, but ONLY request the title field.
+# The server returns ONLY title — no other fields, even if the Book type has 15 fields.
+# This solves REST over-fetching.
+
+query GetAllBookTitles {
+  books {
+    title
+  }
+}
+
+# Expected response shape:
+# {
+#   "data": {
+#     "books": [
+#       { "title": "Clean Code" },
+#       { "title": "The Pragmatic Programmer" }
+#     ]
+#   }
+# }
+
+
+# ── 1b. Requesting multiple fields ───────────────────────
+# Now ask for several fields from the same type.
+# The client controls exactly which fields come back.
+
+query GetBooksForCatalog {
+  books {
+    id
+    title
+    rating
+    price
+    inStock
+    genre
+  }
+}
+
+
+# ── 1c. Nested query — solving under-fetching ─────────────
+# Get book data AND the author's data in a single round trip.
+# With REST this would be GET /books + GET /authors/:id for each book.
+# With GraphQL: one request, all data.
+
+query GetBooksWithAuthors {
+  books {
+    id
+    title
+    price
+    author {        # author is a nested object type
+      name
+      email
+    }
+    reviews {       # reviews is a list of Review objects
+      rating
+      comment
+      reviewer
+    }
+  }
+}
+
+# Expected response:
+# {
+#   "data": {
+#     "books": [
+#       {
+#         "id": "1",
+#         "title": "Clean Code",
+#         "price": 34.99,
+#         "author": { "name": "Robert C. Martin", "email": "uncle.bob@example.com" },
+#         "reviews": [
+#           { "rating": 5, "comment": "Essential reading", "reviewer": "alice" }
+#         ]
+#       }
+#     ]
+#   }
+# }
+
+
+# ── 1d. Single item query with argument ──────────────────
+# Fetch a specific book by its ID.
+# Arguments go in parentheses after the field name.
+
+query GetBookById {
+  book(id: "42") {    # "42" is an argument — the server uses this to look up the book
+    id
+    title
+    isbn
+    pageCount
+    genre
+    author {
+      name
+    }
+  }
+}
+
+# If the book doesn't exist, the server returns:
+# { "data": { "book": null } }
+# because book(id: ID!): Book — the return type is nullable (no !)
+
+
+# =============================================================================
+# SECTION 2: QUERY SYNTAX DETAILS
+# =============================================================================
+
+# ── 2a. Query shorthand (anonymous) ──────────────────────
+# If there's only ONE query and no variables, you can omit "query" keyword.
+# NOT recommended for production — but you'll see it in examples.
+
+{
+  books {
+    title
+    rating
+  }
+}
+
+
+# ── 2b. Multiple root fields in one query ────────────────
+# A single query document can request multiple root-level fields.
+# Both resolve in parallel — this is faster than two separate requests.
+
+query DashboardData {
+  books {
+    id
+    title
+    inStock
+  }
+  # NOTE: to query the same root field twice with different arguments,
+  # you need ALIASES (covered in Part 2)
+}
+
+
+# ── 2c. Query with simple inline argument ────────────────
+# Arguments can filter, paginate, or customize results.
+
+query GetFictionBooks {
+  books(genre: FICTION) {    # genre: FICTION uses the Genre enum value
+    title
+    rating
+    author {
+      name
+    }
+  }
+}
+
+query GetTopRatedBooks {
+  books(sortBy: RATING_DESC, limit: 5) {  # multiple arguments
+    title
+    rating
+    price
+  }
+}
+
+
+# =============================================================================
+# SECTION 3: MUTATIONS — Writing Data
+# =============================================================================
+# Mutations change server-side state.
+# Convention: mutation names are verb phrases (createBook, updateBook, deleteBook).
+# Mutations can ALSO return data — you ask for what you want back.
+
+# ── 3a. Create mutation ───────────────────────────────────
+
+mutation CreateNewBook {
+  createBook(input: {           # input: uses the CreateBookInput input type
+    title:     "Effective Java"
+    isbn:      "978-0134685991"
+    pageCount: 412
+    genre:     TECHNOLOGY
+    price:     44.99
+    authorId:  "101"
+  }) {
+    # After creating, we ask for the newly created book's fields
+    # This is the "return selection" — ask for what you need to update your UI
+    id
+    title
+    isbn
+    genre
+    author {
+      name
+    }
+  }
+}
+
+# Expected response:
+# {
+#   "data": {
+#     "createBook": {
+#       "id": "200",
+#       "title": "Effective Java",
+#       "isbn": "978-0134685991",
+#       "genre": "TECHNOLOGY",
+#       "author": { "name": "Joshua Bloch" }
+#     }
+#   }
+# }
+
+
+# ── 3b. Update mutation ───────────────────────────────────
+# Partial update — only send the fields you want to change.
+# UpdateBookInput has all optional fields.
+
+mutation UpdateBookPrice {
+  updateBook(
+    id: "200"
+    input: {
+      price:   39.99
+      inStock: true
+    }
+  ) {
+    id
+    title
+    price
+    inStock
+  }
+}
+
+
+# ── 3c. Delete mutation ───────────────────────────────────
+# deleteBook returns the ID of the deleted book
+# (common pattern — client uses the ID to remove from UI state)
+
+mutation RemoveBook {
+  deleteBook(id: "200")   # returns ID! — no selection set needed for a scalar return type
+}
+
+
+# ── 3d. Add a review ─────────────────────────────────────
+
+mutation PostBookReview {
+  addReview(
+    bookId:  "42"
+    rating:  5
+    comment: "Absolutely changed how I write code. Must read for every developer."
+  ) {
+    id
+    rating
+    comment
+    reviewer
+    createdAt
+  }
+}
+
+
+# ── 3e. Multiple mutations in sequence ────────────────────
+# Unlike queries (which run in parallel), mutations run SEQUENTIALLY.
+# This is by spec — mutations are guaranteed to execute in order.
+
+mutation CreateThenUpdate {
+  first: createBook(input: {
+    title:    "Design Patterns"
+    isbn:     "978-0201633610"
+    pageCount: 395
+    genre:    TECHNOLOGY
+    price:    49.99
+    authorId: "102"
+  }) {
+    id
+    title
+  }
+
+  second: updateBook(id: "1", input: { price: 32.99 }) {
+    id
+    price
+  }
+
+  # "first" and "second" are aliases — required here because we're
+  # calling two different fields; aliases are optional on queries
+  # but become necessary when calling the same field multiple times
+}
+
+
+# =============================================================================
+# SECTION 4: SUBSCRIPTIONS — Real-Time Updates
+# =============================================================================
+# Subscriptions set up a persistent connection (WebSocket).
+# The server PUSHES data to the client whenever the event occurs.
+# The client doesn't repeatedly poll — the server notifies.
+
+# ── 4a. Subscribe to new books ───────────────────────────
+# Once this subscription is set up, the client receives a
+# new event every time ANY book is added to the system.
+
+subscription WatchForNewBooks {
+  bookAdded {            # triggered when createBook mutation runs
+    id
+    title
+    genre
+    price
+    author {
+      name
+    }
+  }
+}
+
+# Flow:
+#   1. Client opens WebSocket, sends this subscription document
+#   2. Server registers the client for "bookAdded" events
+#   3. Whenever a new book is created, server publishes event
+#   4. Client receives the book data automatically
+
+
+# ── 4b. Subscribe to a specific book's stock changes ──────
+# Filter the subscription to a specific book ID.
+# Only events for THAT book will be pushed.
+
+subscription WatchBookStock {
+  bookStockChanged(bookId: "42") {   # argument to filter by specific book
+    id
+    title
+    inStock
+    # Useful for a product page: "Only 2 left in stock!"
+    # The page updates automatically when stock changes
+  }
+}
+
+
+# ── 4c. Subscribe to new reviews for a book ──────────────
+# Useful for a live review feed on a book detail page.
+
+subscription WatchNewReviews {
+  newReview(bookId: "42") {
+    id
+    rating
+    comment
+    reviewer
+    createdAt
+  }
+}
+
+# When would you use subscriptions vs polling?
+# Subscriptions:  stock tickers, live chat, notifications, collaborative editing
+# Polling:        dashboards that refresh every 30s, "is the job done yet?"
+# REST (SSE):     one-directional server push, simpler than WebSocket
+
+
+# =============================================================================
+# SECTION 5: ERROR HANDLING IN GRAPHQL RESPONSES
+# =============================================================================
+
+# Unlike REST (which uses HTTP status codes), GraphQL ALWAYS returns HTTP 200.
+# Errors appear in the "errors" array alongside any partial data.
+
+# Example: query for a book that doesn't exist
+query GetNonExistentBook {
+  book(id: "9999") {
+    title
+    author {
+      name
+    }
+  }
+}
+
+# Response (partial success is possible):
+# {
+#   "data": {
+#     "book": null        ← field is nullable, so null is returned
+#   },
+#   "errors": [
+#     {
+#       "message": "Book with id 9999 not found",
+#       "locations": [{ "line": 2, "column": 3 }],
+#       "path": ["book"],
+#       "extensions": {
+#         "code": "NOT_FOUND",
+#         "classification": "DataFetchingException"
+#       }
+#     }
+#   ]
+# }
+#
+# Note: GraphQL returns PARTIAL DATA when possible.
+# If one field fails, other fields in the same query still resolve.
+# This is fundamentally different from REST where a 404 means the whole response fails.

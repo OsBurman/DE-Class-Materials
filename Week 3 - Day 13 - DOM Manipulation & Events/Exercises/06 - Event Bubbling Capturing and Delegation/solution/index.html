@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bubbling, Capturing & Delegation</title>
+  <style>
+    body    { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    #outer  { padding: 2rem; background: #ffd; border: 2px solid orange; }
+    #middle { padding: 1.5rem; background: #dff; border: 2px solid teal; margin-top: 0.5rem; }
+    #inner-btn { padding: 0.5rem 1rem; cursor: pointer; }
+    #dynamic-list { list-style: disc; padding-left: 1.5rem; margin-top: 1rem; cursor: pointer; }
+    #dynamic-list li:hover { background: #eee; }
+    #add-item-btn { margin-top: 0.5rem; padding: 0.4rem 0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>Bubbling, Capturing & Delegation</h1>
+
+  <div id="outer">
+    Outer div
+    <div id="middle">
+      Middle div
+      <br>
+      <button id="inner-btn">Inner Button</button>
+    </div>
+  </div>
+
+  <h2>Dynamic List (Event Delegation)</h2>
+  <ul id="dynamic-list"></ul>
+  <button id="add-item-btn">Add Item</button>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!-- ============================================================
+  Day 16b — Angular Fundamentals
+  File: Components & Templates — HTML Template
+  ============================================================
+  This template corresponds to course-card.component.ts.
+  Angular templates are HTML + Angular-specific syntax.
+  ============================================================ -->
+
+<!-- ─── SECTION 1: INTERPOLATION ({{ }}) ─────────────────────
+  Double curly braces embed a TypeScript expression as text.
+  The expression is evaluated in the component class context.
+  Only valid for TEXT content — not attribute values.
+-->
+<article class="course-card">
+
+  <!-- Basic string interpolation -->
+  <h2>{{ title }}</h2>
+
+  <!-- Interpolation with property access -->
+  <p class="instructor">👩‍🏫 {{ instructor.name }} — {{ instructor.title }}</p>
+
+  <!-- Interpolation with arithmetic -->
+  <p class="duration">⏱ {{ durationHours }} hours ({{ durationHours * 60 }} minutes)</p>
+
+  <!-- Interpolation with method call -->
+  <p class="price">{{ formatPrice(price) }}</p>
+
+  <!-- Interpolation with getter -->
+  <p class="rating">{{ ratingStars }} ({{ reviewCount | number }} reviews)</p>
+
+  <!-- Interpolation with pipe (| date, | number, | currency covered in Part 2) -->
+  <p class="publish-date">Published: {{ publishedDate | date:'mediumDate' }}</p>
+
+  <!-- ─── SECTION 2: TEMPLATE EXPRESSIONS ──────────────────────
+    Any valid TypeScript expression works inside {{ }}.
+    Angular evaluates it each change detection cycle.
+  -->
+  <!-- Ternary expression -->
+  <span class="availability">
+    {{ isAvailable ? '✅ Available' : '❌ Unavailable' }}
+  </span>
+
+  <!-- String concatenation -->
+  <p class="tagline">{{ 'Course: ' + title }}</p>
+
+  <!-- Method call returning a value -->
+  <p class="discounted">Sale price: {{ formatPrice(discountedPrice) }}</p>
+
+  <!-- ─── SECTION 3: TEMPLATE STATEMENTS ──────────────────────
+    Event bindings (like click handlers) use template STATEMENTS,
+    not expressions. Statements perform actions — they can have side effects.
+    Syntax: (event)="statement"
+  -->
+  <div class="actions">
+    <!-- Simple method call -->
+    <button (click)="enroll()">Enroll Now</button>
+
+    <!-- Method call with argument -->
+    <button (click)="addToWishlist()">♡ Wishlist</button>
+  </div>
+
+  <!-- ─── SECTION 4: SAFE NAVIGATION OPERATOR (?.) ────────────
+    The ?. operator prevents errors when accessing properties
+    that might be null or undefined.
+    Without it: if instructor is null → runtime error
+    With it:    if instructor is null → renders empty string
+  -->
+  <p class="bio">{{ instructor?.bio }}</p>
+  <img [src]="instructor?.avatarUrl" [alt]="instructor?.name" />
+
+  <!-- ─── SECTION 5: TEMPLATE EXPRESSIONS — WHAT'S ALLOWED ────
+    Angular restricts template expressions for safety.
+    These are NOT allowed in templates:
+      - Assignments (=, +=, -=)
+      - new keyword
+      - Chaining with ; or ,
+      - Bitwise operators
+      - Increment/decrement (++, --)
+    These ARE allowed:
+      - Property access: user.name
+      - Method calls: formatPrice(price)
+      - Ternary: isOn ? 'yes' : 'no'
+      - Pipes: value | currency
+      - Null coalescing: value ?? 'default'
+  -->
+
+  <!-- Tags rendered from an array (basic *ngFor preview) -->
+  <div class="tags">
+    <span *ngFor="let tag of tags" class="tag">
+      #{{ tag }}
+    </span>
+  </div>
+
+  <!-- ─── SECTION 6: COMPONENT SELECTOR IN USE ─────────────────
+    This template is rendered whenever the parent uses:
+      <app-course-card></app-course-card>
+    The selector matches the HTML tag name.
+  -->
+
+</article>

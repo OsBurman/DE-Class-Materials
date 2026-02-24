@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: spring-deployment
+  namespace: default
+  labels:
+    app: springapp
+
+spec:
+  replicas: 3
+
+  # The selector must match the Pod template labels exactly.
+  selector:
+    matchLabels:
+      app: springapp
+
+  template:
+    metadata:
+      labels:
+        app: springapp   # Must match spec.selector.matchLabels
+
+    spec:
+      containers:
+        - name: spring-container
+          image: springapp:1.0.0
+          ports:
+            - containerPort: 8080
+
+          # Resource requests tell the scheduler how much capacity to reserve.
+          # Resource limits cap how much the container can actually consume.
+          resources:
+            requests:
+              cpu: "100m"      # 100 millicores = 0.1 vCPU
+              memory: "128Mi"
+            limits:
+              cpu: "500m"      # 0.5 vCPU
+              memory: "512Mi"

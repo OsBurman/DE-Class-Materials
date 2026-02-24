@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Positioning</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sticky header — sticks to top when you scroll past it -->
+  <div class="sticky-header">📌 Sticky Header — scroll down to see it stick</div>
+
+  <main>
+
+    <h2>Static (Default Flow)</h2>
+    <div class="box static-box">static: normal flow</div>
+
+    <h2>Relative Positioning</h2>
+    <div class="box relative-box">relative: nudged from normal position</div>
+
+    <h2>Absolute Positioning</h2>
+    <!-- position: relative on the parent creates the positioning context -->
+    <div class="positioned-parent" style="position: relative; height: 120px; border: 2px dashed #999; background: #f8f9fa;">
+      <p style="margin: 0.5rem;">Parent (position: relative)</p>
+      <div class="box absolute-box">absolute: bottom-right of parent</div>
+    </div>
+
+    <h2>z-index</h2>
+    <div class="layer-wrapper" style="position: relative; height: 100px;">
+      <div class="layer layer-1">Layer 1 (behind)</div>
+      <div class="layer layer-2">Layer 2 (in front)</div>
+    </div>
+
+    <!-- Filler content to make the page scrollable -->
+    <h2>Scroll down to test Sticky & Fixed</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+
+  </main>
+
+  <!-- Fixed element — stays on screen while scrolling -->
+  <div class="fixed-box">⬆ Back to top</div>
+
+</body>
+</html>

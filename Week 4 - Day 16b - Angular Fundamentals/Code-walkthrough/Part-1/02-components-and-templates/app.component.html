@@ -1,0 +1,85 @@
+<!-- =============================================================================
+  app.component.html — Root Application Template
+  =============================================================================
+  This is the template for AppComponent. Angular replaces <app-root> in
+  index.html with the content of this file.
+
+  CONCEPTS DEMONSTRATED HERE:
+    1. Interpolation          → {{ expression }}
+    2. Property binding       → [property]="expression"
+    3. Event binding          → (event)="handler($event)"
+    4. *ngFor structural dir  → iterate over the courses array
+    5. Using child component  → <app-course-card> with @Input() + @Output()
+
+  NOTE: *ngFor, *ngIf etc. are covered in depth in Part-2.
+  This file just shows REAL usage in context so students see how it all fits.
+  =============================================================================  -->
+
+<!-- ── 1. Page Header ──────────────────────────────────────────────────────── -->
+<header class="app-header">
+  <!-- Interpolation: {{ }} renders a component property as text -->
+  <h1>{{ title }}</h1>
+  <p class="subtitle">{{ subtitle }}</p>
+
+  <!-- String interpolation can hold any JS expression that returns a value -->
+  <p class="stats">
+    Enrolled in {{ enrolledCount }} of {{ courses.length }} courses
+  </p>
+</header>
+
+<!-- ── 2. Selected-course banner (simple conditional using ternary) ─────────── -->
+<!--
+  Property binding: [class.active] sets/removes the "active" CSS class
+  based on whether selectedCourseId has a value.
+  The class binding is one of the most common Angular patterns.
+-->
+<div [class.active]="selectedCourseId !== null" class="selection-banner">
+  <!-- Ternary expression inside {{ }} — any valid TS expression works here -->
+  {{ selectedCourseId !== null
+    ? 'Viewing course #' + selectedCourseId
+    : 'Click a course card to select it' }}
+</div>
+
+<!-- ── 3. Course Grid — using a child component in a loop ───────────────────── -->
+<main class="course-grid">
+
+  <!--
+    *ngFor — Angular structural directive (syntactic sugar for a template loop).
+    "let course of courses" declares a loop variable named "course".
+    Each iteration renders one <app-course-card> element.
+
+    PROPERTY BINDING on @Input():
+      [course]="course"
+        ↑ The @Input() name    ↑ The loop variable (a Course object)
+    This passes each Course object DOWN to the child component.
+
+    EVENT BINDING on @Output():
+      (courseSelected)="onCourseSelected($event)"
+        ↑ @Output() EventEmitter name    ↑ $event = emitted value (courseId)
+    This listens for the child to emit an event and calls our handler.
+  -->
+  <app-course-card
+    *ngFor="let course of courses"
+    [course]="course"
+    (courseSelected)="onCourseSelected($event)">
+  </app-course-card>
+
+</main>
+
+<!-- ── 4. Empty state (shown when courses array is empty) ────────────────────── -->
+<!--
+  *ngIf — renders this block ONLY when the condition is truthy.
+  courses.length === 0 means no courses exist → show the empty message.
+-->
+<p *ngIf="courses.length === 0" class="empty-state">
+  No courses available yet. Check back soon!
+</p>
+
+<!-- ── 5. Footer ─────────────────────────────────────────────────────────────── -->
+<footer class="app-footer">
+  <!-- Property binding: sets the href attribute dynamically -->
+  <a [href]="'https://angular.io'" target="_blank">Angular Docs</a>
+  <span> | </span>
+  <!-- Event binding: (click) listens for the click DOM event -->
+  <button (click)="selectedCourseId = null">Clear Selection</button>
+</footer>

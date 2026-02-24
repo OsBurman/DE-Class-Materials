@@ -1,0 +1,9 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics"   # Only expose what you need; restrict further in production
+
+  endpoint:
+    metrics:
+      enabled: true

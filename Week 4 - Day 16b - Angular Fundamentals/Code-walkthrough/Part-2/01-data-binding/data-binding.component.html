@@ -1,0 +1,270 @@
+<!-- =============================================================================
+  data-binding.component.html — All Four Angular Binding Types
+  =============================================================================
+  Paired with data-binding.component.ts.
+  Sections map directly to the four binding types defined there.
+  =============================================================================  -->
+
+<div class="binding-demo">
+  <h1>Angular Data Binding — All Four Types</h1>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+    TYPE 1 — INTERPOLATION   {{ expression }}
+    Direction: Component → DOM  (read-only from the DOM's perspective)
+    Use when: rendering text content from the component class
+    ══════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>Type 1 — Interpolation <code>{{ '{{' }} prop {{ '}}' }}</code></h2>
+
+    <!-- Basic property rendering -->
+    <p>Student: <strong>{{ studentName }}</strong></p>
+    <p>Course:  <strong>{{ courseTitle }}</strong></p>
+    <p>Rating:  <strong>{{ rating }}</strong> / 5.0</p>
+
+    <!-- Expressions inside {{ }} — any value-returning TS expression -->
+    <p>Rating stars: {{ '★'.repeat(Math.round(rating)) }}</p>
+    <p>Enrolled: {{ enrollmentDate | date:'mediumDate' }}</p>
+    <p>Tags: {{ tags.join(', ') }}</p>
+
+    <!-- Ternary inside interpolation -->
+    <p>Status: {{ rating >= 4.5 ? '🏆 Top Rated' : 'Good' }}</p>
+
+    <!--
+      ⚠️ Note: Interpolation ultimately calls toString() on the result.
+      It is shorthand for [textContent]="expression".
+      Use [innerHTML] (with caution!) if you need to render HTML markup.
+    -->
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+    TYPE 2 — PROPERTY BINDING   [domProperty]="expression"
+    Direction: Component → DOM  (sets a DOM property, not an HTML attribute)
+    Use when: setting non-text content — src, disabled, class, style, etc.
+
+    KEY DISTINCTION:
+      HTML attribute:  <img alt="logo">         ← initial value only, string
+      DOM property:    [alt]="imageAlt"          ← live binding, any type
+
+    Most of the time they have the same name. Exceptions:
+      HTML: colspan   →  DOM: [colSpan]          (camelCase)
+      HTML: class     →  DOM: [className] or [class.myClass]
+      HTML: for       →  DOM: [htmlFor]
+      HTML: readonly  →  DOM: [readOnly]
+    ══════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>Type 2 — Property Binding <code>[property]="expr"</code></h2>
+
+    <!-- Binding to src and alt attributes (images) -->
+    <img [src]="imageUrl" [alt]="imageAlt" width="60">
+
+    <!-- Binding to disabled — value is a boolean, NOT the string "true" -->
+    <!-- [disabled]="true"   → button is disabled                        -->
+    <!-- [disabled]="false"  → disabled property is REMOVED from DOM     -->
+    <button [disabled]="isButtonDisabled">{{ buttonLabel }}</button>
+    <button (click)="toggleDisabled()">Toggle Disabled</button>
+
+    <!-- Class binding: [class.className]="boolean expression" -->
+    <!-- Adds/removes the CSS class based on truthiness -->
+    <div [class.highlighted]="isCardHighlighted" class="card-demo">
+      This card {{ isCardHighlighted ? 'IS' : 'is NOT' }} highlighted
+    </div>
+
+    <!-- Style binding: [style.propertyName]="value" -->
+    <!-- The value is a CSS string or a numeric value -->
+    <p [style.color]="rating > 4 ? 'green' : 'orange'">
+      Rating color changes via style binding
+    </p>
+
+    <!-- Progress element — binding to value and max -->
+    <label>Course progress: {{ progressValue }}%</label>
+    <progress [value]="progressValue" [max]="100"></progress>
+
+    <!-- Binding to href with target -->
+    <a [href]="'https://angular.io'" [target]="linkTarget">Angular Docs</a>
+
+    <!--
+      attr. prefix — for HTML attributes that have no DOM property equivalent
+      (e.g., aria-* attributes, colspan on td):
+        <td [attr.colspan]="columnSpan">
+        <button [attr.aria-label]="buttonLabel">
+    -->
+    <button [attr.aria-label]="buttonLabel">Accessible Button</button>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+    TYPE 3 — EVENT BINDING   (eventName)="statement"
+    Direction: DOM → Component  (listens to DOM events, calls class methods)
+    Use when: responding to user interactions
+
+    $event — the native DOM event object passed to the handler.
+    For click: MouseEvent; for keyup: KeyboardEvent; for input: InputEvent
+    ══════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>Type 3 — Event Binding <code>(event)="handler()"</code></h2>
+
+    <!-- click event -->
+    <button (click)="onButtonClick()">Click Me</button>
+    <p>Click count: {{ clickCount }}</p>
+
+    <!-- keyup event — $event gives access to which key was pressed -->
+    <input type="text" (keyup)="onKeyPress($event)" placeholder="Press any key">
+    <p>Last key pressed: <kbd>{{ lastKey || '—' }}</kbd></p>
+
+    <!-- mousemove — $event.clientX / clientY -->
+    <div class="mouse-area"
+         (mousemove)="onMouseMove($event)"
+         (mouseenter)="onMouseEnter()"
+         (mouseleave)="onMouseLeave()">
+      Move mouse here
+      <span *ngIf="hovered">
+        — X: {{ mousePosition.x }}, Y: {{ mousePosition.y }}
+      </span>
+    </div>
+
+    <!-- Inline statement in event binding — simple assignments are fine -->
+    <button (click)="isCardHighlighted = !isCardHighlighted">
+      Toggle Card Highlight (inline)
+    </button>
+
+    <!--
+      Stopping event propagation:
+        (click)="doSomething(); $event.stopPropagation()"
+      Preventing default browser behavior:
+        (submit)="onSubmit(); $event.preventDefault()"
+      Or use the shorthand:
+        (click.stop)="..." / (click.prevent)="..."  ← NOT built-in, just pattern
+    -->
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+    TYPE 4 — TWO-WAY BINDING   [(ngModel)]="property"
+    Direction: Component ↔ DOM  (syncs both ways simultaneously)
+    Use when: form fields where you need to both display AND capture a value
+
+    REQUIRES FormsModule in AppModule:
+      import { FormsModule } from '@angular/forms';
+      imports: [BrowserModule, FormsModule]  ← in @NgModule
+
+    HOW IT WORKS UNDER THE HOOD:
+      [(ngModel)]="form.name"
+      is exactly equivalent to:
+      [ngModel]="form.name" (ngModelChange)="form.name = $event"
+    ══════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>Type 4 — Two-Way Binding <code>[(ngModel)]="prop"</code></h2>
+
+    <div class="form-demo">
+      <form (ngSubmit)="onSubmit()" #regForm="ngForm">
+
+        <!-- Text input — updates form.name on every keystroke -->
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input id="name"
+                 type="text"
+                 [(ngModel)]="form.name"
+                 name="name"
+                 placeholder="Enter full name"
+                 required>
+          <!-- Live preview — updates AS YOU TYPE because of two-way binding -->
+          <small>Preview: {{ form.name || 'nothing typed yet' }}</small>
+        </div>
+
+        <!-- Email input -->
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email"
+                 type="email"
+                 [(ngModel)]="form.email"
+                 name="email"
+                 placeholder="Enter email">
+        </div>
+
+        <!-- Select dropdown — [(ngModel)] works on <select> too -->
+        <div class="field">
+          <label for="course">Course</label>
+          <select id="course" [(ngModel)]="form.course" name="course">
+            <option *ngFor="let c of availableCourses" [value]="c.value">
+              {{ c.label }}
+            </option>
+          </select>
+          <small>Selected value: {{ form.course }}</small>
+        </div>
+
+        <!-- Checkbox — [(ngModel)] on checkboxes gives you a boolean -->
+        <div class="field">
+          <label>
+            <input type="checkbox" [(ngModel)]="form.agreed" name="agreed">
+            I agree to the terms
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit" [disabled]="!form.agreed">Register</button>
+          <button type="button" (click)="resetForm()">Reset</button>
+          <button type="button" (click)="fillSampleData()">Fill Sample Data</button>
+        </div>
+
+      </form>
+
+      <!-- Submitted state -->
+      <div *ngIf="formSubmitted" class="success-banner">
+        ✅ Registered: {{ form.name }} for {{ form.course }}
+      </div>
+
+      <!-- Live form state preview (using json pipe for debugging) -->
+      <details>
+        <summary>Live form state (json pipe)</summary>
+        <pre>{{ form | json }}</pre>
+      </details>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+    SUMMARY — When to use which binding
+    ══════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section summary">
+    <h2>Quick Reference</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Syntax</th>
+          <th>Type</th>
+          <th>Direction</th>
+          <th>Use For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>{{ '{{' }} expr {{ '}}' }}</code></td>
+          <td>Interpolation</td>
+          <td>Class → DOM</td>
+          <td>Text content</td>
+        </tr>
+        <tr>
+          <td><code>[prop]="expr"</code></td>
+          <td>Property binding</td>
+          <td>Class → DOM</td>
+          <td>DOM properties, attributes, classes, styles</td>
+        </tr>
+        <tr>
+          <td><code>(event)="stmt"</code></td>
+          <td>Event binding</td>
+          <td>DOM → Class</td>
+          <td>User interactions, DOM events</td>
+        </tr>
+        <tr>
+          <td><code>[(ngModel)]="prop"</code></td>
+          <td>Two-way binding</td>
+          <td>Class ↔ DOM</td>
+          <td>Form inputs, real-time sync</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>

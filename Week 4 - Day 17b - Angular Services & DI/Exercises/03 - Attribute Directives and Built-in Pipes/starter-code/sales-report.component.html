@@ -1,0 +1,32 @@
+<h2>Sales Report</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Units rounded</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!--
+      TODO 2: Use *ngFor="let sale of sales" on <tr>.
+      TODO 3: Apply [ngClass] on <tr> to add:
+                'featured'   when sale.featured is true
+                'high-value' when sale.amount > 1000
+      TODO 4: Inside the first <td>, apply [ngStyle] to set font-weight
+              to 'bold' when sale.featured, 'normal' otherwise.
+              Also apply the 'uppercase' pipe to sale.product.
+      TODO 5: In the second <td>, display sale.amount with the 'currency' pipe.
+              In the third <td>, display sale.date with the 'date' pipe (format: 'mediumDate').
+              In the fourth <td>, display sale.amount with the 'number' pipe (format: '1.0-0').
+    -->
+    <tr>
+      <td>Product Name</td>
+      <td>Amount</td>
+      <td>Date</td>
+      <td>Units</td>
+    </tr>
+  </tbody>
+</table>

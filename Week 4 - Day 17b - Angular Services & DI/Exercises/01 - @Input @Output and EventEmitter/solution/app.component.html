@@ -1,0 +1,8 @@
+<h1>Product Reviews</h1>
+
+<app-rating-badge
+  *ngFor="let product of products"
+  [productName]="product.name"
+  [rating]="product.rating"
+  (upvoted)="onUpvote($event)">
+</app-rating-badge>

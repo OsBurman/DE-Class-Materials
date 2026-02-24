@@ -1,0 +1,579 @@
+{
+  "info": {
+    "_postman_id": "d23-bookstore-api-collection",
+    "name": "Day 23 — Bookstore REST API",
+    "description": "Complete demo collection for Day 23 — REST & API Tools.\n\nCovers:\n- All HTTP methods (GET, POST, PUT, PATCH, DELETE)\n- Environment variables ({{baseUrl}}, {{authToken}}, {{bookId}})\n- Pre-request scripts\n- Test assertions (status codes, body fields, headers, response time)\n- Error case testing (400, 401, 403, 404, 409)\n- Chained requests (login → use token)\n\nHow to use:\n1. Import this file into Postman (File → Import)\n2. Create an environment with baseUrl = https://jsonplaceholder.typicode.com\n3. Run individual requests or use the Collection Runner",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://jsonplaceholder.typicode.com",
+      "type": "string",
+      "description": "Override this with your environment variable {{baseUrl}}"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "📁 Books — Happy Path",
+      "description": "Standard CRUD operations against the Books resource",
+      "item": [
+        {
+          "name": "GET All Posts (Books)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/posts?_limit=5&userId=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"],
+              "query": [
+                {
+                  "key": "_limit",
+                  "value": "5",
+                  "description": "Pagination: max 5 results"
+                },
+                {
+                  "key": "userId",
+                  "value": "1",
+                  "description": "Filter by userId"
+                }
+              ]
+            },
+            "description": "GET /posts?_limit=5&userId=1\n\nDemonstrates:\n- GET method\n- Query parameters for filtering and pagination\n- Accept header"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ── Status Code Assertion ──────────────────────────────────────",
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// ── Response Body Assertions ───────────────────────────────────",
+                  "const posts = pm.response.json();",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    pm.expect(posts).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Response contains 5 or fewer items (paginated)', function () {",
+                  "    pm.expect(posts.length).to.be.at.most(5);",
+                  "});",
+                  "",
+                  "pm.test('Each post has id, title, and body', function () {",
+                  "    posts.forEach(function (post) {",
+                  "        pm.expect(post).to.have.property('id');",
+                  "        pm.expect(post).to.have.property('title');",
+                  "        pm.expect(post).to.have.property('body');",
+                  "    });",
+                  "});",
+                  "",
+                  "// ── Response Time Assertion ────────────────────────────────────",
+                  "pm.test('Response time is under 1000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});",
+                  "",
+                  "// ── Header Assertion ───────────────────────────────────────────",
+                  "pm.test('Content-Type includes application/json', function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+                  "});",
+                  "",
+                  "// ── Save first item ID for use in later requests ───────────────",
+                  "if (posts.length > 0) {",
+                  "    pm.environment.set('postId', posts[0].id);",
+                  "    console.log('Saved postId:', posts[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Single Post by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/posts/{{postId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "{{postId}}"]
+            },
+            "description": "GET /posts/{postId}\n\nDemonstrates:\n- Path variable ({{postId}} set by the previous GET All request)\n- Single resource retrieval\n\nRun 'GET All Posts' first to populate {{postId}}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// Fallback: if postId wasn't set by the previous request, use 1",
+                  "if (!pm.environment.get('postId')) {",
+                  "    pm.environment.set('postId', 1);",
+                  "    console.log('postId not found in environment; defaulting to 1');",
+                  "}"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const post = pm.response.json();",
+                  "",
+                  "pm.test('Response is an object (not array)', function () {",
+                  "    pm.expect(post).to.be.an('object');",
+                  "    pm.expect(post).to.not.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Post ID matches requested ID', function () {",
+                  "    const requestedId = parseInt(pm.environment.get('postId'));",
+                  "    pm.expect(post.id).to.equal(requestedId);",
+                  "});",
+                  "",
+                  "pm.test('Post has required fields', function () {",
+                  "    pm.expect(post).to.have.property('id');",
+                  "    pm.expect(post).to.have.property('userId');",
+                  "    pm.expect(post).to.have.property('title');",
+                  "    pm.expect(post).to.have.property('body');",
+                  "});",
+                  "",
+                  "pm.test('title is a non-empty string', function () {",
+                  "    pm.expect(post.title).to.be.a('string').and.to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "POST Create Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Introduction to REST APIs\",\n  \"body\": \"REST stands for Representational State Transfer. It is an architectural style that uses HTTP methods to interact with resources.\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "POST /posts\n\nDemonstrates:\n- POST method with JSON body\n- Content-Type header (required when sending a body)\n- Expecting 201 Created\n- Saving the new resource ID to environment variable"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// You could dynamically build the body here",
+                  "// For example, set a dynamic title with timestamp:",
+                  "const timestamp = new Date().toISOString();",
+                  "pm.environment.set('createdAt', timestamp);",
+                  "console.log('Sending POST request at:', timestamp);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// JSONPlaceholder returns 201 for POST /posts",
+                  "pm.test('Status is 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const created = pm.response.json();",
+                  "",
+                  "pm.test('Response contains generated ID', function () {",
+                  "    pm.expect(created).to.have.property('id');",
+                  "    pm.expect(created.id).to.be.a('number');",
+                  "});",
+                  "",
+                  "pm.test('Response echoes back the title we sent', function () {",
+                  "    pm.expect(created.title).to.equal('Introduction to REST APIs');",
+                  "});",
+                  "",
+                  "pm.test('Response echoes back userId', function () {",
+                  "    pm.expect(created.userId).to.equal(1);",
+                  "});",
+                  "",
+                  "// Save the new ID for use in PUT/PATCH/DELETE requests",
+                  "pm.environment.set('newPostId', created.id);",
+                  "console.log('Created post with ID:', created.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PUT Replace Post (Full Update)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"Complete REST API Reference Guide\",\n  \"body\": \"This replaces the entire post object. All fields must be included when using PUT.\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "PUT /posts/1\n\nDemonstrates PUT (full replacement):\n- ALL fields must be included in the body\n- Omitting a field may result in it being set to null\n\nContrast with PATCH below."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const updated = pm.response.json();",
+                  "",
+                  "pm.test('Title was updated', function () {",
+                  "    pm.expect(updated.title).to.equal('Complete REST API Reference Guide');",
+                  "});",
+                  "",
+                  "pm.test('ID is preserved', function () {",
+                  "    pm.expect(updated.id).to.equal(1);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "PATCH Partial Update Post",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title Only — Other Fields Preserved\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "PATCH /posts/1\n\nDemonstrates PATCH (partial update):\n- Only send the fields you want to change\n- Other fields are preserved (not set to null)\n\nThis is the key difference from PUT."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const patched = pm.response.json();",
+                  "",
+                  "pm.test('Title was patched', function () {",
+                  "    pm.expect(patched.title).to.equal('Updated Title Only — Other Fields Preserved');",
+                  "});",
+                  "",
+                  "// body field was NOT sent in PATCH — it should still exist",
+                  "pm.test('Body field still present after PATCH', function () {",
+                  "    pm.expect(patched).to.have.property('body');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "DELETE /posts/1\n\nDemonstrates:\n- DELETE method\n- Expecting 200 (JSONPlaceholder returns 200 with empty body; real APIs return 204 No Content)"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// JSONPlaceholder returns 200 {} for DELETE",
+                  "// A real API should return 204 No Content",
+                  "pm.test('Status is 200 or 204', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});",
+                  "",
+                  "pm.test('Response time is under 1000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📁 Error Cases",
+      "description": "Test error scenarios — 400, 404, and validation failures",
+      "item": [
+        {
+          "name": "GET Non-Existent Resource (404)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/posts/999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "999999"]
+            },
+            "description": "GET /posts/999999\n\nExpects 404 Not Found.\nJSONPlaceholder returns a 404 for IDs that don't exist."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 404 Not Found', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('Response time is under 1000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET Comments for a Post (Nested Resource)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1", "comments"]
+            },
+            "description": "GET /posts/1/comments\n\nDemonstrates nested resource URL pattern.\nReturns all comments belonging to post 1."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const comments = pm.response.json();",
+                  "",
+                  "pm.test('Returns an array of comments', function () {",
+                  "    pm.expect(comments).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "",
+                  "pm.test('Each comment has postId, name, email, body', function () {",
+                  "    comments.forEach(function (comment) {",
+                  "        pm.expect(comment).to.have.property('postId');",
+                  "        pm.expect(comment).to.have.property('name');",
+                  "        pm.expect(comment).to.have.property('email');",
+                  "        pm.expect(comment).to.have.property('body');",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test('All comments belong to post 1', function () {",
+                  "    comments.forEach(function (comment) {",
+                  "        pm.expect(comment.postId).to.equal(1);",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "📁 Environment Variable Demo",
+      "description": "Demonstrates setting and reading environment variables across requests",
+      "item": [
+        {
+          "name": "STEP 1 — GET Users (Saves First User ID)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            },
+            "description": "Run this FIRST. It fetches all users and saves the first user's ID\nto the environment variable {{savedUserId}}.\n\nThen run STEP 2 to use that variable."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const users = pm.response.json();",
+                  "pm.test('Response is a non-empty array', function () {",
+                  "    pm.expect(users).to.be.an('array').that.is.not.empty;",
+                  "});",
+                  "",
+                  "// Save the first user's ID to the environment",
+                  "const firstUser = users[0];",
+                  "pm.environment.set('savedUserId', firstUser.id);",
+                  "pm.environment.set('savedUsername', firstUser.username);",
+                  "",
+                  "console.log('Saved user ID:', firstUser.id, '| Username:', firstUser.username);",
+                  "console.log('Now run STEP 2 to fetch this user by ID.');"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "STEP 2 — GET User by Saved ID (Reads Environment Variable)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{savedUserId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{savedUserId}}"]
+            },
+            "description": "Run this AFTER STEP 1.\n\n{{savedUserId}} was set by the previous request.\nThis demonstrates chaining requests using environment variables."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const user = pm.response.json();",
+                  "const savedId = parseInt(pm.environment.get('savedUserId'));",
+                  "const savedUsername = pm.environment.get('savedUsername');",
+                  "",
+                  "pm.test('Returned user ID matches saved environment variable', function () {",
+                  "    pm.expect(user.id).to.equal(savedId);",
+                  "});",
+                  "",
+                  "pm.test('Returned username matches saved environment variable', function () {",
+                  "    pm.expect(user.username).to.equal(savedUsername);",
+                  "});",
+                  "",
+                  "console.log('Successfully fetched user:', user.name, '(ID:', user.id, ')');",
+                  "console.log('Chain complete — environment variable worked correctly.');"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

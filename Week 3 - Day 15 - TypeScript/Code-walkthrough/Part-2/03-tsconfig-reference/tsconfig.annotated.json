@@ -1,0 +1,195 @@
+{
+  // ============================================================
+  // ANNOTATED tsconfig.json — Day 15 TypeScript Reference
+  // ============================================================
+  // This file documents the most important compiler options.
+  // In a real project, remove the comments (JSON doesn't allow them
+  // officially, but tsc accepts them; some tools do not).
+  //
+  // Docs: https://www.typescriptlang.org/tsconfig
+  // ============================================================
+  "compilerOptions": {
+
+    // ─── TARGET & MODULE SYSTEM ─────────────────────────────
+    // `target`: which JavaScript version to compile to.
+    // ES2020 is a safe modern default. Use ES5 only if you need
+    // IE11 support (very rare now).
+    // Options: "ES3" | "ES5" | "ES6"/"ES2015" | "ES2020" | "ES2022" | "ESNext"
+    "target": "ES2020",
+
+    // `module`: which module system to use in the output files.
+    // "commonjs" = Node.js (require/exports)
+    // "ESNext"   = ES Modules (import/export) — for Vite/bundlers
+    // "NodeNext" = Modern Node.js with .mjs/.cjs support
+    "module": "commonjs",
+
+    // `lib`: which built-in type definitions to include.
+    // "ES2020" gives you Map, Set, Promise, optional chaining, etc.
+    // "DOM"    gives you browser types (window, document, HTMLElement…)
+    "lib": ["ES2020", "DOM"],
+
+    // ─── OUTPUT ──────────────────────────────────────────────
+    // `outDir`: where to put the compiled .js files.
+    // Always output to a separate folder — never mix .ts and .js.
+    "outDir": "./dist",
+
+    // `rootDir`: where your source .ts files live.
+    // TypeScript preserves the folder structure under rootDir in outDir.
+    "rootDir": "./src",
+
+    // `declaration`: generate .d.ts files alongside .js output.
+    // Essential if you're building a library others will consume.
+    // Your consumers get type info without your source code.
+    "declaration": true,
+
+    // `declarationMap`: generate .d.ts.map files for "go to definition"
+    // to jump through to original .ts source in editors.
+    "declarationMap": true,
+
+    // `sourceMap`: generate .js.map files for debugging.
+    // Lets DevTools / debuggers show you the original .ts source
+    // even though the browser runs the compiled .js.
+    "sourceMap": true,
+
+    // `removeComments`: strip comments from output .js files.
+    // Reduces file size, but loses inline documentation.
+    "removeComments": false,
+
+    // ─── STRICT MODE ─────────────────────────────────────────
+    // `strict`: umbrella flag — enables ALL strict checks below.
+    // ALWAYS enable this for new projects. It catches the most bugs.
+    "strict": true,
+
+    // The following are all enabled by `strict: true`.
+    // Listed individually for educational purposes:
+
+    // `noImplicitAny`: error when TypeScript infers `any` because
+    // you didn't annotate and it can't infer. Forces you to be explicit.
+    "noImplicitAny": true,
+
+    // `strictNullChecks`: null and undefined are NOT assignable to
+    // other types. Forces you to handle null explicitly.
+    // Without this: `const s: string = null` is fine. With it: error.
+    "strictNullChecks": true,
+
+    // `strictFunctionTypes`: stronger checks on function type compatibility.
+    "strictFunctionTypes": true,
+
+    // `strictBindCallApply`: strict types for .bind(), .call(), .apply().
+    "strictBindCallApply": true,
+
+    // `strictPropertyInitialization`: class properties must be initialized
+    // in the constructor or assigned a definite assignment assertion (!).
+    "strictPropertyInitialization": true,
+
+    // `noImplicitThis`: error if `this` has implicit `any` type.
+    "noImplicitThis": true,
+
+    // `useUnknownInCatchVariables`: catch clause variables are `unknown`
+    // instead of `any`. Forces you to type-check errors properly.
+    "useUnknownInCatchVariables": true,
+
+    // ─── ADDITIONAL CHECKS ───────────────────────────────────
+    // `noUnusedLocals`: error on declared but never-read local variables.
+    // Great for keeping code clean.
+    "noUnusedLocals": true,
+
+    // `noUnusedParameters`: error on function parameters that are never used.
+    // Prefix with _ to intentionally ignore: (_unusedParam: string)
+    "noUnusedParameters": true,
+
+    // `noImplicitReturns`: error if not all code paths in a function return a value.
+    "noImplicitReturns": true,
+
+    // `noFallthroughCasesInSwitch`: error if a switch case falls through
+    // without a break/return.
+    "noFallthroughCasesInSwitch": true,
+
+    // `exactOptionalPropertyTypes`: optional properties must be explicitly
+    // set to `undefined` rather than being assignable to `undefined` for free.
+    // Stricter than the default.
+    "exactOptionalPropertyTypes": false,
+
+    // ─── INTEROP ─────────────────────────────────────────────
+    // `esModuleInterop`: allows `import React from "react"` style imports
+    // for CommonJS modules that don't have a default export.
+    // Enable this if you use libraries like React, lodash, express.
+    "esModuleInterop": true,
+
+    // `allowSyntheticDefaultImports`: allows default imports from modules
+    // that don't explicitly export a default (implied by esModuleInterop).
+    "allowSyntheticDefaultImports": true,
+
+    // `moduleResolution`: how TypeScript resolves module imports.
+    // "node" = classic Node.js algorithm (for CJS projects)
+    // "bundler" = for Vite/Webpack/modern bundlers (recommended for new projects)
+    "moduleResolution": "node",
+
+    // `resolveJsonModule`: allows importing .json files as modules.
+    // const pkg = require("./package.json") → import pkg from "./package.json"
+    "resolveJsonModule": true,
+
+    // ─── DECORATORS ──────────────────────────────────────────
+    // `experimentalDecorators`: enables the LEGACY TypeScript decorator syntax
+    // (@Component, @Injectable, etc. — used by Angular).
+    // The new TC39 standard decorators don't need this flag.
+    "experimentalDecorators": true,
+
+    // `emitDecoratorMetadata`: emit type metadata for decorators.
+    // Required for Angular's DI and for libraries using reflect-metadata.
+    // Requires: npm install reflect-metadata
+    "emitDecoratorMetadata": true,
+
+    // ─── PATHS & ALIASES ─────────────────────────────────────
+    // `baseUrl`: root for non-relative imports.
+    // With baseUrl: "." you can write import { x } from "src/utils"
+    // instead of "../../utils"
+    "baseUrl": ".",
+
+    // `paths`: custom module aliases. Pair with bundler aliases.
+    // "@/" is a common alias for the source root (used in Vue/Vite projects).
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+
+    // ─── SKIP LIBRARY CHECKS ─────────────────────────────────
+    // `skipLibCheck`: skip type checking of .d.ts files in node_modules.
+    // Speeds up compilation significantly. Enable for most projects.
+    "skipLibCheck": true,
+
+    // ─── EMIT ────────────────────────────────────────────────
+    // `noEmit`: type-check only — don't produce any output files.
+    // Useful in CI pipelines where a bundler handles the actual compilation.
+    // "noEmit": true,
+
+    // `noEmitOnError`: don't emit output if there were compile errors.
+    // Good practice — don't deploy broken code.
+    "noEmitOnError": true,
+
+    // ─── MISC ────────────────────────────────────────────────
+    // `forceConsistentCasingInFileNames`: error if import casing doesn't
+    // match the actual filename. Prevents case-sensitive FS bugs.
+    "forceConsistentCasingInFileNames": true,
+
+    // `allowJs`: allow .js files in the project.
+    // Useful when gradually migrating a JS codebase to TypeScript.
+    "allowJs": false,
+
+    // `checkJs`: type-check .js files (requires allowJs).
+    "checkJs": false
+  },
+
+  // ─── INCLUDE / EXCLUDE ───────────────────────────────────────
+  // Which files to include in compilation.
+  // Default: all .ts files in the project (recursively).
+  "include": ["src/**/*.ts"],
+
+  // Files/folders to exclude. node_modules is always excluded by default.
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
+
+  // `files`: explicit list of files to include (overrides include/exclude).
+  // Use only for small projects — prefer include/exclude otherwise.
+  // "files": ["src/main.ts", "src/types.d.ts"]
+}

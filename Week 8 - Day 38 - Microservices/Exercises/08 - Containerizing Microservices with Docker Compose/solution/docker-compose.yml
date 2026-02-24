@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+
+  # ── Eureka Service Registry ──────────────────────────────────────────────────
+  eureka-server:
+    build: ./eureka-server          # Runs `docker build` in the ./eureka-server directory
+    ports:
+      - "8761:8761"                  # host:container — Eureka dashboard accessible at localhost:8761
+    networks:
+      - ecommerce-network
+    # No depends_on — Eureka starts first; all other services depend on it
+
+  # ── PostgreSQL Database ──────────────────────────────────────────────────────
+  postgres-db:
+    image: postgres:16               # Use official image — no build needed
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"                  # Expose for local database tools (DBeaver, IntelliJ)
+    volumes:
+      - postgres-data:/var/lib/postgresql/data   # Named volume persists data across restarts
+    networks:
+      - ecommerce-network
+    # Health check: Spring Boot services can start before Postgres is ready;
+    # using restart: on-failure lets them retry until Postgres accepts connections
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d ecommerce"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Inventory Service ────────────────────────────────────────────────────────
+  inventory-service:
+    build: ./inventory-service
+    ports:
+      - "8081:8081"
+    environment:
+      # Service name used for Eureka registration — must match spring.application.name
+      SPRING_APPLICATION_NAME: inventory-service
+      # Docker service name "postgres-db" resolves to the container's IP on ecommerce-network
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: secret
+      # Point to Eureka server by its Docker service name
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      postgres-db:
+        condition: service_healthy   # Wait until Postgres healthcheck passes
+      eureka-server:
+        condition: service_started
+    restart: on-failure              # Retry if startup fails (e.g., Eureka not yet ready)
+    networks:
+      - ecommerce-network
+
+  # ── Order Service ────────────────────────────────────────────────────────────
+  order-service:
+    build: ./order-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_APPLICATION_NAME: order-service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/ecommerce
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: secret
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      # Direct URL used as fallback when Eureka lookup is not yet available
+      INVENTORY_SERVICE_URL: http://inventory-service:8081
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+      inventory-service:
+        condition: service_started
+    restart: on-failure
+    networks:
+      - ecommerce-network
+
+  # ── API Gateway ──────────────────────────────────────────────────────────────
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"                  # All external traffic enters here
+    environment:
+      SPRING_APPLICATION_NAME: api-gateway
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - order-service
+      - inventory-service
+    restart: on-failure
+    networks:
+      - ecommerce-network
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  ecommerce-network:
+    driver: bridge   # Default Docker network driver — containers share a private subnet
+
+# ── Volumes ───────────────────────────────────────────────────────────────────
+volumes:
+  postgres-data:
+    # Declaring a named volume here makes it managed by Docker.
+    # Data persists across `docker compose down` restarts.
+    # Remove with `docker compose down -v` to reset the database.

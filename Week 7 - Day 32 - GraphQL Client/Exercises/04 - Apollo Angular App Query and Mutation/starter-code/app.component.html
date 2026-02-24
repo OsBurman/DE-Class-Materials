@@ -1,0 +1,18 @@
+<h1>Bookstore</h1>
+
+<!-- TODO 5a: Render an unordered list over the books array using *ngFor.
+     Each <li> should show: [title] ([year]) — [genre] — by [author.name] -->
+<ul>
+  <!-- TODO 5a: <li *ngFor="let book of books">{{ ... }}</li> -->
+</ul>
+
+<h2>Add a Book</h2>
+<!-- TODO 5b: Build a form with four inputs bound to newTitle, newGenre, newYear, newAuthorId.
+     Use [(ngModel)] for two-way binding. The submit button should call addBook(). -->
+<form (ngSubmit)="addBook()">
+  <!-- TODO 5b: <input [(ngModel)]="newTitle" name="title" placeholder="Title" required> -->
+  <!-- TODO 5b: <input [(ngModel)]="newGenre" name="genre" placeholder="Genre" required> -->
+  <!-- TODO 5b: <input type="number" [(ngModel)]="newYear" name="year" placeholder="Year" required> -->
+  <!-- TODO 5b: <input [(ngModel)]="newAuthorId" name="authorId" placeholder="Author ID" required> -->
+  <button type="submit">Add Book</button>
+</form>

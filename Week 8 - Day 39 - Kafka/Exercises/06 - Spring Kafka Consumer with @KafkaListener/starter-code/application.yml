@@ -1,0 +1,14 @@
+spring:
+  kafka:
+    # TODO: Set bootstrap-servers to localhost:9092
+    bootstrap-servers:
+    consumer:
+      # TODO: Set group-id to "order-processor"
+      group-id:
+      # TODO: Set auto-offset-reset to "earliest"
+      auto-offset-reset:
+      # TODO: Set key-deserializer to StringDeserializer
+      key-deserializer:
+      # TODO: Set value-deserializer to StringDeserializer
+      # (KafkaConsumerConfig will override with JsonDeserializer for the @KafkaListener)
+      value-deserializer:

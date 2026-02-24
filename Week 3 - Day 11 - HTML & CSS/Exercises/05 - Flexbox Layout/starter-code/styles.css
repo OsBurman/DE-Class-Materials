@@ -1,0 +1,84 @@
+/* Global */
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+.page-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* ── Part A: Navigation Bar ──────────────────────────────────────── */
+
+/* TODO: Target .navbar
+         Set display: flex
+         Set justify-content: space-between   (logo left, links right)
+         Set align-items: center
+         Set background-color: #343a40
+         Set padding: 1rem 2rem */
+
+/* TODO: Target .navbar .nav-links
+         Set display: flex
+         Set gap: 1.5rem
+         Set list-style: none
+         Set margin: 0
+         Set padding: 0 */
+
+/* TODO: Target .navbar a
+         Set color: white
+         Set text-decoration: none */
+
+/* ── Part B: Card Row with Wrapping ─────────────────────────────── */
+
+/* TODO: Target .card-row
+         Set display: flex
+         Set flex-wrap: wrap
+         Set gap: 1rem
+         Set margin: 1rem 0 */
+
+/* TODO: Target .card
+         Set flex: 1 1 220px   (grow | shrink | basis)
+         Set background-color: #f8f9fa
+         Set border: 1px solid #dee2e6
+         Set border-radius: 6px
+         Set padding: 1.25rem */
+
+/* ── Part C: Sidebar Layout ──────────────────────────────────────── */
+
+/* TODO: Target .sidebar-layout
+         Set display: flex
+         Set gap: 1.5rem
+         Set margin: 1rem 0 */
+
+/* TODO: Target .sidebar
+         Set flex: 0 0 220px   (no grow, no shrink, fixed 220px)
+         Set background-color: #e9ecef
+         Set padding: 1rem
+         Set border-radius: 6px */
+
+/* TODO: Target .content
+         Set flex: 1   (take all remaining space)
+         Set background-color: #fff
+         Set padding: 1rem
+         Set border: 1px solid #dee2e6
+         Set border-radius: 6px */
+
+/* ── Part D: Centred Hero ────────────────────────────────────────── */
+
+/* TODO: Target .hero
+         Set display: flex
+         Set flex-direction: column       (stack children vertically)
+         Set justify-content: center      (centre vertically on the column axis)
+         Set align-items: center          (centre horizontally on the row axis)
+         Set text-align: center
+         Set height: 200px
+         Set background-color: #e8f4fd
+         Set border-radius: 8px
+         Set margin: 1rem 0 */
+
+/* ── Part E: Flex Item Order ─────────────────────────────────────── */
+
+/* TODO: Make .item-c appear FIRST (before .item-a and .item-b)
+         Hint: all items default to order: 0; set .item-c to order: -1 */

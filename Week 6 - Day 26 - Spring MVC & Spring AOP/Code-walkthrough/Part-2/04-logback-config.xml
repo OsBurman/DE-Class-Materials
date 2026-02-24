@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+FILE: 04-logback-config.xml
+Location: src/main/resources/logback-spring.xml
+
+"logback-spring.xml" (not "logback.xml") — the "-spring" suffix tells Spring
+Boot to process this file, enabling Spring-specific features:
+  - ${spring.profiles.active} variable
+  - <springProfile> conditional configuration
+  - Spring Boot's color output support
+
+LOGBACK ARCHITECTURE:
+  Logger       → the API you call in code: log.info("...")
+  Appender     → where logs go: console, file, database, external system
+  Encoder      → how logs are formatted: text pattern, JSON
+  Level filter → which log levels are written: TRACE < DEBUG < INFO < WARN < ERROR
+
+Spring Boot defaults:
+  - Console appender with colored output
+  - Log level: INFO for root, DEBUG for your packages in dev
+  - No file output by default
+
+This config replaces those defaults with a production-ready setup.
+=============================================================================
+-->
+
+<configuration>
+
+    <!-- =========================================================
+         SECTION 1: PROPERTIES — reusable values
+         ========================================================= -->
+
+    <!-- Log files go here. Override via spring.logging.file.path property -->
+    <property name="LOG_PATH" value="${LOG_PATH:-logs}" />
+
+    <!-- App name for log identification in multi-service environments -->
+    <property name="APP_NAME" value="bookstore-api" />
+
+    <!-- =========================================================
+         SECTION 2: CONSOLE APPENDER
+         =========================================================
+         Writes log lines to STDOUT.
+         In containers (Docker/K8s), container runtime captures STDOUT
+         and routes it to your log aggregator (ELK, Loki, CloudWatch).
+         ========================================================= -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--
+                PATTERN BREAKDOWN:
+                  %d{HH:mm:ss.SSS}           → timestamp (e.g. 10:22:01.453)
+                  [%thread]                  → thread name
+                  %highlight(%-5level)       → colored log level, left-padded to 5 chars
+                  %cyan(%logger{36})         → logger name (class), cyan color, max 36 chars
+                  [%X{traceId},%X{spanId}]   → OTel trace/span IDs (empty if no tracing)
+                  %msg                       → the log message
+                  %n                         → newline
+            -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) [%X{traceId},%X{spanId}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- =========================================================
+         SECTION 3: ROLLING FILE APPENDER
+         =========================================================
+         Writes logs to rotating files:
+           - Active file: logs/bookstore-api.log
+           - Archived:    logs/bookstore-api.2024-01-15.1.log.gz
+         Files rotate daily and when size exceeds 10MB.
+         Max 30 days of history kept; total cap at 1GB.
+         ========================================================= -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <!-- Current log file -->
+        <file>${LOG_PATH}/${APP_NAME}.log</file>
+
+        <!-- Rolling policy: time + size based -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Archive file name pattern — %d = date, %i = index within a day -->
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>         <!-- Rotate when file hits 10MB -->
+            <maxHistory>30</maxHistory>             <!-- Keep last 30 days -->
+            <totalSizeCap>1GB</totalSizeCap>        <!-- Never exceed 1GB total -->
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- File logs include full timestamp and no color codes -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} [%X{traceId},%X{spanId}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- =========================================================
+         SECTION 4: ASYNC APPENDER WRAPPER
+         =========================================================
+         Writing to disk is slow. Wrapping FILE in AsyncAppender
+         offloads log writing to a background thread.
+         Your application code returns immediately — the background
+         thread drains the queue and writes to disk.
+
+         WARNING: queueSize has a maximum. If logging is faster than
+         writing (burst), the queue fills up.
+           discardingThreshold=0 → never discard (block instead)
+           discardingThreshold=20 (default) → discard TRACE/DEBUG/INFO
+                                              when queue is 80% full
+         ========================================================= -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>  <!-- never discard messages -->
+        <includeCallerData>false</includeCallerData>  <!-- caller data = expensive -->
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!-- =========================================================
+         SECTION 5: SPRING PROFILE-SPECIFIC LOG LEVELS
+         =========================================================
+         <springProfile> tags let you set different log levels
+         depending on which Spring profile is active.
+         ========================================================= -->
+
+    <!-- Development: verbose logging for your code, INFO for frameworks -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.bookstore" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+        <!-- See SQL statements in dev -->
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+        <logger name="org.hibernate.type.descriptor.sql" level="TRACE" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+    <!-- Test: WARN only to keep test output clean -->
+    <springProfile name="test">
+        <root level="WARN">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.bookstore" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
+        </logger>
+    </springProfile>
+
+    <!-- Production: INFO level, both console (for container capture) + async file -->
+    <springProfile name="prod">
+        <root level="WARN">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="ASYNC_FILE" />
+        </root>
+        <logger name="com.bookstore" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="ASYNC_FILE" />
+        </logger>
+    </springProfile>
+
+    <!-- =========================================================
+         SECTION 6: THIRD-PARTY LIBRARY LOG SUPPRESSION
+         =========================================================
+         Many libraries are verbose at INFO level.
+         Suppress them to WARN to reduce noise.
+         ========================================================= -->
+    <logger name="org.springframework" level="WARN" />
+    <logger name="org.hibernate" level="WARN" />
+    <logger name="com.zaxxer.hikari" level="INFO" />          <!-- HikariCP pool events -->
+    <logger name="org.apache.tomcat" level="WARN" />
+    <logger name="springfox" level="WARN" />
+    <logger name="io.swagger" level="WARN" />
+
+    <!-- =========================================================
+         SECTION 7: ROOT LOGGER (fallback)
+         =========================================================
+         Any logger not explicitly configured above falls back to root.
+         Root level applies to ALL loggers without an explicit level.
+         ========================================================= -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
+
+<!--
+=============================================================================
+USING LOGBACK FROM YOUR CODE
+
+Step 1: Import SLF4J (never import Logback classes directly)
+  import org.slf4j.Logger;
+  import org.slf4j.LoggerFactory;
+
+Step 2: Declare the logger (one per class)
+  private static final Logger log = LoggerFactory.getLogger(BookService.class);
+
+  With Lombok (shortcut):
+  @Slf4j
+  public class BookService { ... }
+  // creates 'log' field automatically
+
+Step 3: Log at the appropriate level
+  log.trace("Very detailed: looping through {} items", items.size());
+  log.debug("findById called with id={}", id);
+  log.info("Book created: id={}, title={}", book.getId(), book.getTitle());
+  log.warn("Slow query detected: {}ms", elapsed);
+  log.error("Failed to process order {}", orderId, ex);  // pass exception as last arg
+
+SLF4J PARAMETERIZED LOGGING — always use {} placeholders, never string concatenation:
+  ❌ log.debug("Book: " + book.getTitle());   // builds string even if DEBUG is OFF
+  ✅ log.debug("Book: {}", book.getTitle());  // no string built unless DEBUG is ON
+
+STRUCTURED LOGGING (MDC — Mapped Diagnostic Context):
+  MDC.put("requestId", UUID.randomUUID().toString());
+  MDC.put("userId", user.getId().toString());
+  // Now every log line from this thread includes requestId and userId in the output
+  // Useful for correlating all log lines from one HTTP request
+  MDC.clear();  // clear at end of request (use a filter/interceptor)
+
+EXAMPLE OUTPUT with this logback-spring.xml:
+  10:22:01.453 [main] INFO  c.b.service.BookServiceImpl [abc123,def456] - Book created: id=42
+  10:22:01.467 [main] WARN  c.b.aspect.PerformanceMon.  [abc123,def456] - ⚠️ SLOW METHOD: findAll() took 350ms
+=============================================================================
+-->

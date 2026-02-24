@@ -1,0 +1,62 @@
+// build.gradle — Gradle Groovy DSL
+// Exercise 03: Gradle Build Script and Dependency Management
+
+// TODO 1: Apply the 'java' plugin using the plugins {} block
+//         This enables Java compilation, test, and jar tasks.
+plugins {
+
+}
+
+// TODO 2: Set the project group and version
+//         group   = "com.library"
+//         version = "1.0.0-SNAPSHOT"
+
+
+// TODO 3: Set sourceCompatibility and targetCompatibility to Java 17
+//         These go at the top level, outside any block.
+
+
+java {
+    // TODO 3 (alternative): you can also set toolchain or just set sourceCompatibility above
+}
+
+repositories {
+    // TODO 4: Declare mavenCentral() as the repository
+    //         This tells Gradle where to download dependencies from.
+}
+
+dependencies {
+    // TODO 5a: Add JUnit Jupiter API for test compilation
+    //          configuration: testImplementation
+    //          group: org.junit.jupiter  name: junit-jupiter-api  version: 5.10.2
+
+    // TODO 5b: Add JUnit Jupiter Engine for test execution (runtime only)
+    //          configuration: testRuntimeOnly
+    //          group: org.junit.jupiter  name: junit-jupiter-engine  version: 5.10.2
+
+    // TODO 5c: Add SLF4J API (compile and runtime)
+    //          configuration: implementation
+    //          group: org.slf4j  name: slf4j-api  version: 2.0.13
+
+    // TODO 5d: Add Logback Classic (compile and runtime)
+    //          configuration: implementation
+    //          group: ch.qos.logback  name: logback-classic  version: 1.5.6
+}
+
+test {
+    // TODO 6: Tell the test task to use the JUnit Platform (required for JUnit 5)
+    //         Hint: call useJUnitPlatform() inside this block
+}
+
+// TODO 7: Define a custom task named 'hello'
+//         - group: "custom"
+//         - description: "Prints a greeting from Gradle"
+//         - doLast block: print "Hello from Gradle! Java version: 17"
+
+
+// TODO 8: Define a custom task named 'projectInfo'
+//         - doLast block: print the project name, group, and version
+//           Format:
+//             Project: <name>
+//             Group:   <group>
+//             Version: <version>

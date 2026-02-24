@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ex 01: JSX & First Component</title>
+    <!-- React + ReactDOM from CDN (development builds) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel transpiles JSX in the browser (dev only — never use in production) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { font-family: sans-serif; padding: 2rem; }
+      .info-box { border: 1px solid #ccc; padding: 1rem; border-radius: 4px; margin-top: 1rem; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- type="text/babel" tells Babel to transpile this script -->
+    <script type="text/babel" src="App.js"></script>
+  </body>
+</html>

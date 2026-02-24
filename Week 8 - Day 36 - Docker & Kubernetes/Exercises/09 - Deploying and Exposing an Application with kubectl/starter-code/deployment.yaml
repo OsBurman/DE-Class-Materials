@@ -1,0 +1,50 @@
+# Exercise 09 — Deployment Manifest Starter
+# Complete every TODO to produce a valid Kubernetes Deployment.
+
+# TODO: Set the correct apiVersion for Deployments (apps/v1)
+apiVersion: # TODO
+# TODO: Set the kind to Deployment
+kind: # TODO
+
+metadata:
+  # TODO: Set the Deployment name to spring-deployment
+  name: # TODO
+  namespace: default
+  labels:
+    # TODO: Add label app: springapp
+    app: # TODO
+
+spec:
+  # TODO: Set replicas to 3
+  replicas: # TODO
+
+  selector:
+    matchLabels:
+      # TODO: Match Pods with label app: springapp
+      app: # TODO
+
+  # Pod template — every Pod created by this Deployment will use this spec
+  template:
+    metadata:
+      labels:
+        # TODO: Label the Pods app: springapp (must match selector above)
+        app: # TODO
+
+    spec:
+      containers:
+        # TODO: Name the container spring-container
+        - name: # TODO
+          # TODO: Set the image to springapp:1.0.0
+          image: # TODO
+          ports:
+            # TODO: Expose containerPort 8080
+            - containerPort: # TODO
+          resources:
+            requests:
+              # TODO: Request cpu: 100m, memory: 128Mi
+              cpu: # TODO
+              memory: # TODO
+            limits:
+              # TODO: Limit cpu: 500m, memory: 512Mi
+              cpu: # TODO
+              memory: # TODO

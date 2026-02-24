@@ -1,0 +1,644 @@
+/*
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 2 | CSS Layout, Responsive Design, Animations & Transitions
+  ═══════════════════════════════════════════════════════════════════════════════
+  Topics:
+    • Flexbox — one-dimensional layout
+    • Grid    — two-dimensional layout
+    • Responsive web design & media queries
+    • CSS animations & transitions
+  Linked by 04-full-page-demo.html.
+*/
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 1 — FLEXBOX
+   One-dimensional: arrange items in a ROW or COLUMN.
+   Think: navigation bars, card rows, centering content, button groups.
+
+   CONTAINER properties (on the flex parent):
+     display: flex | inline-flex
+     flex-direction: row (default) | row-reverse | column | column-reverse
+     flex-wrap: nowrap (default) | wrap | wrap-reverse
+     justify-content: flex-start | flex-end | center | space-between | space-around | space-evenly
+     align-items: stretch (default) | flex-start | flex-end | center | baseline
+     align-content: (multi-line wrapping) — same values as justify-content
+     gap: <row-gap> <column-gap>
+
+   ITEM properties (on the flex children):
+     flex-grow:   0 (default) — how much to GROW relative to siblings
+     flex-shrink: 1 (default) — how much to SHRINK relative to siblings
+     flex-basis:  auto (default) — starting size before grow/shrink
+     flex: <grow> <shrink> <basis>  shorthand  (e.g. flex: 1 = flex: 1 1 0)
+     align-self:  overrides align-items for THIS item
+     order:       change visual order without changing DOM order
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1a. Navigation bar (the classic flex use case) ─────────────────────── */
+.flex-navbar {
+  display: flex;
+  flex-direction: row;          /* default — items left to right */
+  align-items: center;          /* vertically center all items */
+  justify-content: space-between; /* logo on left, links on right */
+  gap: var(--space-4, 1rem);
+  padding: 1rem 2rem;
+  background: #1e293b;
+  color: white;
+}
+
+.flex-navbar .logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;   /* don't let the logo shrink */
+}
+
+.flex-navbar .nav-links {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.flex-navbar .nav-links a {
+  color: #94a3b8;
+  transition: color 200ms ease;
+}
+
+.flex-navbar .nav-links a:hover {
+  color: white;
+}
+
+/* ── 1b. Card row — equal-width, wrapping ───────────────────────────────── */
+.flex-card-row {
+  display: flex;
+  flex-wrap: wrap;     /* items wrap to next line when they can't fit */
+  gap: 1.5rem;
+}
+
+.flex-card {
+  flex: 1 1 280px;     /* grow: 1, shrink: 1, basis: 280px */
+  /* ↑ each card is at LEAST 280px wide and grows to fill space equally */
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+/* ── 1c. Centering — the flex superpower ───────────────────────────────── */
+.flex-center {
+  display: flex;
+  justify-content: center;   /* horizontal center */
+  align-items: center;       /* vertical center */
+  min-height: 200px;
+  background: #f1f5f9;
+}
+
+/* ── 1d. Holy Grail layout (header / sidebar-content-sidebar / footer) ─── */
+.holy-grail {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.holy-grail-header,
+.holy-grail-footer {
+  padding: 1rem 2rem;
+  background: #1e293b;
+  color: white;
+}
+
+.holy-grail-body {
+  display: flex;
+  flex: 1;             /* grow to fill remaining height */
+}
+
+.holy-grail-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: #f8fafc;
+  padding: 1.5rem;
+}
+
+.holy-grail-content {
+  flex: 1;             /* take all remaining horizontal space */
+  padding: 1.5rem;
+}
+
+/* ── 1e. flex-grow / flex-shrink / flex-basis demo ──────────────────────── */
+.flex-grow-demo {
+  display: flex;
+  gap: 0.5rem;
+  background: #e2e8f0;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.flex-grow-demo .item-fixed {
+  flex: 0 0 100px;   /* grow:0 shrink:0 basis:100px — always exactly 100px */
+  background: #2563eb;
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.flex-grow-demo .item-grow {
+  flex: 1;           /* grow to fill remaining space */
+  background: #10b981;
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.flex-grow-demo .item-grow-2 {
+  flex: 2;           /* gets TWICE as much extra space as flex:1 items */
+  background: #7c3aed;
+  color: white;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 2 — CSS GRID
+   Two-dimensional: arrange items in ROWS AND COLUMNS simultaneously.
+   Think: page layouts, image galleries, dashboards, form grids.
+
+   CONTAINER properties (on the grid parent):
+     display: grid | inline-grid
+     grid-template-columns: <track-list>
+     grid-template-rows:    <track-list>
+     grid-template-areas:   "named string" layout
+     gap: <row-gap> <column-gap>
+     justify-items: start | end | center | stretch (horizontal alignment of cells)
+     align-items:   start | end | center | stretch (vertical alignment of cells)
+     justify-content: (aligns the entire grid within container)
+     align-content:   (aligns grid rows within container)
+
+   ITEM properties (on the grid children):
+     grid-column: <start> / <end>   (e.g. 1 / 3 = span columns 1 and 2)
+     grid-row:    <start> / <end>
+     grid-area:   <named-area>
+     justify-self / align-self: override for individual cell
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── 2a. Basic 3-column grid ────────────────────────────────────────────── */
+.grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* 3 equal columns; fr = fraction of free space */
+  gap: 1.5rem;
+}
+
+/* ── 2b. Responsive auto-fill grid ─────────────────────────────────────── */
+.grid-auto {
+  display: grid;
+  /* auto-fill: create as many columns as fit; minmax: each min 250px, max 1fr */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── 2c. Named areas layout ────────────────────────────────────────────── */
+.grid-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 180px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header  header  header"
+    "sidebar main    aside"
+    "footer  footer  footer";
+  min-height: 100vh;
+  gap: 0;
+}
+
+.grid-layout-header  { grid-area: header;  background: #1e293b; color: white; padding: 1rem 2rem; }
+.grid-layout-sidebar { grid-area: sidebar; background: #f8fafc; padding: 1.5rem; }
+.grid-layout-main    { grid-area: main;    padding: 1.5rem; }
+.grid-layout-aside   { grid-area: aside;   background: #f8fafc; padding: 1.5rem; }
+.grid-layout-footer  { grid-area: footer;  background: #1e293b; color: white; padding: 1rem 2rem; }
+
+/* ── 2d. Spanning columns and rows ─────────────────────────────────────── */
+.grid-magazine {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 200px);
+  gap: 1rem;
+}
+
+.grid-magazine .feature {
+  grid-column: 1 / 3;   /* spans columns 1 and 2 */
+  grid-row: 1 / 3;      /* spans rows 1 and 2 */
+}
+
+.grid-magazine .sidebar-top {
+  grid-column: 4 / 5;   /* column 4 only */
+  grid-row: 1 / 3;      /* spans rows 1 and 2 */
+}
+
+/* span keyword: "start from auto position, span 2 tracks" */
+.grid-magazine .wide {
+  grid-column: span 2;
+}
+
+/* ── 2e. Image gallery with dense auto-placement ────────────────────────── */
+.grid-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: 200px;
+  gap: 0.5rem;
+}
+
+.grid-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* crop image to fill cell without distortion */
+  border-radius: 0.25rem;
+}
+
+.grid-gallery .tall {
+  grid-row: span 2;     /* double height */
+}
+
+.grid-gallery .wide {
+  grid-column: span 2;  /* double width */
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 3 — RESPONSIVE DESIGN & MEDIA QUERIES
+   Mobile-first: write default styles for mobile, then ADD styles for larger screens.
+   ════════════════════════════════════════════════════════════════════════════
+
+   BREAKPOINTS (common conventions):
+     < 640px   — xs (phones portrait)
+     640px+    — sm (phones landscape / small tablets)
+     768px+    — md (tablets)
+     1024px+   — lg (desktops)
+     1280px+   — xl (large desktops)
+     1536px+   — 2xl (very large screens)
+
+   MEDIA QUERY SYNTAX:
+     @media (condition) { ... }
+     @media screen and (min-width: 768px) and (max-width: 1024px) { ... }
+     @media (prefers-color-scheme: dark) { ... }
+     @media (prefers-reduced-motion: reduce) { ... }
+     @media print { ... }
+*/
+
+/* ── MOBILE FIRST: base styles (all screen sizes) ──────────────────────── */
+
+/* Navigation: stacks vertically on mobile */
+.responsive-nav {
+  display: flex;
+  flex-direction: column;     /* vertical on mobile */
+  gap: 0;
+  background: #1e293b;
+}
+
+.responsive-nav a {
+  color: white;
+  padding: 1rem 1.5rem;
+  display: block;
+  border-bottom: 1px solid #334155;
+}
+
+/* Grid: single column on mobile */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr;   /* one column on mobile */
+  gap: 1.5rem;
+}
+
+/* Text: larger tap targets on mobile */
+.responsive-card {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+/* ── sm breakpoint: 640px+ ─────────────────────────────────────────────── */
+@media (min-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);   /* 2 columns on small screens */
+  }
+}
+
+/* ── md breakpoint: 768px+ ─────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  .responsive-nav {
+    flex-direction: row;     /* horizontal on tablet+ */
+    align-items: center;
+  }
+
+  .responsive-nav a {
+    border-bottom: none;
+    border-right: 1px solid #334155;
+  }
+}
+
+/* ── lg breakpoint: 1024px+ ────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);   /* 3 columns on desktop */
+  }
+
+  /* Show sidebar that was hidden on mobile */
+  .mobile-hidden {
+    display: block;
+  }
+}
+
+/* ── xl breakpoint: 1280px+ ────────────────────────────────────────────── */
+@media (min-width: 1280px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);   /* 4 columns on large desktop */
+  }
+}
+
+/* ── Accessibility: reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Dark mode preference ───────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg:      #0f172a;
+    --color-surface: #1e293b;
+    --color-text:    #f1f5f9;
+    --color-border:  #334155;
+    --color-muted:   #94a3b8;
+  }
+}
+
+/* ── Print styles ───────────────────────────────────────────────────────── */
+@media print {
+  .nav-fixed,
+  .flex-navbar,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    font-size: 12pt;
+    color: black;
+  }
+}
+
+/* ── Container query (modern CSS, supported Chrome 105+) ───────────────── */
+.cq-wrapper {
+  container-type: inline-size;
+  container-name: card-container;
+}
+
+@container card-container (min-width: 400px) {
+  /* styles that apply when THIS CONTAINER is >= 400px wide (not the viewport) */
+  .flex-card {
+    display: flex;
+    gap: 1rem;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 4 — CSS TRANSITIONS
+   Smoothly animate a property change (triggered by state change like :hover).
+
+   Syntax: transition: property duration timing-function delay;
+     property: which CSS property to animate (all = every property)
+     duration: how long (200ms, 0.5s)
+     timing-function: the acceleration curve
+       ease (default) | linear | ease-in | ease-out | ease-in-out
+       cubic-bezier(x1, y1, x2, y2) — custom curve
+     delay: wait before starting
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Button with multiple transitions ───────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  /* Transition multiple properties */
+  transition:
+    background-color 200ms ease,
+    transform        150ms ease,
+    box-shadow       200ms ease;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);    /* lift effect */
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);       /* press down on click */
+}
+
+/* ── Card hover effect ───────────────────────────────────────────────────── */
+.card-hover {
+  transition:
+    transform  250ms ease,
+    box-shadow 250ms ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+}
+
+/* ── Smooth link underline ───────────────────────────────────────────────── */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;                 /* starts at zero width */
+  height: 2px;
+  background: #2563eb;
+  transition: width 250ms ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;              /* expands to full width on hover */
+}
+
+/* ── Input focus transition ─────────────────────────────────────────────── */
+.input-transition {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  transition:
+    border-color 150ms ease,
+    box-shadow   150ms ease;
+}
+
+.input-transition:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 5 — CSS ANIMATIONS
+   For multi-step or looping effects (don't need a trigger).
+
+   @keyframes name {
+     from  { ... }     or    0%  { ... }
+     to    { ... }           50% { ... }
+                             100%{ ... }
+   }
+
+   animation: name duration timing-function delay iteration-count direction fill-mode;
+     name:            keyframe name
+     duration:        how long one cycle takes
+     timing-function: easing
+     delay:           initial wait
+     iteration-count: number | infinite
+     direction:       normal | reverse | alternate | alternate-reverse
+     fill-mode:       none | forwards | backwards | both
+                      'forwards' — keep the final keyframe state after ending
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Fade in ─────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 400ms ease forwards;
+}
+
+/* Staggered children — each starts slightly later */
+.fade-in:nth-child(1) { animation-delay:   0ms; }
+.fade-in:nth-child(2) { animation-delay: 100ms; }
+.fade-in:nth-child(3) { animation-delay: 200ms; }
+.fade-in:nth-child(4) { animation-delay: 300ms; }
+
+/* ── Loading spinner ─────────────────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spin 600ms linear infinite;
+}
+
+/* ── Pulse (notification badge) ─────────────────────────────────────────── */
+@keyframes pulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.15); opacity: 0.8; }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ── Skeleton loading screen ─────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #e2e8f0 25%,
+    #f8fafc 50%,
+    #e2e8f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.25rem;
+}
+
+.skeleton-text  { height: 1rem; margin-bottom: 0.5rem; }
+.skeleton-title { height: 1.5rem; width: 60%; margin-bottom: 1rem; }
+.skeleton-block { height: 120px; }
+
+/* ── Bounce entrance ─────────────────────────────────────────────────────── */
+@keyframes bounceIn {
+  0%   { transform: scale(0);    opacity: 0; }
+  60%  { transform: scale(1.1);  opacity: 1; }
+  80%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.bounce-in {
+  animation: bounceIn 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* ── Slide in from left ──────────────────────────────────────────────────── */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);      opacity: 1; }
+}
+
+.slide-in-left {
+  animation: slideInLeft 350ms ease-out forwards;
+}
+
+/* ── Progress bar fill ───────────────────────────────────────────────────── */
+@keyframes fillProgress {
+  from { width: 0; }
+  to   { width: var(--progress, 70%); }
+}
+
+.progress-bar-track {
+  background: #e2e8f0;
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #2563eb;
+  border-radius: 999px;
+  animation: fillProgress 1s ease-out forwards;
+  animation-delay: 200ms;
+  width: 0;   /* starts at 0; animation takes over */
+}
+
+/* ── Typing cursor ───────────────────────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50%       { border-color: currentColor; }
+}
+
+.typing-cursor {
+  border-right: 2px solid currentColor;
+  animation: blink 1s step-end infinite;
+}

@@ -1,0 +1,108 @@
+# .github/workflows/ci.yml
+# Exercise 04 — Writing a GitHub Actions CI Workflow
+# Complete every TODO to produce a working GitHub Actions workflow.
+
+name: CI Pipeline
+
+# ---------------------------------------------------------------------------
+# Requirement 1 — Triggers
+# TODO 1: Configure triggers for:
+#   - push to main
+#   - pull_request targeting main
+# ---------------------------------------------------------------------------
+on:
+  push:
+    branches:
+      # TODO 1a: list the branch name
+      - # TODO
+  pull_request:
+    branches:
+      # TODO 1b: list the branch name
+      - # TODO
+
+jobs:
+
+  # -------------------------------------------------------------------------
+  # Requirement 2 — Job Setup
+  # TODO 2: Define a job named "build" on ubuntu-latest
+  # -------------------------------------------------------------------------
+  build:
+    # TODO 2a: Set the runner
+    runs-on: # TODO
+
+    # Required for the test reporter action (Requirement 5)
+    permissions:
+      checks: write
+      contents: read
+
+    steps:
+
+      # TODO 2b: Check out the repository using actions/checkout@v4
+      - name: Checkout repository
+        uses: # TODO
+
+      # TODO 2c: Set up Java 17 (temurin distribution) with Maven cache enabled
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: # TODO
+          distribution: # TODO
+          cache: # TODO
+
+      # -----------------------------------------------------------------------
+      # Requirement 3 — Dependency Caching (manual cache step)
+      # TODO 3: Cache ~/.m2/repository
+      #   key: runner.os + hash of pom.xml
+      #   restore-keys: runner.os prefix fallback
+      # -----------------------------------------------------------------------
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: # TODO
+          key: # TODO — use ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            # TODO — use ${{ runner.os }}-maven-
+
+      # -----------------------------------------------------------------------
+      # Requirement 4 — Build and Test
+      # -----------------------------------------------------------------------
+
+      # TODO 4a: Compile the project (skip tests)
+      - name: Compile
+        run: # TODO
+
+      # TODO 4b: Run unit tests
+      - name: Unit Tests
+        run: # TODO
+
+      # TODO 4c: Run integration tests using the integration-tests Maven profile
+      - name: Integration Tests
+        run: # TODO
+
+      # -----------------------------------------------------------------------
+      # Requirement 5 — Publish Test Report
+      # TODO 5: Add a step using dorny/test-reporter@v1
+      #   - name: Publish Test Results
+      #   - if: always()   ← runs even when tests fail
+      #   - reporter: java-junit
+      #   - path: **/surefire-reports/*.xml
+      # -----------------------------------------------------------------------
+      - name: Publish Test Results
+        uses: # TODO
+        if: # TODO
+        with:
+          name: # TODO
+          path: # TODO
+          reporter: # TODO
+
+      # -----------------------------------------------------------------------
+      # Requirement 6 — Upload JAR Artifact
+      # TODO 6: Upload target/*.jar as artefact "springapp-jar", retain 5 days
+      # -----------------------------------------------------------------------
+      - name: Upload JAR
+        uses: # TODO
+        if: always()
+        with:
+          name: # TODO
+          path: # TODO
+          retention-days: # TODO

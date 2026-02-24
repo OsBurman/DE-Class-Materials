@@ -1,0 +1,3 @@
+# .env files containing real secrets or environment-specific values must never be
+# committed to version control. Add this file to .gitignore.
+.env

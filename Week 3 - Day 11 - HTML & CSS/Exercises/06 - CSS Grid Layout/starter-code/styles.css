@@ -1,0 +1,78 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+/* ── Part A: Named Grid Areas ────────────────────────────────────── */
+
+/* TODO: Target .page-grid
+         Set display: grid
+         Set grid-template-columns: 200px 1fr
+         Set grid-template-rows: auto 1fr auto
+         Set min-height: 60vh   (use 60vh so the demo fits on screen)
+         Set grid-template-areas:
+           "header  header"
+           "sidebar main"
+           "footer  footer"
+         Set gap: 0 */
+
+/* TODO: Target .pg-header
+         Set grid-area: header
+         Set background: #343a40
+         Set color: white
+         Set padding: 1rem 2rem */
+
+/* TODO: Target .pg-sidebar
+         Set grid-area: sidebar
+         Set background: #e9ecef
+         Set padding: 1rem */
+
+/* TODO: Target .pg-main
+         Set grid-area: main
+         Set background: #fff
+         Set padding: 1.5rem */
+
+/* TODO: Target .pg-footer
+         Set grid-area: footer
+         Set background: #6c757d
+         Set color: white
+         Set padding: 1rem 2rem
+         Set text-align: center */
+
+/* ── Part B: Auto-Fill Gallery ───────────────────────────────────── */
+
+/* TODO: Target .gallery
+         Set display: grid
+         Set grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))
+         Set gap: 0.75rem
+         Set margin: 1rem 0 */
+
+/* TODO: Target .gallery-item
+         Set background-color: #dee2e6
+         Set border-radius: 6px
+         Set height: 120px
+         Set display: flex
+         Set align-items: center
+         Set justify-content: center
+         Set font-weight: bold
+         Set font-size: 1.2rem */
+
+/* ── Part C: Spanning Items ──────────────────────────────────────── */
+
+/* TODO: Target .span-grid
+         Set display: grid
+         Set grid-template-columns: repeat(3, 1fr)
+         Set gap: 1rem */
+
+/* TODO: Target all .span-item elements
+         Set background-color: #cce5ff
+         Set padding: 1rem
+         Set border: 1px solid #b8daff
+         Set border-radius: 4px
+         Set text-align: center */
+
+/* TODO: Target .span-item-a
+         Set grid-column: span 2   (stretches across 2 columns) */
+
+/* TODO: Target .span-item-b
+         Set grid-row: span 2      (stretches across 2 rows) */

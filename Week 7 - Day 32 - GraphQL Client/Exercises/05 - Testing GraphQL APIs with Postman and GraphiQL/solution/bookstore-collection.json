@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Bookstore GraphQL API",
+    "_postman_id": "day32-graphql-bookstore",
+    "description": "GraphQL requests for the Bookstore API — Day 32 Exercise 05",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET_ALL_BOOKS",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"query\": \"{ books { id title genre year author { name } } }\", \"variables\": {}}"
+        }
+      }
+    },
+    {
+      "name": "GET_BOOK_BY_ID",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"query\": \"query GetBook($id: ID!) { book(id: $id) { id title genre year author { name } } }\", \"variables\": {\"id\": \"b1\"}}"
+        }
+      }
+    },
+    {
+      "name": "ADD_BOOK",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"query\": \"mutation AddBook($title: String!, $genre: String!, $year: Int!, $authorId: ID!) { addBook(title: $title, genre: $genre, year: $year, authorId: $authorId) { id title genre year author { name } } }\", \"variables\": {\"title\": \"Refactoring\", \"genre\": \"Programming\", \"year\": 2018, \"authorId\": \"a1\"}}"
+        }
+      }
+    },
+    {
+      "name": "GET_BOOKS_BY_GENRE",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"query\": \"query BooksByGenre($genre: String!) { booksByGenre(genre: $genre) { id title author { name } } }\", \"variables\": {\"genre\": \"Programming\"}}"
+        }
+      }
+    },
+    {
+      "name": "INTROSPECTION",
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:4000/graphql",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"query\": \"{ __schema { types { name } } }\", \"variables\": {}}"
+        }
+      }
+    }
+  ]
+}

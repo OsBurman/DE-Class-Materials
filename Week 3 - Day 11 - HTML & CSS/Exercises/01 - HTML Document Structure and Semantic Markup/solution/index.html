@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blog</title>
+</head>
+<body>
+
+  <!-- <header> wraps the top-of-page branding / site identity -->
+  <header>
+    <h1>My Tech Blog</h1>
+  </header>
+
+  <!-- <nav> marks a block of navigation links — important for screen readers -->
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <!-- target="_blank" opens in new tab; rel="noopener noreferrer" is a security best practice -->
+      <li><a href="#" target="_blank" rel="noopener noreferrer">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- <main> contains the dominant content of the page — used only once -->
+  <main>
+
+    <!-- <article> is a self-contained piece of content (could be syndicated on its own) -->
+    <article>
+      <h2>Why Semantic HTML Matters</h2>
+
+      <!-- <strong> = important text (bold); <em> = stress emphasis (italic) — both inline -->
+      <p>
+        Semantic HTML makes your pages more <strong>accessible</strong> and helps
+        search engines understand your content <em>accurately</em>.
+      </p>
+
+      <!-- <blockquote> is a block-level element for extended quotations -->
+      <blockquote>
+        "The web is for everyone." — Tim Berners-Lee
+      </blockquote>
+
+      <h3>Practical Benefits</h3>
+      <p>
+        Using semantic elements reduces the need for extra CSS classes and makes
+        the document outline readable without any styling.
+      </p>
+
+      <!-- img with descriptive alt text — essential for accessibility -->
+      <img src="https://placehold.co/400x200" alt="Placeholder image representing web layout">
+    </article>
+
+    <!-- <aside> marks content tangentially related to the surrounding content -->
+    <aside>
+      <p>📌 <strong>Tip:</strong> Install the "Axe" browser extension to test accessibility instantly.</p>
+    </aside>
+
+    <!-- Ordered list — demonstrates block-level list element -->
+    <ol>
+      <li>Improved screen-reader compatibility</li>
+      <li>Better SEO rankings from meaningful structure</li>
+      <li>Cleaner, self-documenting HTML code</li>
+    </ol>
+
+  </main>
+
+  <!-- <footer> wraps the bottom-of-page information -->
+  <footer>
+    <p>&copy; 2025 My Blog. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

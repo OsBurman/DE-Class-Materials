@@ -1,0 +1,166 @@
+{
+  "info": {
+    "_postman_id": "ex04-library-api-practice-starter",
+    "name": "Library API Practice",
+    "description": "Exercise 04 — Postman Requests and Collections\n\nComplete each request by:\n1. Replacing TODO comments with the correct URL, headers, and body\n2. Setting your 'JSONPlaceholder' environment with baseUrl = https://jsonplaceholder.typicode.com\n3. Sending each request and verifying the expected status code",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Posts",
+      "description": "CRUD operations on the /posts resource",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "TODO: Send this request.\nExpected status: 200 OK\nQuestion: How many posts are returned?"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "TODO: Send this request.\nExpected status: 200 OK\nRecord the userId, id, title, and body fields from the response."
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "TODO: add the correct media type header",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"TODO: add a title\",\n  \"body\": \"TODO: add body text\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "TODO: Fix the Content-Type header and fill in the JSON body.\nExpected status: 201 Created\nQuestion: What id does the server assign?"
+          },
+          "response": []
+        },
+        {
+          "name": "Full Update a Post (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "TODO: add the correct media type header",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"TODO: replacement title\",\n  \"body\": \"TODO: replacement body\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "TODO: Fix the Content-Type header and complete the JSON body.\nExpected status: 200 OK\nNote: PUT replaces the entire resource — all fields must be supplied."
+          },
+          "response": []
+        },
+        {
+          "name": "Partial Update a Post (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "TODO: add the correct media type header",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"TODO: only the title changes\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "TODO: Fix the Content-Type header and complete the JSON body.\nExpected status: 200 OK\nQuestion: Which fields appear in the response?"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "TODO: Send this request.\nExpected status: 200 OK\nNote: JSONPlaceholder returns {} — a real API might return 204 No Content."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "description": "Nested resource: comments on a post",
+      "item": [
+        {
+          "name": "Get Comments for a Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1", "comments"]
+            },
+            "description": "TODO: Send this request.\nExpected status: 200 OK\nNote: This demonstrates accessing a nested sub-resource."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": []
+}

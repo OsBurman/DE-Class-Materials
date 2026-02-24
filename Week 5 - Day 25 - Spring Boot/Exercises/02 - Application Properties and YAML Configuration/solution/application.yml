@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: library-service
+
+library:
+  max-loan-days: 14
+  welcome-message: "Welcome to the Library Service!"

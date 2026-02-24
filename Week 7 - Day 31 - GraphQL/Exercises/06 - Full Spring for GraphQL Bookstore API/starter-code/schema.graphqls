@@ -1,0 +1,19 @@
+# TODO 1: Define type Author with three fields:
+#         id: ID!  name: String!  nationality: String   (nationality is nullable)
+
+# TODO 2: Define type Book with these fields:
+#         id: ID!  title: String!  genre: String!  year: Int!
+#         available: Boolean!  rating: Float   (rating is nullable)
+#         author: Author!   ← nested type resolved by @SchemaMapping
+
+# TODO 3: Define type Query with:
+#         books: [Book!]!
+#         book(id: ID!): Book
+#         booksByGenre(genre: String!): [Book!]!
+
+# TODO 4: Define type Mutation with:
+#         addBook(title: String!, genre: String!, year: Int!, authorId: ID!): Book!
+#         setAvailability(id: ID!, available: Boolean!): Book
+
+# TODO 5: Define type Subscription with:
+#         bookAdded: Book!

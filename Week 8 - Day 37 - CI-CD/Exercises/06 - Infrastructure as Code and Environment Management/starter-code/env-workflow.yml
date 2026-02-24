@@ -1,0 +1,64 @@
+name: Deploy with Environments
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  # ---------------------------------------------------------------------------
+  # Step 1 — Build and Test
+  # TODO 1: This job should build and test the project (no environment needed).
+  #         Name it "build-and-test", run on ubuntu-latest.
+  #         Steps: checkout, setup-java@v4 (java 17, temurin, cache maven), mvn verify
+  # ---------------------------------------------------------------------------
+  build-and-test:
+    runs-on: # TODO
+    steps:
+      - uses: # TODO
+      - uses: actions/setup-java@v4
+        with:
+          java-version: # TODO
+          distribution: # TODO
+          cache: # TODO
+      - name: Build and Test
+        run: # TODO
+
+  # ---------------------------------------------------------------------------
+  # Step 2 — Deploy to Staging
+  # TODO 2: Name this job "deploy-staging".
+  #         It needs: runs-on, needs: (depends on build-and-test), environment: staging
+  #         Set env variable APP_ENV to "staging"
+  #         Steps: checkout, then a "Deploy to Staging" step that echoes:
+  #           "Deploying to $APP_ENV environment"
+  # ---------------------------------------------------------------------------
+  deploy-staging:
+    runs-on: # TODO
+    needs: # TODO
+    environment: # TODO
+    env:
+      APP_ENV: # TODO
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Staging
+        run: # TODO
+
+  # ---------------------------------------------------------------------------
+  # Step 3 — Deploy to Production (requires manual approval)
+  # TODO 3: Name this job "deploy-production".
+  #         It needs: deploy-staging (runs after staging succeeds)
+  #         environment: production  ← manual approval is configured in GitHub Settings
+  #         Set env variable APP_ENV to "production"
+  #         Steps: checkout, then a "Deploy to Production" step
+  # ---------------------------------------------------------------------------
+  deploy-production:
+    runs-on: # TODO
+    needs: # TODO
+    environment: # TODO
+    env:
+      APP_ENV: # TODO
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Production
+        run: # TODO

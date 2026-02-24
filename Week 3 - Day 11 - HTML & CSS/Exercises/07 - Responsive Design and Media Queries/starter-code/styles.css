@@ -1,0 +1,52 @@
+/* ── BASE STYLES (Mobile-first: < 600px) ─────────────────────────── */
+
+/* TODO: body — font-family: sans-serif, margin: 0, font-size: 16px */
+
+/* TODO: .navbar — display: flex, flex-direction: column,
+                   align-items: flex-start, background: #343a40, padding: 1rem */
+
+/* TODO: .nav-links — display: none (hidden on mobile) */
+
+/* TODO: .logo — color: white, font-size: 1.25rem */
+
+/* TODO: .hero — padding: 2rem 1rem, text-align: center, background: #e8f4fd */
+
+/* TODO: .card-row — display: flex, flex-direction: column, gap: 1rem, padding: 1rem */
+
+/* TODO: .card — background: #f8f9fa, border: 1px solid #dee2e6,
+                 border-radius: 6px, padding: 1.25rem */
+
+/* TODO: .two-col — display: flex, flex-direction: column, gap: 1rem, padding: 1rem */
+
+/* TODO: .sidebar and .main-content — background: #e9ecef, padding: 1rem, border-radius: 6px */
+
+
+/* ── TABLET BREAKPOINT ── min-width: 600px ───────────────────────── */
+
+/* TODO: @media (min-width: 600px) {
+           .navbar → flex-direction: row, justify-content: space-between, align-items: center
+           .nav-links → display: flex, gap: 1rem, list-style: none, margin: 0, padding: 0
+           .nav-links a → color: white, text-decoration: none
+           .card-row → flex-direction: row, flex-wrap: wrap
+           .card → flex: 1 1 calc(50% - 0.5rem)   (2 cards per row)
+         } */
+
+
+/* ── DESKTOP BREAKPOINT ── min-width: 960px ─────────────────────── */
+
+/* TODO: @media (min-width: 960px) {
+           .card → flex: 1 1 calc(33% - 0.75rem)  (3 cards per row)
+           .two-col → flex-direction: row
+           .sidebar → flex: 0 0 220px
+           .main-content → flex: 1, background: #fff, border: 1px solid #dee2e6
+           .hero → padding: 4rem 2rem, font-size: 1.125rem
+         } */
+
+
+/* ── PRINT MEDIA QUERY ───────────────────────────────────────────── */
+
+/* TODO: @media print {
+           body → font-size: 12pt
+           .navbar → display: none
+           .card-row → display: block
+         } */

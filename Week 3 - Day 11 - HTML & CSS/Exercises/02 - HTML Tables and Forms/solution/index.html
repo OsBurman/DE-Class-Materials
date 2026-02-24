@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tables and Forms</title>
+  <style>
+    body { font-family: sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem 1rem; text-align: left; }
+    thead th { background: #f0f0f0; }
+    tfoot td { font-style: italic; color: #666; }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: 0.4rem; margin-top: 0.25rem; box-sizing: border-box; }
+    input[type="color"] { height: 2.5rem; padding: 0.1rem; }
+    input[type="checkbox"] { width: auto; margin-right: 0.5rem; }
+    fieldset { margin-top: 1rem; border: 1px solid #ccc; padding: 0.75rem; }
+    legend { font-weight: bold; padding: 0 0.25rem; }
+    button { margin-top: 1rem; margin-right: 0.5rem; padding: 0.5rem 1.5rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h1>Part A: Data Table</h1>
+
+  <table>
+    <!-- caption describes the table's content — read by screen readers -->
+    <caption>Student Grades</caption>
+
+    <!-- thead holds column headers -->
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Subject</th>
+        <th scope="col">Grade</th>
+        <th scope="col">Passed</th>
+      </tr>
+    </thead>
+
+    <!-- tbody holds the data rows -->
+    <tbody>
+      <!-- scope="row" on <th> marks this cell as the row header -->
+      <tr>
+        <th scope="row">Alice Johnson</th>
+        <td>HTML &amp; CSS</td>
+        <td>A</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <th scope="row">Bob Smith</th>
+        <td>JavaScript</td>
+        <td>B+</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <th scope="row">Clara Lee</th>
+        <td>Java</td>
+        <td>A-</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <th scope="row">David Kim</th>
+        <td>SQL</td>
+        <td>C</td>
+        <td>No</td>
+      </tr>
+    </tbody>
+
+    <!-- tfoot summarizes or closes the table -->
+    <tfoot>
+      <tr>
+        <td colspan="4">End of report</td>
+      </tr>
+    </tfoot>
+  </table>
+
+
+  <h1>Part B: Registration Form</h1>
+
+  <!-- method="post" sends data in the request body — appropriate for sensitive data -->
+  <form action="#" method="post">
+
+    <!-- Text input: required + minlength enforced by browser on submit -->
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" name="fullName"
+           required minlength="2" placeholder="Jane Doe">
+
+    <!-- Email input: browser validates presence of '@' and domain -->
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email"
+           required placeholder="jane@example.com">
+
+    <!-- Fieldset groups related fields with a visible border and legend -->
+    <fieldset>
+      <legend>Security</legend>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password"
+             required minlength="8">
+    </fieldset>
+
+    <!-- Number input with min/max — browser rejects values outside range -->
+    <label for="age">Age</label>
+    <input type="number" id="age" name="age"
+           required min="18" max="120">
+
+    <!-- Color input — opens native OS color picker -->
+    <label for="colour">Favourite Colour</label>
+    <input type="color" id="colour" name="colour">
+
+    <!-- URL input — optional field, browser validates URL format -->
+    <label for="website">Website (optional)</label>
+    <input type="url" id="website" name="website"
+           placeholder="https://example.com">
+
+    <!-- Checkbox: label wraps the input — clicking the label text toggles the box -->
+    <label>
+      <input type="checkbox" id="newsletter" name="newsletter">
+      Subscribe to newsletter
+    </label>
+
+    <!-- Select dropdown -->
+    <label for="role">Role</label>
+    <select id="role" name="role">
+      <option value="student">Student</option>
+      <option value="instructor">Instructor</option>
+      <option value="observer">Observer</option>
+    </select>
+
+    <!-- Textarea: rows sets visible height; maxlength caps input length -->
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio" rows="4"
+              maxlength="200" placeholder="Tell us about yourself..."></textarea>
+
+    <!-- type="submit" triggers form validation then submission -->
+    <button type="submit">Register</button>
+    <!-- type="reset" clears all fields back to their default values -->
+    <button type="reset">Clear</button>
+
+  </form>
+
+</body>
+</html>

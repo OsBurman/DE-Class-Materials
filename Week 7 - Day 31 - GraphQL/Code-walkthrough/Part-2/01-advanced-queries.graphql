@@ -1,0 +1,525 @@
+# Advanced GraphQL Queries — Arguments, Variables, Aliases & Fragments
+# Day 31 — Part 2
+# ─────────────────────────────────────────────────────────────────────────────
+# This file demonstrates the client-side features that make GraphQL truly
+# powerful in production applications.
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+# =============================================================================
+# SECTION 1: ARGUMENTS — Parameterizing Queries
+# =============================================================================
+# Arguments are key-value pairs attached to fields.
+# They let you filter, paginate, sort, or otherwise customize the result.
+# Arguments can appear on root fields (like books(genre: FICTION)) or
+# on nested fields (like reviews(minRating: 4)).
+
+# ── 1a. Simple scalar arguments ──────────────────────────
+
+query GetTechBooks {
+  books(genre: TECHNOLOGY) {
+    id
+    title
+    rating
+    price
+  }
+}
+
+# ── 1b. Multiple arguments ────────────────────────────────
+
+query GetAffordableTopRatedBooks {
+  books(
+    genre:   TECHNOLOGY
+    sortBy:  RATING_DESC
+    limit:   10
+  ) {
+    title
+    rating
+    price
+    author {
+      name
+    }
+  }
+}
+
+# ── 1c. Arguments on nested fields ───────────────────────
+# Arguments aren't just for root fields — any field can accept them.
+
+query GetBookWithLimitedReviews {
+  book(id: "42") {
+    title
+    author {
+      name
+    }
+    reviews(minRating: 4, limit: 5) {   # only fetch high-rated reviews, max 5
+      rating
+      comment
+      reviewer
+    }
+  }
+}
+
+# ── 1d. Argument with @deprecated fields ──────────────────
+# In schemas, you can mark fields as deprecated with a directive.
+# Clients can still use them but get a warning.
+# (Schema-side example shown in Part-2/03-schema-design-best-practices.md)
+
+
+# =============================================================================
+# SECTION 2: VARIABLES — Dynamic, Reusable Queries
+# =============================================================================
+# Hardcoding argument values ("42") directly in queries is fine for demos,
+# but in real applications the values change at runtime.
+#
+# VARIABLES let you define a parameterized query template once,
+# then pass different values each execution.
+#
+# Syntax: ($variableName: Type)
+#   - $ prefix for all variable names
+#   - Type must match the argument type (ID!, String, Genre, etc.)
+#   - ! on the variable type means the variable MUST be provided
+#
+# The actual variable values are sent in a SEPARATE JSON object alongside the query:
+# {
+#   "query":     "query GetBook($bookId: ID!) { book(id: $bookId) { title } }",
+#   "variables": { "bookId": "42" }
+# }
+#
+# Benefits of variables:
+#   1. Security — prevents injection attacks (values are never interpolated into query string)
+#   2. Reusability — one query template, many executions
+#   3. Performance — servers can cache parsed queries by their document hash
+
+# ── 2a. Simple variable ───────────────────────────────────
+
+query GetBookByVariable($bookId: ID!) {     # $bookId is a required variable of type ID
+  book(id: $bookId) {                       # use the variable as an argument value
+    id
+    title
+    isbn
+    author {
+      name
+    }
+  }
+}
+
+# Variables JSON sent with this query:
+# { "bookId": "42" }
+
+
+# ── 2b. Multiple variables ────────────────────────────────
+
+query GetFilteredBooks(
+  $genre:  Genre          # optional — no ! means the variable is optional
+  $sortBy: SortOrder      # optional
+  $limit:  Int            # optional
+) {
+  books(genre: $genre, sortBy: $sortBy, limit: $limit) {
+    id
+    title
+    rating
+    price
+    genre
+  }
+}
+
+# Variables JSON:
+# { "genre": "TECHNOLOGY", "sortBy": "RATING_DESC", "limit": 5 }
+
+
+# ── 2c. Variables in mutations ────────────────────────────
+# Variables shine in mutations — the input data always comes from a form/UI
+
+mutation CreateBookWithVariables($input: CreateBookInput!) {
+  createBook(input: $input) {
+    id
+    title
+    isbn
+    genre
+    author {
+      name
+    }
+  }
+}
+
+# Variables JSON:
+# {
+#   "input": {
+#     "title":    "The Clean Coder",
+#     "isbn":     "978-0137081073",
+#     "pageCount": 256,
+#     "genre":    "TECHNOLOGY",
+#     "price":    39.99,
+#     "authorId": "101"
+#   }
+# }
+
+
+# ── 2d. Default variable values ───────────────────────────
+# Variables can have default values — used when the variable isn't provided
+
+query GetBooksWithDefaults(
+  $genre:  Genre    = TECHNOLOGY  # default: TECHNOLOGY
+  $limit:  Int      = 10          # default: 10
+  $sortBy: SortOrder = RATING_DESC # default: highest-rated first
+) {
+  books(genre: $genre, limit: $limit, sortBy: $sortBy) {
+    title
+    rating
+  }
+}
+
+# Called with no variables → uses defaults: TECHNOLOGY, 10, RATING_DESC
+# Called with { "genre": "FICTION" } → FICTION, 10, RATING_DESC
+
+
+# =============================================================================
+# SECTION 3: ALIASES — Multiple Fields, Different Names
+# =============================================================================
+# Problem: you want to query the same field twice with different arguments.
+# Without aliases: the two results would have the same key in the response,
+# and the second would overwrite the first.
+#
+# Solution: aliases let you rename any field in the response.
+# Syntax: aliasName: fieldName(arguments)
+
+# ── 3a. Alias for same field with different arguments ─────
+# A "compare books" page needs two different books simultaneously.
+
+query CompareTwoBooks {
+  cleanCode: book(id: "1") {       # "cleanCode" is the alias
+    title
+    rating
+    price
+    pageCount
+  }
+
+  effectiveJava: book(id: "2") {   # "effectiveJava" is the alias
+    title
+    rating
+    price
+    pageCount
+  }
+}
+
+# Response:
+# {
+#   "data": {
+#     "cleanCode":    { "title": "Clean Code",    "rating": 4.9, ... },
+#     "effectiveJava":{ "title": "Effective Java", "rating": 4.8, ... }
+#   }
+# }
+# Without aliases, both would try to be "book" — the second would overwrite the first.
+
+
+# ── 3b. Aliases on any field (not just duplicates) ────────
+# Aliases also help when the schema field name doesn't match what your UI layer expects.
+
+query BookListForUI {
+  bookList: books(limit: 20) {        # rename "books" to "bookList" in the response
+    bookId: id                         # rename "id" to "bookId"
+    bookTitle: title                   # rename "title" to "bookTitle"
+    authorName: author {               # ← this only works for scalars
+      # For objects, alias the object itself, then select fields
+    }
+    price
+  }
+}
+
+# More realistic alias usage with nested objects:
+query BooksForCatalogPage {
+  featuredBooks: books(sortBy: RATING_DESC, limit: 6) {
+    id
+    title
+    rating
+    coverPrice: price     # rename price to coverPrice in response
+    author {
+      displayName: name   # rename name to displayName
+    }
+  }
+
+  newArrivals: books(sortBy: NEWEST_FIRST, limit: 6) {  # same field, different args, different alias
+    id
+    title
+    genre
+  }
+}
+
+
+# ── 3c. Aliases in mutations ──────────────────────────────
+# When updating multiple books in one mutation, aliases separate the results.
+
+mutation BulkUpdatePrices {
+  book1: updateBook(id: "1", input: { price: 29.99 }) {
+    id
+    title
+    price
+  }
+  book2: updateBook(id: "2", input: { price: 34.99 }) {
+    id
+    title
+    price
+  }
+  book3: updateBook(id: "3", input: { price: 39.99 }) {
+    id
+    title
+    price
+  }
+}
+
+
+# =============================================================================
+# SECTION 4: FRAGMENTS — Reusable Field Sets
+# =============================================================================
+# Problem: you're building several different queries and they all need the same
+# set of fields from Book. You'd repeat the same selection set everywhere.
+# If you add a new field, you'd have to update every query.
+#
+# Solution: fragments define a named, reusable set of fields for a specific type.
+#
+# Syntax:
+#   fragment FragmentName on TypeName {
+#     field1
+#     field2
+#   }
+# Used with: ...FragmentName (spread operator)
+
+# ── 4a. Named fragments ───────────────────────────────────
+
+# Define the fragment once
+fragment BookCardFields on Book {
+  id
+  title
+  rating
+  price
+  inStock
+  genre
+  author {
+    name
+  }
+}
+
+fragment AuthorBioFields on Author {
+  id
+  name
+  email
+  birthYear
+}
+
+# Use the fragment in multiple queries — spread with ...
+query GetAllBooksForCard {
+  books {
+    ...BookCardFields    # spread all fields from the fragment here
+  }
+}
+
+query GetSingleBookForCard {
+  book(id: "42") {
+    ...BookCardFields    # same fragment, different query
+    pageCount            # can add more fields beyond the fragment
+    reviews {
+      rating
+      comment
+    }
+  }
+}
+
+query GetAuthorProfile {
+  author(id: "101") {
+    ...AuthorBioFields
+    books {
+      ...BookCardFields  # nested — Author's books use the BookCardFields fragment
+    }
+  }
+}
+
+
+# ── 4b. Combining fragments with aliases ──────────────────
+
+query CompareAuthors {
+  firstAuthor: author(id: "101") {
+    ...AuthorBioFields
+    books {
+      title
+      rating
+    }
+  }
+
+  secondAuthor: author(id: "102") {
+    ...AuthorBioFields
+    books {
+      title
+      rating
+    }
+  }
+}
+
+
+# ── 4c. Inline fragments — for interfaces and unions ──────
+# When a field returns an interface or union, you need inline fragments
+# to select fields specific to each possible concrete type.
+#
+# Syntax: ... on TypeName { field1 field2 }
+
+query SearchEverything {
+  search(query: "Robert Martin") {
+
+    # __typename is a special meta-field — returns the actual type name as a String
+    # Useful for the client to know which type it got
+    __typename
+
+    # Inline fragment for when the result is a Book
+    ... on Book {
+      id
+      title
+      genre
+      author {
+        name
+      }
+    }
+
+    # Inline fragment for when the result is an Author
+    ... on Author {
+      id
+      name
+      email
+    }
+
+    # Inline fragment for when the result is a Review
+    ... on Review {
+      id
+      rating
+      comment
+      reviewer
+    }
+  }
+}
+
+# Response might contain a mix:
+# {
+#   "data": {
+#     "search": [
+#       { "__typename": "Author", "id": "101", "name": "Robert C. Martin", "email": "..." },
+#       { "__typename": "Book",   "id": "1",   "title": "Clean Code", ... },
+#       { "__typename": "Book",   "id": "5",   "title": "The Clean Coder", ... }
+#     ]
+#   }
+# }
+
+
+# =============================================================================
+# SECTION 5: DIRECTIVES — Runtime Conditional Logic
+# =============================================================================
+# Directives modify query execution at runtime based on a boolean condition.
+# Two built-in directives:
+#   @include(if: Boolean) — include this field only if condition is true
+#   @skip(if: Boolean)    — skip (exclude) this field if condition is true
+#
+# Both work on fields, fragments, and inline fragments.
+
+# ── 5a. @include — conditionally include a field ─────────
+
+query GetBookDetails(
+  $bookId:          ID!
+  $includeReviews:  Boolean!   # the condition comes from a variable
+  $includeISBN:     Boolean!
+) {
+  book(id: $bookId) {
+    title
+    price
+    isbn @include(if: $includeISBN)    # only include isbn if $includeISBN is true
+    author {
+      name
+    }
+    reviews @include(if: $includeReviews) {   # entire selection set conditional
+      rating
+      comment
+    }
+  }
+}
+
+# With variables: { "bookId": "42", "includeReviews": true, "includeISBN": false }
+# Result: isbn omitted, reviews included
+
+# With variables: { "bookId": "42", "includeReviews": false, "includeISBN": true }
+# Result: isbn included, reviews omitted
+
+
+# ── 5b. @skip — conditionally skip a field ────────────────
+# @skip is the logical inverse of @include — include by default, skip if condition is true
+
+query GetBookForPreview(
+  $bookId:    ID!
+  $isPreview: Boolean!    # if true, we're in preview mode — skip paid fields
+) {
+  book(id: $bookId) {
+    title
+    author { name }
+    rating
+
+    # Skip the price and purchase fields in preview mode
+    price       @skip(if: $isPreview)
+    inStock     @skip(if: $isPreview)
+
+    # Skip detailed reviews in preview mode — just show a count
+    reviews     @skip(if: $isPreview) {
+      rating
+      comment
+    }
+  }
+}
+
+
+# ── 5c. Directive on a fragment spread ────────────────────
+
+query GetBookConditionally(
+  $bookId:           ID!
+  $showAuthorDetails: Boolean!
+) {
+  book(id: $bookId) {
+    title
+    price
+
+    # Include the entire AuthorBioFields fragment conditionally
+    author @include(if: $showAuthorDetails) {
+      ...AuthorBioFields
+    }
+  }
+}
+
+
+# =============================================================================
+# SECTION 6: INTROSPECTION — Querying the Schema Itself
+# =============================================================================
+# GraphQL has a built-in introspection system — you can query the schema
+# using special fields starting with __ (double underscore).
+# This is how GraphiQL and Postman's auto-complete work.
+
+# ── 6a. Discover what types are available ─────────────────
+
+query IntrospectTypes {
+  __schema {
+    types {
+      name
+      kind          # OBJECT, SCALAR, ENUM, INTERFACE, UNION, INPUT_OBJECT
+    }
+  }
+}
+
+# ── 6b. Inspect a specific type ───────────────────────────
+
+query IntrospectBookType {
+  __type(name: "Book") {
+    name
+    fields {
+      name
+      type {
+        name
+        kind
+      }
+    }
+  }
+}
+
+# Note: in production, disable introspection for security — it reveals your full schema.
+# Spring for GraphQL: spring.graphql.schema.introspection.enabled=false

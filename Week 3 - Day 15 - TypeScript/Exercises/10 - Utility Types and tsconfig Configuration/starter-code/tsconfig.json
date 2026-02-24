@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // ES2020: compiled JS uses modern syntax (optional chaining, nullish coalescing, etc.)
+    "target": "ES2020",
+
+    // commonjs: module.exports/require — compatible with Node.js
+    "module": "commonjs",
+
+    // strict: enables ALL strict type-checking flags at once (recommended)
+    "strict": true,
+
+    // outDir: compiled .js files go here — keeps source clean
+    "outDir": "./dist",
+
+    // rootDir: tells tsc where your source .ts files start
+    "rootDir": "./",
+
+    // esModuleInterop: allows `import fs from 'fs'` style (instead of * as fs)
+    "esModuleInterop": true,
+
+    // experimentalDecorators: enables @Decorator syntax (needed for Ex 08)
+    "experimentalDecorators": true,
+
+    // noImplicitAny: parameter/variable typed as `any` implicitly → compile error
+    "noImplicitAny": true,
+
+    // strictNullChecks: null and undefined are NOT assignable to other types by default
+    "strictNullChecks": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

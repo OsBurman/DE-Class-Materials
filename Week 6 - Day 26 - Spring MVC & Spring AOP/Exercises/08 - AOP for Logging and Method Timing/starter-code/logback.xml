@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- TODO: Define a ConsoleAppender named "CONSOLE" -->
+    <!--       Use encoder pattern: %d{HH:mm:ss.SSS} [%level] %logger{36} - %msg%n -->
+
+    <root level="INFO">
+        <!-- TODO: Add appender-ref ref="CONSOLE" -->
+    </root>
+
+</configuration>

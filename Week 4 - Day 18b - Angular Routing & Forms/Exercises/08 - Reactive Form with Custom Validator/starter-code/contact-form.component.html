@@ -1,0 +1,41 @@
+<!-- TODO 6 – Add [formGroup]="form" and (ngSubmit)="onSubmit()" to the form tag -->
+<form style="max-width:440px; padding:1.5rem;">
+  <h2>Contact Us</h2>
+
+  <!-- ════ Username ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="username">Username</label><br />
+    <!-- TODO 7 – Add formControlName="username" -->
+    <input id="username" type="text" style="width:100%; padding:0.4rem;" />
+
+    <!-- TODO 8 – Add error divs:
+      form.get('username')?.touched && form.get('username')?.errors?.['required']
+        → "Username is required."
+      form.get('username')?.touched && form.get('username')?.errors?.['minlength']
+        → "Minimum 3 characters."
+      form.get('username')?.touched && form.get('username')?.errors?.['noSpaces']
+        → "Username cannot contain spaces."
+    -->
+  </div>
+
+  <!-- ════ Email ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="email">Email</label><br />
+    <!-- TODO 7 – Add formControlName="email" -->
+    <input id="email" type="email" style="width:100%; padding:0.4rem;" />
+    <!-- TODO 8 – Add error divs for required and email validators -->
+  </div>
+
+  <!-- ════ Message ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="message">Message</label><br />
+    <!-- TODO 7 – Add formControlName="message" -->
+    <textarea id="message" rows="4" style="width:100%; padding:0.4rem;"></textarea>
+    <!-- TODO 8 – Add error divs for required and minlength validators -->
+  </div>
+
+  <!-- TODO 6 – Disable button when form.invalid -->
+  <button type="submit">Send</button>
+
+  <p *ngIf="submitted" style="color:green; margin-top:1rem;">✔ Message sent!</p>
+</form>

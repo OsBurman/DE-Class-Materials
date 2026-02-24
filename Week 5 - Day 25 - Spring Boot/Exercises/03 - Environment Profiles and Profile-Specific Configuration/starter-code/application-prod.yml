@@ -1,0 +1,7 @@
+# Production profile configuration.
+# Loaded when spring.profiles.active=prod (in addition to application.yml).
+
+# TODO: Add these three settings in YAML format:
+#   server.port          → 80
+#   library.datasource-url → jdbc:postgresql://prod-db:5432/library
+#   library.log-level    → WARN

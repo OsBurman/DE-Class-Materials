@@ -1,0 +1,19 @@
+<h1>Lifecycle Hooks Demo</h1>
+
+<div>
+  <!-- TODO 9: Use *ngIf="showChild" on the <app-lifecycle-child> element to conditionally render it.
+               Pass [message]="message" as a property binding.
+               Destroying the component (toggling showChild to false) triggers ngOnDestroy. -->
+  <app-lifecycle-child [message]="message"></app-lifecycle-child>
+  <!-- TODO: add *ngIf="showChild" to the element above -->
+</div>
+
+<div style="margin-top: 1rem;">
+  <!-- TODO 10: Bind (click)="changeMessage()" to the first button -->
+  <button>Change Message</button>
+
+  <!-- TODO 11: Bind (click)="toggleChild()" to the second button -->
+  <button>Destroy / Re-create Child</button>
+</div>
+
+<p><em>Watch the browser console as you click the buttons!</em></p>

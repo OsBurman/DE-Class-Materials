@@ -1,0 +1,32 @@
+# Complete product catalog schema
+# Uses all five built-in scalar types and all three operation types.
+
+type Product {
+  id: ID!              # unique identifier – non-null
+  name: String!        # product name – non-null
+  price: Float!        # price e.g. 29.99 – non-null
+  quantity: Int!       # units in stock – non-null
+  inStock: Boolean!    # availability flag – non-null
+  description: String  # optional description (nullable)
+  reviews: [Review!]!  # non-null list of non-null Reviews
+}
+
+type Review {
+  id: ID!
+  comment: String!     # reviewer comment – non-null
+  rating: Float!       # 0.0 – 5.0 rating – non-null
+}
+
+type Query {
+  products: [Product!]!      # all products
+  product(id: ID!): Product  # single product; null if not found
+}
+
+type Mutation {
+  addProduct(name: String!, price: Float!, inStock: Boolean!): Product!
+  deleteProduct(id: ID!): Boolean!
+}
+
+type Subscription {
+  productAdded: Product!  # pushed whenever a product is added
+}

@@ -1,0 +1,75 @@
+# Exercise 07 — Docker Compose Starter
+# Complete every TODO to build a working two-service Compose stack.
+
+services:
+
+  # ------------------------------------------------------------------
+  # TODO 2: Database service
+  # ------------------------------------------------------------------
+  db:
+    # TODO 2a: Set the image to postgres:15-alpine
+    image: # TODO
+
+    # TODO 2b: Set the container name to postgres-db
+    container_name: # TODO
+
+    environment:
+      # TODO 2c: Set POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
+      POSTGRES_DB: # TODO
+      POSTGRES_USER: # TODO
+      POSTGRES_PASSWORD: # TODO
+
+    volumes:
+      # TODO 2d: Mount named volume pgdata at /var/lib/postgresql/data
+      - # TODO
+
+    networks:
+      # TODO 2e: Attach to app-net
+      - # TODO
+
+    healthcheck:
+      # TODO 2f: Add a health check for pg_isready
+      test: # TODO
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ------------------------------------------------------------------
+  # TODO 3: Application service
+  # ------------------------------------------------------------------
+  app:
+    # TODO 3a: Set the image to springapp:1.0.0
+    image: # TODO
+
+    # TODO 3b: Set the container name to spring-boot-app
+    container_name: # TODO
+
+    ports:
+      # TODO 3c: Map host port 8080 to container port 8080
+      - # TODO
+
+    environment:
+      # TODO 3d: Set datasource URL, username, and password to match the db service
+      SPRING_DATASOURCE_URL: # TODO
+      SPRING_DATASOURCE_USERNAME: # TODO
+      SPRING_DATASOURCE_PASSWORD: # TODO
+
+    depends_on:
+      # TODO 3e: Wait for db to pass its health check before starting app
+      db:
+        condition: # TODO
+
+    networks:
+      # TODO 3f: Attach to app-net
+      - # TODO
+
+# ----------------------------------------------------------------------
+# TODO 4: Top-level volumes and networks declarations
+# ----------------------------------------------------------------------
+volumes:
+  # TODO 4a: Declare the pgdata named volume
+  # pgdata:
+
+networks:
+  # TODO 4b: Declare the app-net custom bridge network
+  # app-net:

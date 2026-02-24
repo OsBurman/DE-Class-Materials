@@ -1,0 +1,60 @@
+/* ── Global reset ────────────────────────────────────────────────── */
+body {
+  font-family: sans-serif;
+  max-width: 760px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Part A: Selectors ───────────────────────────────────────────── */
+
+/* TODO: 1. Element selector — target all <p>
+            set font-size: 1rem and line-height: 1.6 */
+
+/* TODO: 2. Class selector — target .highlight
+            set background-color: #fff3cd and font-weight: bold */
+
+/* TODO: 3. ID selector — target #hero
+            set background-color: #e8f4fd and padding: 2rem */
+
+/* TODO: 4. Descendant selector — target <a> inside <nav>
+            set color: #0066cc and text-decoration: none */
+
+/* TODO: 5. Child selector — target direct <li> children of .menu
+            set list-style: none and margin-bottom: 0.5rem */
+
+/* TODO: 6. Adjacent sibling selector — target <p> immediately after <h2>
+            set margin-top: 0.25rem */
+
+/* TODO: 7. Attribute selector + ::after pseudo-element
+            target a[target="_blank"]::after
+            set content: " ↗" */
+
+/* TODO: 8. Pseudo-class :hover — target .btn:hover
+            set background-color: #0056b3 and color: white */
+
+/* TODO: 9. Pseudo-class :nth-child — target li:nth-child(odd) inside .zebra-list
+            set background-color: #f9f9f9 */
+
+/* TODO: 10. Pseudo-element ::first-line — target p::first-line
+             set font-weight: bold */
+
+/* ── Part B: Specificity Conflict ───────────────────────────────── */
+
+/* TODO: Write three rules competing for #conflict / .blue-text / span:
+         span { color: green; }
+         .blue-text { color: blue; }
+         #conflict { color: red; }
+         Observe which one wins (it should be red) */
+
+/* ── Part C: Box Model ───────────────────────────────────────────── */
+
+/* TODO: Target .box and set:
+         width: 200px
+         padding: 20px
+         border: 4px solid #333
+         margin: 30px auto
+         background-color: #d4edda */
+
+/* TODO: Add a second rule .box-border { box-sizing: border-box; }
+         so that the second box stays within 200px total width */

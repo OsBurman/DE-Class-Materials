@@ -1,0 +1,9 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # Note: KafkaProducerConfig overrides value-serializer with JsonSerializer for OrderEvent.
+      # This yml entry is kept for documentation; the @Configuration bean takes precedence
+      # for the KafkaTemplate<String, OrderEvent> used by OrderEventProducer.

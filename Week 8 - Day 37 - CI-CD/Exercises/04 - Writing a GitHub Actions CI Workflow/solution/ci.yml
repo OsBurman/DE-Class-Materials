@@ -1,0 +1,102 @@
+# .github/workflows/ci.yml
+# Exercise 04 — Writing a GitHub Actions CI Workflow — SOLUTION
+
+name: CI Pipeline
+
+# ---------------------------------------------------------------------------
+# Requirement 1 — Triggers
+# Run on every push to main and on every PR targeting main.
+# ---------------------------------------------------------------------------
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build:
+    # ---------------------------------------------------------------------------
+    # Requirement 2 — Job Setup
+    # ubuntu-latest is the standard free runner for open-source projects.
+    # ---------------------------------------------------------------------------
+    runs-on: ubuntu-latest
+
+    # dorny/test-reporter needs "checks: write" to post results to the PR checks UI.
+    permissions:
+      checks: write
+      contents: read
+
+    steps:
+
+      # Check out the full repository at the triggered SHA.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Set up the JDK. "cache: maven" activates built-in ~/.m2 caching — this
+      # is equivalent to Requirement 3 but uses the setup-java shortcut.
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven   # built-in Maven cache — covers Requirement 3
+
+      # ---------------------------------------------------------------------------
+      # Requirement 3 — Explicit manual cache (shown here for learning purposes;
+      # in practice "cache: maven" above is sufficient)
+      # ---------------------------------------------------------------------------
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          # Key changes whenever pom.xml changes → forces fresh download only when deps change.
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          # Fallback: reuse any previous cache for this OS even if pom.xml changed.
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # ---------------------------------------------------------------------------
+      # Requirement 4 — Build and Test
+      # ---------------------------------------------------------------------------
+
+      # Compile only — fail fast on compilation errors before spending time on tests.
+      - name: Compile
+        run: mvn compile -DskipTests
+
+      # Run unit tests (Surefire plugin, matches **/*Test.java by default).
+      - name: Unit Tests
+        run: mvn test
+
+      # Run integration tests using the Failsafe plugin via the integration-tests profile.
+      # The profile should bind failsafe:integration-test and failsafe:verify goals.
+      - name: Integration Tests
+        run: mvn verify -Pintegration-tests
+
+      # ---------------------------------------------------------------------------
+      # Requirement 5 — Publish Test Report
+      # "if: always()" ensures the report is published even when tests fail,
+      # so developers can see which tests failed in the PR checks tab.
+      # ---------------------------------------------------------------------------
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: JUnit Test Results
+          path: '**/surefire-reports/*.xml'
+          reporter: java-junit
+
+      # ---------------------------------------------------------------------------
+      # Requirement 6 — Upload JAR Artifact
+      # Retained for 5 days — long enough to download for hotfix deployments
+      # without consuming excessive storage.
+      # ---------------------------------------------------------------------------
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: springapp-jar
+          path: target/*.jar
+          retention-days: 5

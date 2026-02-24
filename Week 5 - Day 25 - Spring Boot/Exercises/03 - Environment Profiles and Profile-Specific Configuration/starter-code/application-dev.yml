@@ -1,0 +1,7 @@
+# Development profile configuration.
+# Loaded when spring.profiles.active=dev (in addition to application.yml).
+
+# TODO: Add these three settings in YAML format:
+#   server.port          → 8080
+#   library.datasource-url → jdbc:h2:mem:devdb
+#   library.log-level    → DEBUG

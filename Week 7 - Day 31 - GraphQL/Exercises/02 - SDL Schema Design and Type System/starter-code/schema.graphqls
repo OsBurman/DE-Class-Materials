@@ -1,0 +1,36 @@
+# TODO 1: Define a Product object type with at least 6 fields.
+#         Use all five built-in scalars: String, Int, Float, Boolean, ID.
+#         Example field shapes:  id: ID!   name: String!   price: Float!
+#         Mark non-null fields with !
+# type Product {
+#   ...
+# }
+
+# TODO 2: Define a Review object type with at least 3 fields:
+#         - id: ID!
+#         - comment: String!   (non-null)
+#         - rating: Float!     (non-null)
+
+# TODO 3: Add a reviews field to Product that links to Review:
+#         reviews: [Review!]!
+#         (Add this inside your Product type above, not separately)
+
+# TODO 4: Define a Query type with:
+#         - products: [Product!]!
+#         - product(id: ID!): Product    (nullable return – null if not found)
+# type Query {
+#   ...
+# }
+
+# TODO 5: Define a Mutation type with:
+#         - addProduct(name: String!, price: Float!, inStock: Boolean!): Product!
+#         - deleteProduct(id: ID!): Boolean!
+# type Mutation {
+#   ...
+# }
+
+# TODO 6: Define a Subscription type with:
+#         - productAdded: Product!
+# type Subscription {
+#   ...
+# }

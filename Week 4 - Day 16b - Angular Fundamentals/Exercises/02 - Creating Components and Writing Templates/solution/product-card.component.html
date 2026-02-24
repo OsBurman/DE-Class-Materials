@@ -1,0 +1,9 @@
+<!-- Exercise 02 Solution: ProductCardComponent template -->
+<!-- {{ expression }} is Angular interpolation — it evaluates the expression and inserts the string result -->
+<div class="product-card">
+  <h2>{{ name }}</h2>
+  <p>Brand: {{ brand }}</p>
+  <p>Price: ${{ price }}</p>
+  <p>In Stock: {{ inStock }}&nbsp;&nbsp;{{ getStockLabel() }}</p>
+  <p>Rating: {{ rating }} / 5</p>
+</div>

@@ -1,0 +1,12 @@
+server:
+  # TODO: Set the server port to 9090
+  port:
+
+  servlet:
+    # TODO: Set the context path to /library
+    #       (all endpoints will be prefixed with /library)
+    context-path:
+
+  tomcat:
+    # TODO: Set the Tomcat connection timeout to 20s
+    connection-timeout:

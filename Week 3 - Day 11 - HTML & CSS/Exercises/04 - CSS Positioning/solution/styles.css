@@ -1,0 +1,90 @@
+body {
+  font-family: sans-serif;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Shared box styles */
+.box {
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 1. Static — position: static is the default; top/left have NO effect */
+.static-box {
+  /* position: static — normal flow, top/left have no effect */
+  background-color: #e2e2e2;
+}
+
+/* 2. Relative — element stays in normal flow but is visually nudged.
+      The space it originally occupied is STILL reserved — neighbours don't move. */
+.relative-box {
+  position: relative;
+  top: 20px;    /* push 20px DOWN from normal position */
+  left: 30px;   /* push 30px RIGHT from normal position */
+  background-color: #cce5ff;
+}
+
+/* 3. Absolute — removed from normal flow.
+      Anchored to nearest ancestor with a position value (not static).
+      Here that ancestor is .positioned-parent (position: relative). */
+.absolute-box {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #d4edda;
+}
+
+/* 4. Fixed — positioned relative to the VIEWPORT.
+      Stays visible even while the user scrolls the page. */
+.fixed-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #343a40;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* 5. Sticky — hybrid of relative + fixed.
+      Scrolls normally until top: 0 threshold is reached,
+      then "sticks" to the top of the viewport. */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  border-bottom: 2px solid #dee2e6;
+  padding: 0.75rem 1rem;
+  z-index: 100;   /* keeps it above other content while stuck */
+  font-weight: bold;
+}
+
+/* 6. z-index — controls stacking order for positioned elements.
+      Higher z-index = closer to the viewer (painted on top). */
+.layer {
+  position: absolute;
+  width: 180px;
+  height: 70px;
+  padding: 0.5rem;
+  border: 1px solid #999;
+}
+
+.layer-1 {
+  left: 10px;
+  top: 10px;
+  z-index: 1;                /* BEHIND layer-2 */
+  background-color: #f8d7da;
+}
+
+.layer-2 {
+  left: 60px;
+  top: 30px;
+  z-index: 2;                /* IN FRONT OF layer-1 */
+  background-color: #d1ecf1;
+}

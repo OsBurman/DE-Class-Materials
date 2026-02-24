@@ -1,0 +1,175 @@
+openapi: 3.0.3
+
+info:
+  title: Library Management API
+  version: 1.0.0
+  description: A REST API for managing books, authors, and loans in a library system.
+
+paths:
+
+  /books:
+
+    get:
+      operationId: listBooks
+      summary: List all books
+      tags:
+        - Books
+      parameters:
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter books by author name (partial match supported)
+      responses:
+        '200':
+          description: A JSON array of book objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '500':
+          description: Internal server error
+
+    post:
+      operationId: createBook
+      summary: Create a new book
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '201':
+          description: The newly created book, including its server-assigned id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request — missing required fields or validation failure
+
+  /books/{bookId}:
+
+    get:
+      operationId: getBookById
+      summary: Get a book by ID
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique numeric ID of the book to retrieve
+      responses:
+        '200':
+          description: The book matching the provided ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book with the specified ID was not found
+
+    put:
+      operationId: updateBook
+      summary: Fully replace a book
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique numeric ID of the book to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request — validation failure
+        '404':
+          description: Book with the specified ID was not found
+
+    delete:
+      operationId: deleteBook
+      summary: Delete a book
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The unique numeric ID of the book to delete
+      responses:
+        '204':
+          description: Book successfully deleted — no content returned
+        '404':
+          description: Book with the specified ID was not found
+
+components:
+  schemas:
+
+    Book:
+      type: object
+      required:
+        - title
+        - isbn
+        - authorId
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: Server-assigned unique identifier; not supplied on create/update
+        title:
+          type: string
+          description: The full title of the book
+        isbn:
+          type: string
+          description: International Standard Book Number (e.g. 978-3-16-148410-0)
+        publishedYear:
+          type: integer
+          description: The four-digit year the book was published
+        authorId:
+          type: integer
+          description: Foreign key referencing the author of this book
+
+    BookInput:
+      type: object
+      description: Request body schema for creating or replacing a book — id is excluded as it is server-assigned
+      required:
+        - title
+        - isbn
+        - authorId
+      properties:
+        title:
+          type: string
+          description: The full title of the book
+        isbn:
+          type: string
+          description: International Standard Book Number
+        publishedYear:
+          type: integer
+          description: The four-digit year the book was published
+        authorId:
+          type: integer
+          description: Foreign key referencing the author of this book

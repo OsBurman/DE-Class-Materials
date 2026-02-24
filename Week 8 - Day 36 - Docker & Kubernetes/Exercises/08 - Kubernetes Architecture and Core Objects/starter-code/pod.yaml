@@ -1,0 +1,27 @@
+# Exercise 08 — Pod Manifest Starter
+# Complete every TODO to produce a valid Pod YAML.
+
+# TODO: Set the correct apiVersion for core Kubernetes objects (v1)
+apiVersion: # TODO
+
+# TODO: Set the kind to Pod
+kind: # TODO
+
+metadata:
+  # TODO: Set the Pod name to spring-pod
+  name: # TODO
+  # TODO: Set the namespace to default
+  namespace: # TODO
+  labels:
+    # TODO: Add the label app: springapp
+    # app: TODO
+
+spec:
+  containers:
+    # TODO: Name the container spring-container
+    - name: # TODO
+      # TODO: Set the image to springapp:1.0.0
+      image: # TODO
+      ports:
+        # TODO: Expose container port 8080
+        - containerPort: # TODO

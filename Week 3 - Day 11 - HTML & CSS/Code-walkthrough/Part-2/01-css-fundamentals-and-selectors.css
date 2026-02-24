@@ -1,0 +1,587 @@
+/*
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 2 | CSS Fundamentals, Selectors, Specificity, Box Model & Positioning
+  ═══════════════════════════════════════════════════════════════════════════════
+
+  CSS SYNTAX:
+    selector {
+      property: value;       ← one declaration
+      property: value;
+    }
+
+  This file is linked by 04-full-page-demo.html.
+  Open that HTML file in a browser to see every rule take effect.
+*/
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 1 — CSS Reset / Base
+   Browsers have their own default styles (user-agent stylesheet).
+   A reset flattens them so we start from a consistent baseline.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* box-sizing: border-box — padding and border are INCLUDED in width/height.
+   Default (content-box): width = content only; padding ADDS to total width.
+   border-box is almost always what you want — add it globally. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 2 — CSS Variables (Custom Properties)
+   Defined on :root — available everywhere in the document.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Colour palette */
+  --color-primary:    #2563eb;   /* blue-600 */
+  --color-primary-hover: #1d4ed8;
+  --color-secondary:  #10b981;   /* emerald-500 */
+  --color-danger:     #ef4444;
+  --color-text:       #1e293b;
+  --color-muted:      #64748b;
+  --color-bg:         #ffffff;
+  --color-surface:    #f8fafc;
+  --color-border:     #e2e8f0;
+
+  /* Typography */
+  --font-sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:  "Fira Code", "Cascadia Code", Consolas, monospace;
+  --text-base:  1rem;         /* 16px */
+  --text-sm:    0.875rem;     /* 14px */
+  --text-lg:    1.125rem;     /* 18px */
+  --text-xl:    1.25rem;      /* 20px */
+  --text-2xl:   1.5rem;       /* 24px */
+  --text-4xl:   2.25rem;      /* 36px */
+
+  /* Spacing */
+  --space-1:  0.25rem;   /* 4px */
+  --space-2:  0.5rem;    /* 8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+
+  /* Other */
+  --radius:   0.5rem;    /* 8px border radius */
+  --shadow:   0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  --transition: 200ms ease;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 3 — CSS Selectors
+   ════════════════════════════════════════════════════════════════════════════
+
+   SELECTOR TYPES AND SPECIFICITY WEIGHT:
+     Inline style              (1,0,0,0) — highest
+     ID selector    #id        (0,1,0,0)
+     Class selector .class     (0,0,1,0)
+     Attribute      [attr]     (0,0,1,0)
+     Pseudo-class   :hover     (0,0,1,0)
+     Element type   div        (0,0,0,1)
+     Universal      *          (0,0,0,0) — lowest
+
+   When two rules conflict, the rule with HIGHER specificity wins.
+   If specificity is equal, the LATER rule in the file wins (cascade).
+   !important overrides everything — use sparingly.
+*/
+
+/* ── 3a. Element (type) selector — targets ALL matching tags ─────────────── */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+}
+
+p {
+  margin-bottom: var(--space-4);
+  color: var(--color-text);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;    /* never overflow their container */
+  display: block;
+}
+
+/* ── 3b. Class selector (.classname) ─────────────────────────────────────── */
+/* A class can be applied to many elements; one element can have many classes. */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: var(--text-xl);
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+}
+
+.text-muted {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.text-center { text-align: center; }
+
+/* ── 3c. ID selector (#id) ───────────────────────────────────────────────── */
+/* IDs must be unique per page. High specificity — prefer classes for styling. */
+#hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #7c3aed 100%);
+  color: white;
+  padding: var(--space-16) var(--space-8);
+  text-align: center;
+}
+
+#hero h1 {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-4);
+}
+
+/* ── 3d. Attribute selector ([attr] / [attr=val] / [attr^=val] / etc.) ───── */
+/* Targets elements based on the presence or value of an HTML attribute */
+
+/* [attr]      — element has the attribute (any value) */
+input[required] {
+  border-left: 3px solid var(--color-danger);
+}
+
+/* [attr="val"] — exact value match */
+input[type="email"] {
+  background: url("data:image/svg+xml,%3Csvg ...%3E") no-repeat right 10px center;
+}
+
+/* [attr^="val"] — value STARTS WITH */
+a[href^="https"] {
+  /* only style HTTPS links */
+  color: var(--color-secondary);
+}
+
+/* [attr$="val"] — value ENDS WITH */
+a[href$=".pdf"]::after {
+  content: " (PDF)";
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+/* [attr*="val"] — value CONTAINS */
+a[href*="github"] {
+  font-weight: 600;
+}
+
+/* ── 3e. Pseudo-class selectors (:pseudo-class) ──────────────────────────── */
+/* Describe an element's STATE or POSITION */
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a:visited {
+  color: #7c3aed;    /* purple — signals "already clicked" */
+}
+
+/* :nth-child(n) — every nth child */
+.table-row:nth-child(even) {
+  background: var(--color-surface);
+}
+
+.table-row:nth-child(odd) {
+  background: white;
+}
+
+/* :first-child, :last-child */
+.nav-link:first-child {
+  margin-left: 0;
+}
+
+.nav-link:last-child {
+  margin-right: 0;
+}
+
+/* :not() — excludes matching elements */
+p:not(.lead) {
+  max-width: 65ch;   /* ch = width of the "0" character — great for line length */
+}
+
+/* :is() — matches any of the listed selectors (reduces repetition) */
+:is(h1, h2, h3):hover {
+  color: var(--color-primary);
+}
+
+/* Form state pseudo-classes */
+input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 0;
+  border-color: var(--color-primary);
+}
+
+input:valid {
+  border-color: var(--color-secondary);
+}
+
+input:invalid:not(:placeholder-shown) {
+  /* :not(:placeholder-shown) — only show error styles AFTER user has typed */
+  border-color: var(--color-danger);
+}
+
+input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-border);
+}
+
+/* ── 3f. Pseudo-element selectors (::pseudo-element) ─────────────────────── */
+/* Create and style virtual elements (content not in the DOM) */
+
+/* ::before / ::after — insert content before/after the element's content */
+.required-label::after {
+  content: " *";
+  color: var(--color-danger);
+  font-weight: bold;
+}
+
+.badge::before {
+  content: "🏷 ";
+}
+
+/* ::first-line — style only the first line of a block */
+.article-intro::first-line {
+  font-weight: 600;
+  font-size: var(--text-lg);
+}
+
+/* ::first-letter — drop cap effect */
+.article-body::first-letter {
+  font-size: 3rem;
+  float: left;
+  margin-right: 0.1em;
+  line-height: 1;
+  color: var(--color-primary);
+}
+
+/* ::placeholder — styles the placeholder text of an input */
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ::selection — styles text the user selects/highlights */
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ── 3g. Combinator selectors ────────────────────────────────────────────── */
+
+/* Descendant combinator (space) — any depth */
+.card p {
+  color: var(--color-muted);
+}
+
+/* Child combinator (>) — direct children only */
+.nav > li {
+  display: inline-block;
+}
+
+/* Adjacent sibling (+) — immediately following sibling */
+label + input,
+label + select,
+label + textarea {
+  margin-top: var(--space-1);
+  display: block;
+  width: 100%;
+}
+
+/* General sibling (~) — all following siblings */
+input:invalid ~ .error-msg {
+  display: block;   /* show error message after invalid input */
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 4 — CSS Specificity and Cascade (demonstration)
+   ════════════════════════════════════════════════════════════════════════════
+
+   The CASCADE rules (in priority order):
+     1. Origin:    browser default < author stylesheet < user stylesheet
+     2. Importance: normal < !important
+     3. Specificity: (inline > #id > .class > element)
+     4. Order:      later rule wins if same specificity
+
+   Example: what colour does this paragraph get?
+     p             { color: black; }    — specificity (0,0,0,1)
+     .content p    { color: gray; }     — specificity (0,0,1,1) ← WINS
+     #sidebar p    { color: navy; }     — specificity (0,1,0,1) ← WINS if present
+     p.intro       { color: teal; }     — specificity (0,0,1,1) — tie, later wins
+*/
+
+/* Specificity demo classes — visible in 04-full-page-demo.html */
+.specificity-demo                { color: gray; }           /* (0,0,1,0) */
+.specificity-demo.highlight      { color: var(--color-primary); }  /* (0,0,2,0) ← wins over above */
+#specificity-winner              { color: var(--color-secondary); } /* (0,1,0,0) ← wins over class */
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 5 — CSS Box Model
+   ════════════════════════════════════════════════════════════════════════════
+
+   Every element is a rectangle with four layers (inside-out):
+     ┌──────────────────────────────────────────────────┐
+     │                   MARGIN                         │  ← transparent, pushes others away
+     │   ┌──────────────────────────────────────────┐   │
+     │   │                BORDER                    │   │  ← can be colored/styled
+     │   │   ┌──────────────────────────────────┐   │   │
+     │   │   │             PADDING              │   │   │  ← inside border, same bg as content
+     │   │   │   ┌──────────────────────────┐   │   │   │
+     │   │   │   │        CONTENT           │   │   │   │  ← text/image/child elements
+     │   │   │   └──────────────────────────┘   │   │   │
+     │   │   └──────────────────────────────────┘   │   │
+     │   └──────────────────────────────────────────┘   │
+     └──────────────────────────────────────────────────┘
+
+   With box-sizing: border-box:
+     width = content + padding + border   (what you set IS the total)
+
+   With box-sizing: content-box (default):
+     width = content only
+     total = width + padding-left + padding-right + border-left + border-right
+*/
+
+.box-model-demo {
+  /* Content size */
+  width: 300px;
+  height: 150px;
+
+  /* Padding — space inside the border */
+  padding: 1rem;              /* all four sides */
+  /* padding: 1rem 2rem; */         /* top/bottom | left/right */
+  /* padding: 1rem 2rem 0.5rem; */  /* top | left/right | bottom */
+  /* padding: 1rem 2rem 0.5rem 0; *//* top | right | bottom | left (clockwise) */
+  padding-top: 1rem;
+  padding-right: 1.5rem;
+  padding-bottom: 1rem;
+  padding-left: 1.5rem;
+
+  /* Border */
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  /* border-top: 4px solid var(--color-secondary); */  /* individual side */
+
+  /* Margin — space outside the border */
+  margin: 1.5rem auto;    /* auto left/right = center horizontally */
+
+  /* Visual */
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+/* Margin collapse: vertical margins between adjacent elements collapse
+   to the LARGER of the two (they don't add).
+   Only vertical margins collapse. Horizontal margins never collapse. */
+.margin-collapse-demo p {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  /* Gap between paragraphs = 2rem (max), NOT 3rem (sum) */
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   SECTION 6 — CSS Positioning
+   ════════════════════════════════════════════════════════════════════════════
+
+   position: static    — default; part of normal document flow
+   position: relative  — offset from its NORMAL position; still in flow
+   position: absolute  — removed from flow; positioned relative to nearest
+                         non-static ancestor (or viewport if none)
+   position: fixed     — removed from flow; positioned relative to VIEWPORT;
+                         stays visible when scrolling
+   position: sticky    — hybrid: relative until scroll threshold, then fixed
+
+   Offset properties: top | right | bottom | left
+   z-index: controls stacking order (higher = in front)
+*/
+
+/* ── static (default) ───────────────────────────────────────────────────── */
+.pos-static {
+  position: static;    /* offset properties have no effect */
+}
+
+/* ── relative ───────────────────────────────────────────────────────────── */
+.pos-relative {
+  position: relative;
+  top: 10px;      /* moves DOWN 10px from where it would normally be */
+  left: 20px;     /* moves RIGHT 20px */
+  /* Note: the space it originally occupied is PRESERVED — other elements
+     don't move to fill the gap */
+}
+
+/* ── absolute ───────────────────────────────────────────────────────────── */
+.pos-container {
+  position: relative;   /* ← makes this the "containing block" for children */
+  min-height: 200px;
+  border: 2px dashed var(--color-border);
+}
+
+.pos-absolute {
+  position: absolute;
+  top: 16px;     /* 16px from the TOP of .pos-container */
+  right: 16px;   /* 16px from the RIGHT of .pos-container */
+  /* Removed from normal flow — other elements don't leave a gap for it */
+}
+
+/* Common pattern: badge/overlay on a card image */
+.card-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.card-badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  background: var(--color-primary);
+  color: white;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+/* ── fixed ──────────────────────────────────────────────────────────────── */
+.nav-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;       /* stretch full width */
+  z-index: 100;   /* stay above everything */
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-8);
+  box-shadow: var(--shadow);
+}
+
+/* When nav is fixed, the body needs top padding to avoid content hiding behind it */
+/* body { padding-top: 60px; } */
+
+/* ── sticky ─────────────────────────────────────────────────────────────── */
+.sticky-sidebar {
+  position: sticky;
+  top: var(--space-8);   /* sticks 32px from top of viewport after scrolling past it */
+  /* Stays within its parent container — when parent scrolls away, sticky releases */
+}
+
+/* ── z-index stacking ───────────────────────────────────────────────────── */
+.dropdown-menu {
+  position: absolute;
+  z-index: 50;     /* above normal content */
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;        /* shorthand for top:0 right:0 bottom:0 left:0 */
+  z-index: 200;    /* above everything including nav */
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);   /* center trick: offset by half own size */
+  z-index: 201;
+  background: white;
+  padding: var(--space-8);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  min-width: 400px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   (used by 04-full-page-demo.html for the specificity and box model demos)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-8);
+}
+
+.section {
+  padding: var(--space-12) 0;
+}
+
+.section-title {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-8);
+  color: var(--color-text);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.badge-primary { background: #dbeafe; color: var(--color-primary); }
+.badge-success { background: #d1fae5; color: #065f46; }
+.badge-danger  { background: #fee2e2; color: #991b1b; }
+
+.error-msg {
+  display: none;   /* shown via input:invalid ~ .error-msg */
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+}
+
+/* Display utilities */
+.block         { display: block; }
+.inline        { display: inline; }
+.inline-block  { display: inline-block; }
+.hidden        { display: none; }
+
+/* Spacing utilities */
+.mt-4  { margin-top: var(--space-4); }
+.mb-4  { margin-bottom: var(--space-4); }
+.mb-8  { margin-bottom: var(--space-8); }
+.p-4   { padding: var(--space-4); }
+.p-6   { padding: var(--space-6); }
+
+/* Typography utilities */
+.font-bold   { font-weight: 700; }
+.font-mono   { font-family: var(--font-mono); }
+.text-sm     { font-size: var(--text-sm); }
+.text-lg     { font-size: var(--text-lg); }
+.text-xl     { font-size: var(--text-xl); }
+.text-2xl    { font-size: var(--text-2xl); }
+.text-primary { color: var(--color-primary); }
+.text-muted  { color: var(--color-muted); }
+.text-danger { color: var(--color-danger); }

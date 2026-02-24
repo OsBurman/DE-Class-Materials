@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: spring-pod
+  namespace: default
+  labels:
+    app: springapp   # Pods are selected by Services/Deployments via label selectors
+
+spec:
+  containers:
+    - name: spring-container
+      image: springapp:1.0.0
+      ports:
+        - containerPort: 8080   # Documents the port; does not publish it (Services do that)

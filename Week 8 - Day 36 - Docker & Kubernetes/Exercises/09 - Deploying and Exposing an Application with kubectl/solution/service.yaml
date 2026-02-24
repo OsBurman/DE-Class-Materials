@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: spring-service
+  namespace: default
+
+spec:
+  type: NodePort
+
+  # Routes traffic to any Pod carrying the label app: springapp.
+  selector:
+    app: springapp
+
+  ports:
+    - protocol: TCP
+      port: 80           # Port the Service exposes inside the cluster
+      targetPort: 8080   # Port the container listens on
+      nodePort: 30080    # Port opened on every node (30000–32767)

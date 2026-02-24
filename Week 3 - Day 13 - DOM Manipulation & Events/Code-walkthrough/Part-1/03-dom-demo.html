@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 13 — DOM Manipulation Demo (Part 1)</title>
+  <style>
+    /* ── Base styles ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      padding: 24px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 { margin-bottom: 8px; }
+    section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    section > h2 { color: #6366f1; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 14px; }
+
+    /* ── Course cards ─────────────────────────────────────── */
+    .course-card {
+      background: #f1f5f9;
+      border-left: 4px solid #6366f1;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+    .course-card h3 { font-size: 1rem; margin-bottom: 4px; }
+    .course-card.active  { border-left-color: #10b981; background: #ecfdf5; }
+    .course-card.premium { border-left-color: #f59e0b; background: #fffbeb; }
+    .course-card.featured { font-weight: 600; }
+
+    /* ── Demo section ─────────────────────────────────────── */
+    #demo-section { background: #f0fdf4; border-color: #86efac; }
+    #highlight-box {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+    #course-list { padding-left: 20px; }
+    #course-list li { padding: 4px 0; }
+    #course-list li.active { color: #10b981; font-weight: bold; }
+    #course-list li.urgent { color: #ef4444; }
+    #course-list li.new-item { color: #6366f1; }
+
+    /* ── Form elements ──────────────────────────────────────── */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 4px; color: #475569; }
+    input[type="text"], input[type="email"], textarea, select {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: #6366f1; }
+    textarea { resize: vertical; min-height: 80px; }
+    button {
+      padding: 8px 18px;
+      background: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    button:hover { background: #4f46e5; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    /* ── Misc helpers ─────────────────────────────────────── */
+    .label { font-size: 0.8rem; color: #94a3b8; font-style: italic; margin: 4px 0; }
+    .remove-me { color: #ef4444; text-decoration: line-through; }
+    .delete-me { color: #ef4444; }
+    nav { background: #1e293b; border-radius: 6px; padding: 12px 16px; margin-bottom: 10px; }
+    nav a { color: #94a3b8; text-decoration: none; margin-right: 16px; font-size: 0.9rem; }
+    nav a:hover { color: white; }
+    #reset-target { font-size: 0.85rem; color: #64748b; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION: Selecting Elements targets
+       ════════════════════════════════════════════════════════ -->
+
+  <!-- getElementById target -->
+  <h1 id="main-heading">Day 13 — DOM Manipulation &amp; Events</h1>
+
+  <p id="intro-paragraph">
+    This page is your live DOM playground. Open DevTools (F12), go to the
+    <strong>Console</strong> tab, and watch changes happen in real time.
+  </p>
+
+  <!-- Navigation — for scoped querySelector demo -->
+  <nav>
+    <a href="#selecting">Selecting</a>
+    <a href="#manipulation">Manipulation</a>
+    <a href="#styles">Styles</a>
+    <a href="#attributes">Attributes</a>
+  </nav>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 1: Course Cards — getElementsByClassName targets
+       ════════════════════════════════════════════════════════ -->
+  <section id="selecting">
+    <h2>1 — Selecting Elements</h2>
+
+    <!-- getElementsByClassName + querySelector targets -->
+    <div id="card-container">
+      <div class="course-card active" id="card-js">
+        <h3>JavaScript Fundamentals</h3>
+        <p>Duration: 1 Day</p>
+      </div>
+      <div class="course-card" id="card-dom">
+        <h3>DOM Manipulation</h3>
+        <p>Duration: 1 Day</p>
+      </div>
+      <div class="course-card" id="card-react">
+        <h3>React Fundamentals</h3>
+        <p>Duration: 2 Days</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 2: Course List — getElementsByTagName + traversal targets
+       ════════════════════════════════════════════════════════ -->
+  <section id="traversal">
+    <h2>2 — DOM Traversal</h2>
+
+    <div id="course-list-wrapper">
+      <ul id="course-list">
+        <li class="active">Week 1 — Java Foundations</li>
+        <li>Week 2 — OOP &amp; Collections</li>
+        <li>Week 3 — Frontend Web</li>
+        <li>Week 4 — React / Angular</li>
+        <li class="delete-me">Week 5 — (to be removed)</li>
+      </ul>
+    </div>
+
+    <!-- For closest() demo -->
+    <div id="old-note"><p>Old note — will be replaced by the JS.</p></div>
+
+    <!-- remove() demo target -->
+    <p class="remove-me">This paragraph will be removed via .remove()</p>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 3: Creating & Inserting targets
+       ════════════════════════════════════════════════════════ -->
+  <section id="manipulation">
+    <h2>3 — DOM Manipulation</h2>
+
+    <!-- append / prepend target -->
+    <div id="demo-section" style="padding:12px; border-radius:6px;">
+      <p>(append / prepend demo — items added by JS)</p>
+    </div>
+
+    <!-- Demo list for removeChild -->
+    <ul id="demo-list" style="margin-top:12px; padding-left:20px;">
+      <li>Keep me ✅</li>
+      <li class="delete-me">Delete me ❌ (via removeChild)</li>
+      <li>Keep me too ✅</li>
+    </ul>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 4: Styles & Classes targets
+       ════════════════════════════════════════════════════════ -->
+  <section id="styles">
+    <h2>4 — Styles &amp; Classes</h2>
+
+    <div id="highlight-box">
+      I'll get inline styles applied by JavaScript →
+      <code>element.style.backgroundColor</code>
+    </div>
+
+    <p id="reset-target" class="base-style old-class another-class" style="margin-top:10px;">
+      className will be replaced entirely (watch the class list change)
+    </p>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       SECTION 5: Attributes & dataset targets
+       ════════════════════════════════════════════════════════ -->
+  <section id="attributes">
+    <h2>5 — Attributes</h2>
+
+    <!-- getAttribute / setAttribute -->
+    <img id="profile-img"
+         src="https://via.placeholder.com/60"
+         alt="Student avatar"
+         width="60"
+         height="60"
+         style="border-radius:50%; display:block; margin-bottom:10px;" />
+
+    <!-- removeAttribute demo -->
+    <a id="login-link" href="/login" style="display:inline-block; margin-bottom:10px;">
+      Login Page (href will be removed by JS)
+    </a>
+
+    <!-- Boolean attribute + data-* demo -->
+    <div class="form-group" style="margin-top:10px;">
+      <label for="email-input">Email</label>
+      <input type="email"
+             id="email-input"
+             value="initial@default.com"
+             placeholder="your@email.com" />
+    </div>
+
+    <div class="form-group">
+      <label for="bio-textarea">Bio</label>
+      <textarea id="bio-textarea" placeholder="Tell us about yourself…"></textarea>
+    </div>
+
+    <div class="form-group">
+      <button id="submit-btn" type="button">Submit</button>
+    </div>
+
+    <!-- data-* attributes -->
+    <div id="student-data-card"
+         data-student-id="42"
+         data-course-name="DOM Manipulation"
+         style="background:#f1f5f9; border-radius:6px; padding:12px; margin-top:10px; font-size:0.9rem;">
+      Student data card — check <code>dataset</code> in the console
+      <br/>
+      <code>data-student-id="42"</code> &nbsp; <code>data-course-name="DOM Manipulation"</code>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       Scripts — loaded AFTER the HTML so the DOM is ready
+       querySelector('[data-student-id]') needs to match #student-data-card
+       ════════════════════════════════════════════════════════ -->
+  <script>
+    // Make the student-data-card match the selector used in the JS files
+    // The JS files use: document.querySelector("[data-student-id]")
+    // and: document.querySelector("#student-data-card")
+    // We alias the id so both work:
+    document.querySelector("#student-data-card").id = "";
+    // The data attributes remain; querySelector("[data-student-id]") will find it
+  </script>
+  <script src="01-dom-selecting-and-traversal.js"></script>
+  <script src="02-dom-manipulation-styles-attributes.js"></script>
+
+</body>
+</html>

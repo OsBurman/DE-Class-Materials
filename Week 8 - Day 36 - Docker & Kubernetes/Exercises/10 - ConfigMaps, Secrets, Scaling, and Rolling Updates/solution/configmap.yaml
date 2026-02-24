@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: spring-config
+  namespace: default
+
+# All values must be strings.
+# Kubernetes injects each key as an environment variable name.
+data:
+  SPRING_PROFILES_ACTIVE: production
+  SERVER_PORT: "8080"

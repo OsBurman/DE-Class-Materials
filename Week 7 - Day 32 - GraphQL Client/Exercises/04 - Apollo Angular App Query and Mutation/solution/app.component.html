@@ -1,0 +1,19 @@
+<h1>Bookstore</h1>
+
+<!-- *ngFor renders one <li> for each book in the component's books array -->
+<ul>
+  <li *ngFor="let book of books">
+    {{ book.title }} ({{ book.year }}) — {{ book.genre }} — by {{ book.author.name }}
+  </li>
+</ul>
+
+<h2>Add a Book</h2>
+<!-- (ngSubmit) calls addBook() when the form is submitted -->
+<form (ngSubmit)="addBook()">
+  <!-- [(ngModel)] provides two-way binding: component property ↔ input value -->
+  <input [(ngModel)]="newTitle"    name="title"    placeholder="Title"     required />
+  <input [(ngModel)]="newGenre"    name="genre"    placeholder="Genre"     required />
+  <input [(ngModel)]="newYear"     name="year"     placeholder="Year"      type="number" required />
+  <input [(ngModel)]="newAuthorId" name="authorId" placeholder="Author ID" required />
+  <button type="submit">Add Book</button>
+</form>

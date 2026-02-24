@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 1 | HTML Tables & Forms
+  ═══════════════════════════════════════════════════════════════════════════════
+  Topics covered:
+    • HTML tables (thead/tbody/tfoot, rowspan, colspan, scope)
+    • Form structure and accessibility
+    • Input types: text, email, password, number, date, tel, url, color, range,
+                   checkbox, radio, file, hidden, search, textarea, select
+    • Labels, placeholders, fieldset, legend
+    • HTML5 built-in validation (required, pattern, min, max, minlength, maxlength)
+    • Submit and reset buttons
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 — HTML Tables &amp; Forms</title>
+  <style>
+    /* Minimal styles so the demo looks usable without an external stylesheet */
+    body       { font-family: system-ui, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    table      { border-collapse: collapse; width: 100%; margin-bottom: 2rem; }
+    th, td     { border: 1px solid #ccc; padding: 0.5rem 0.75rem; text-align: left; }
+    thead tr   { background: #2563eb; color: #fff; }
+    tfoot tr   { background: #f1f5f9; font-weight: bold; }
+    tr:nth-child(even) td { background: #f8fafc; }
+    form       { background: #f8fafc; padding: 1.5rem; border-radius: 8px; max-width: 600px; }
+    label      { display: block; margin-top: 1rem; font-weight: 600; }
+    input, select, textarea { width: 100%; padding: 0.4rem 0.6rem; margin-top: 0.25rem; box-sizing: border-box; }
+    fieldset   { margin-top: 1.5rem; border: 1px solid #cbd5e1; border-radius: 6px; padding: 1rem; }
+    legend     { font-weight: bold; padding: 0 0.5rem; }
+    .btn-row   { margin-top: 1.5rem; display: flex; gap: 0.75rem; }
+    button     { padding: 0.5rem 1.25rem; font-size: 1rem; cursor: pointer; border-radius: 4px; border: none; }
+    .btn-submit { background: #2563eb; color: white; }
+    .btn-reset  { background: #e2e8f0; }
+    .note      { font-size: 0.85rem; color: #64748b; margin-top: 0.25rem; }
+    h2         { border-bottom: 2px solid #2563eb; padding-bottom: 0.25rem; }
+  </style>
+</head>
+<body>
+
+  <h1>HTML Tables &amp; Forms</h1>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SECTION 1: HTML Tables
+       Use tables for TABULAR DATA only — never for page layout.
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <h2>HTML Tables</h2>
+
+  <!--
+    Table anatomy:
+      <table>   — container
+      <caption> — title (accessibility + SEO)
+      <thead>   — header rows
+      <tbody>   — data rows
+      <tfoot>   — summary/totals rows
+      <tr>      — table row
+      <th>      — header cell (bold, centered by default; adds scope for screen readers)
+      <td>      — data cell
+
+    Attributes:
+      scope="col" / scope="row" — tells screen readers which header applies
+      colspan="n"               — cell spans n columns
+      rowspan="n"               — cell spans n rows
+  -->
+
+  <table>
+    <caption>Q1 2025 — Developer Bootcamp Enrollment</caption>
+
+    <thead>
+      <tr>
+        <th scope="col">Course</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">Students</th>
+        <th scope="col">Pass Rate</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Java Fundamentals</td>
+        <td>Jan 6, 2025</td>
+        <td>24</td>
+        <td>92%</td>
+        <td>Completed</td>
+      </tr>
+      <tr>
+        <td>Spring Boot</td>
+        <td>Feb 3, 2025</td>
+        <td>20</td>
+        <td>88%</td>
+        <td>Completed</td>
+      </tr>
+      <tr>
+        <td>React Fundamentals</td>
+        <td>Mar 3, 2025</td>
+        <td>18</td>
+        <td>—</td>
+        <td>In Progress</td>
+      </tr>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <!-- colspan: this single cell spans all 5 columns -->
+        <td colspan="2">Total / Average</td>
+        <td>62</td>
+        <td>90%</td>
+        <td>—</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Table with rowspan: merging cells across rows -->
+  <h3>Table with <code>rowspan</code></h3>
+  <table>
+    <caption>Weekly Schedule</caption>
+    <thead>
+      <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Monday</th>
+        <th scope="col">Tuesday</th>
+        <th scope="col">Wednesday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">09:00 – 12:00</th>
+        <td>HTML &amp; CSS</td>
+        <td>JavaScript</td>
+        <!-- rowspan="2" — this cell covers two rows -->
+        <td rowspan="2">Workshop</td>
+      </tr>
+      <tr>
+        <th scope="row">13:00 – 17:00</th>
+        <td>CSS Layout</td>
+        <td>DOM Events</td>
+        <!-- No third <td> here because Wednesday is already covered by rowspan -->
+      </tr>
+    </tbody>
+  </table>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SECTION 2: HTML Forms
+       A form is a collection of interactive controls that submits data.
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <h2>HTML Forms</h2>
+
+  <!--
+    <form> attributes:
+      action  — URL to send data to (omit = same page)
+      method  — GET (data in URL, bookmarkable) | POST (data in body, for sensitive/large data)
+      novalidate — disable browser's built-in validation (useful when using JS validation)
+      enctype="multipart/form-data" — required for file uploads
+  -->
+  <form action="/register" method="POST" id="registration-form" novalidate>
+
+    <!-- ── Personal Information ─────────────────────────────────────────── -->
+    <fieldset>
+      <legend>Personal Information</legend>
+
+      <!--
+        LABEL PATTERN (accessibility):
+          Option 1 — label wraps input (implicit association)
+          Option 2 — label for="id" + input id="id" (explicit association)
+        ALWAYS associate every input with a label — screen readers need this.
+      -->
+
+      <label for="full-name">
+        Full Name <span aria-hidden="true">*</span>
+        <input
+          type="text"
+          id="full-name"
+          name="fullName"
+          placeholder="e.g. Jane Smith"
+          required
+          minlength="2"
+          maxlength="60"
+          autocomplete="name"
+        />
+        <span class="note">2–60 characters, required</span>
+      </label>
+
+      <label for="email">
+        Email Address <span aria-hidden="true">*</span>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="jane@example.com"
+          required
+          autocomplete="email"
+        />
+        <!-- type="email" validates format: must contain @ and a domain -->
+      </label>
+
+      <label for="password">
+        Password <span aria-hidden="true">*</span>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          minlength="8"
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          autocomplete="new-password"
+        />
+        <span class="note">Min 8 chars, must include uppercase, lowercase, and a digit</span>
+        <!--
+          pattern — regex the value must match (browser validates on submit)
+          (?=.*\d)   — at least one digit
+          (?=.*[a-z])— at least one lowercase
+          (?=.*[A-Z])— at least one uppercase
+          .{8,}      — at least 8 chars total
+        -->
+      </label>
+
+      <label for="dob">
+        Date of Birth
+        <input
+          type="date"
+          id="dob"
+          name="dateOfBirth"
+          min="1940-01-01"
+          max="2010-12-31"
+        />
+        <!-- type="date" shows a calendar picker -->
+      </label>
+
+      <label for="phone">
+        Phone Number
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="+1 (555) 000-0000"
+          pattern="\+?[\d\s\-\(\)]{7,15}"
+          autocomplete="tel"
+        />
+        <!-- type="tel" shows numeric keyboard on mobile -->
+      </label>
+
+      <label for="website">
+        Personal Website
+        <input
+          type="url"
+          id="website"
+          name="website"
+          placeholder="https://yoursite.com"
+        />
+        <!-- type="url" validates: must start with http:// or https:// -->
+      </label>
+
+    </fieldset><!-- /Personal Information -->
+
+    <!-- ── Course Preferences ────────────────────────────────────────────── -->
+    <fieldset>
+      <legend>Course Preferences</legend>
+
+      <!-- SELECT (dropdown) -->
+      <label for="track">
+        Learning Track <span aria-hidden="true">*</span>
+        <select id="track" name="track" required>
+          <option value="">— choose one —</option>   <!-- empty default -->
+          <option value="java-fullstack">Java Full Stack</option>
+          <option value="react-frontend">React Frontend</option>
+          <option value="angular-frontend">Angular Frontend</option>
+          <option value="devops">DevOps / Cloud</option>
+        </select>
+      </label>
+
+      <!-- NUMBER input -->
+      <label for="experience">
+        Years of Experience
+        <input
+          type="number"
+          id="experience"
+          name="yearsExperience"
+          min="0"
+          max="40"
+          step="1"
+          value="0"
+        />
+      </label>
+
+      <!-- RANGE slider -->
+      <label for="commitment">
+        Weekly Hours You Can Commit: <span id="commitment-value">20</span> hrs
+        <input
+          type="range"
+          id="commitment"
+          name="weeklyHours"
+          min="5"
+          max="40"
+          step="5"
+          value="20"
+          oninput="document.getElementById('commitment-value').textContent = this.value"
+        />
+      </label>
+
+      <!-- RADIO buttons — only one can be selected in a group (same name) -->
+      <fieldset>
+        <legend>Preferred Schedule</legend>
+        <label>
+          <input type="radio" name="schedule" value="morning" required />
+          Morning (9am – 1pm)
+        </label>
+        <label>
+          <input type="radio" name="schedule" value="afternoon" />
+          Afternoon (1pm – 5pm)
+        </label>
+        <label>
+          <input type="radio" name="schedule" value="evening" />
+          Evening (6pm – 10pm)
+        </label>
+      </fieldset>
+
+      <!-- CHECKBOXES — multiple can be selected independently -->
+      <fieldset>
+        <legend>Topics of Interest</legend>
+        <label>
+          <input type="checkbox" name="topics" value="backend" />
+          Backend Development
+        </label>
+        <label>
+          <input type="checkbox" name="topics" value="frontend" checked />
+          Frontend Development
+        </label>
+        <label>
+          <input type="checkbox" name="topics" value="devops" />
+          DevOps &amp; Cloud
+        </label>
+        <label>
+          <input type="checkbox" name="topics" value="ai" />
+          AI &amp; Machine Learning
+        </label>
+      </fieldset>
+
+    </fieldset><!-- /Course Preferences -->
+
+    <!-- ── About You ─────────────────────────────────────────────────────── -->
+    <fieldset>
+      <legend>About You</legend>
+
+      <!-- TEXTAREA — multi-line text -->
+      <label for="bio">
+        Short Bio
+        <textarea
+          id="bio"
+          name="bio"
+          rows="4"
+          cols="50"
+          maxlength="500"
+          placeholder="Tell us a bit about yourself and your goals..."
+        ></textarea>
+        <span class="note">Max 500 characters</span>
+      </label>
+
+      <!-- COLOR picker -->
+      <label for="fav-color">
+        Favourite Colour
+        <input type="color" id="fav-color" name="favouriteColour" value="#2563eb" />
+      </label>
+
+      <!-- SEARCH input — behaves like text but shows a clear (×) button -->
+      <label for="referral">
+        How did you hear about us?
+        <input
+          type="search"
+          id="referral"
+          name="referral"
+          placeholder="Search or type..."
+        />
+      </label>
+
+      <!-- FILE upload — requires enctype="multipart/form-data" on <form> -->
+      <label for="cv">
+        Upload CV / Resume
+        <input
+          type="file"
+          id="cv"
+          name="cv"
+          accept=".pdf,.doc,.docx"
+        />
+        <span class="note">PDF, DOC, or DOCX only</span>
+      </label>
+
+      <!-- HIDDEN field — submitted with the form but not shown to the user -->
+      <input type="hidden" name="formVersion" value="2025-v1" />
+      <!-- Common use: CSRF tokens, tracking info, pre-populated IDs -->
+
+    </fieldset><!-- /About You -->
+
+    <!-- ── Terms & Submit ────────────────────────────────────────────────── -->
+    <fieldset>
+      <legend>Agreement</legend>
+
+      <label>
+        <input type="checkbox" name="terms" required />
+        I agree to the
+        <a href="/terms" target="_blank">Terms &amp; Conditions</a>
+        <span aria-hidden="true">*</span>
+      </label>
+
+      <label>
+        <input type="checkbox" name="newsletter" />
+        Subscribe to our newsletter
+      </label>
+    </fieldset>
+
+    <!-- BUTTONS -->
+    <div class="btn-row">
+      <!-- type="submit" — triggers form validation then submits -->
+      <button type="submit" class="btn-submit">Create Account</button>
+
+      <!-- type="reset" — resets all fields to their default values -->
+      <button type="reset" class="btn-reset">Clear Form</button>
+
+      <!-- type="button" — does nothing by default (use with JavaScript) -->
+      <button type="button" onclick="alert('Draft saved!')">Save Draft</button>
+    </div>
+
+  </form>
+
+  <!--
+    ══════════════════════════════════════════════════════════════════════════
+    INPUT TYPE SUMMARY (quick reference)
+    ══════════════════════════════════════════════════════════════════════════
+    type="text"     — single line free text
+    type="email"    — validates email format
+    type="password" — masks characters
+    type="number"   — numeric, with min/max/step
+    type="tel"      — phone, numeric keyboard on mobile
+    type="url"      — validates URL format
+    type="date"     — date picker (yyyy-mm-dd)
+    type="time"     — time picker
+    type="datetime-local" — date + time picker (no timezone)
+    type="month"    — month picker
+    type="week"     — week picker
+    type="color"    — colour picker
+    type="range"    — slider
+    type="checkbox" — independent on/off toggle
+    type="radio"    — grouped single-select (same name)
+    type="file"     — file chooser
+    type="hidden"   — invisible, sent with form data
+    type="search"   — text with clear button
+    type="image"    — image as submit button
+    type="submit"   — submits the form
+    type="reset"    — resets fields to defaults
+    type="button"   — inert (requires JS onclick)
+
+    VALIDATION ATTRIBUTES:
+    required             — field must be filled
+    minlength / maxlength— for text inputs
+    min / max            — for numeric, date, range
+    step                 — for numeric/range increment
+    pattern              — regex the value must satisfy
+    autocomplete         — browser autofill hint
+  -->
+
+</body>
+</html>

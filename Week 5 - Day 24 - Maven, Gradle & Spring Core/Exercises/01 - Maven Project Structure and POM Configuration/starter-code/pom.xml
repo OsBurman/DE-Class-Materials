@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- TODO: Set groupId to "com.library" -->
+    <groupId>TODO</groupId>
+
+    <!-- TODO: Set artifactId to "library-management" -->
+    <artifactId>TODO</artifactId>
+
+    <!-- TODO: Set version to "1.0.0-SNAPSHOT" -->
+    <version>TODO</version>
+
+    <!-- TODO: Set packaging to "jar" -->
+    <packaging>TODO</packaging>
+
+    <!-- TODO: Set name to "Library Management System" -->
+    <name>TODO</name>
+
+    <!-- TODO: Set description to "A Maven-managed library application" -->
+    <description>TODO</description>
+
+    <properties>
+        <!-- TODO: Add a property "maven.compiler.release" set to "17"
+             This tells Maven which Java version to target when compiling. -->
+    </properties>
+
+    <dependencies>
+        <!-- TODO: Add the JUnit Jupiter dependency
+             groupId:    org.junit.jupiter
+             artifactId: junit-jupiter
+             version:    5.10.2
+             scope:      test   (only needed for compiling and running tests) -->
+
+        <!-- TODO: Add the SLF4J API dependency
+             groupId:    org.slf4j
+             artifactId: slf4j-api
+             version:    2.0.13
+             (no scope — compile scope is the default) -->
+
+        <!-- TODO: Add the Logback Classic dependency
+             groupId:    ch.qos.logback
+             artifactId: logback-classic
+             version:    1.5.6
+             (no scope — compile scope is the default) -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- TODO: Add the maven-compiler-plugin (version 3.11.0)
+                 Inside <configuration>, add <release>17</release>
+                 This enforces Java 17 syntax during compilation. -->
+
+            <!-- TODO: Add the maven-surefire-plugin (version 3.2.5)
+                 No additional configuration is needed — declaring it is enough
+                 to enable JUnit 5 test discovery. -->
+        </plugins>
+    </build>
+
+</project>

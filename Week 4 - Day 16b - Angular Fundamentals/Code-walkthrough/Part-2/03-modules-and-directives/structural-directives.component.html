@@ -1,0 +1,268 @@
+<!-- =============================================================================
+  structural-directives.component.html — NgModule & Structural Directives
+  =============================================================================  -->
+
+<div class="directives-demo">
+  <h1>Structural Directives — *ngIf, *ngFor, *ngSwitch</h1>
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    NGMODULE NOTE (conceptual — no HTML needed)
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section info-box">
+    <h2>NgModule Quick Reference</h2>
+    <p>
+      Structural directives (<code>*ngIf</code>, <code>*ngFor</code>, <code>*ngSwitch</code>)
+      come from <strong>CommonModule</strong> (or <strong>BrowserModule</strong> in the root module).
+      If you're in a feature module, import <code>CommonModule</code>, not <code>BrowserModule</code>.
+    </p>
+    <pre>
+// Feature module pattern:
+&#64;NgModule({{ '{' }}
+  declarations: [FeatureComponent],
+  imports: [CommonModule, FormsModule],  // ← NOT BrowserModule
+  exports: [FeatureComponent]            // ← so other modules can use it
+{{ '}' }})
+export class CoursesModule {{ '{}' }}
+    </pre>
+    <p>
+      <code>exports[]</code> is what makes components available OUTSIDE the module.
+      Without it, the component is private to its declaring module.
+    </p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    *ngIf — Conditional Rendering
+    ════════════════════════════════════════════════════════════════════════
+
+    DESUGARED form — what Angular compiles *ngIf into:
+      <ng-template [ngIf]="condition">
+        ... content ...
+      </ng-template>
+
+    The * (asterisk) is syntactic sugar for this ng-template wrapping.
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>*ngIf — Conditional Rendering</h2>
+
+    <!-- Basic *ngIf — element is REMOVED from DOM when false (not just hidden) -->
+    <button (click)="isLoggedIn = !isLoggedIn">
+      Toggle Login (currently: {{ isLoggedIn ? 'logged in' : 'logged out' }})
+    </button>
+
+    <!-- *ngIf renders/removes the element from the DOM entirely -->
+    <div *ngIf="isLoggedIn" class="user-banner">
+      ✅ Welcome back, {{ currentUser.name }}! (Role: {{ currentUser.role }})
+    </div>
+
+    <!-- *ngIf with else clause — reference a named ng-template -->
+    <div *ngIf="isLoggedIn; else loggedOutBlock" class="dashboard-link">
+      → <a href="#">Go to Dashboard</a>
+    </div>
+
+    <ng-template #loggedOutBlock>
+      <p class="login-prompt">Please log in to access your courses.</p>
+    </ng-template>
+
+    <!-- *ngIf with then and else — both branches as named templates -->
+    <ng-container *ngIf="showDetails; then detailsTemplate; else summaryTemplate">
+    </ng-container>
+
+    <ng-template #summaryTemplate>
+      <p><button (click)="showDetails = true">Show Details</button></p>
+    </ng-template>
+
+    <ng-template #detailsTemplate>
+      <div class="details-panel">
+        <p>Here are the full details…</p>
+        <button (click)="showDetails = false">Hide Details</button>
+      </div>
+    </ng-template>
+
+    <!-- Async state machine using *ngIf / *ngSwitch -->
+    <div class="loading-demo">
+      <h4>Simulated Async States</h4>
+      <button (click)="simulateLoad()">Simulate Load</button>
+      <button (click)="simulateError()">Simulate Error</button>
+      <button (click)="resetLoad()">Reset</button>
+
+      <p *ngIf="loadingState === 'idle'">⚪ Idle — press a button to start</p>
+      <p *ngIf="loadingState === 'loading'">🔄 Loading…</p>
+      <p *ngIf="loadingState === 'loaded'" class="success">✅ Data loaded successfully!</p>
+      <p *ngIf="loadingState === 'error'" class="error">❌ Error loading data. Please retry.</p>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    *ngFor — List Rendering
+    ════════════════════════════════════════════════════════════════════════
+
+    Full syntax:
+      *ngFor="let item of items;
+              let i = index;
+              let first = first;
+              let last = last;
+              let even = even;
+              let odd = odd;
+              trackBy: trackByFn"
+
+    DESUGARED form:
+      <ng-template ngFor let-item [ngForOf]="items" [ngForTrackBy]="trackByFn">
+        ... content ...
+      </ng-template>
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>*ngFor — List Rendering</h2>
+
+    <!-- Filters -->
+    <div class="filters">
+      <label>Enrollment:
+        <select [(ngModel)]="activeFilter" name="activeFilter">
+          <option value="all">All Courses</option>
+          <option value="enrolled">Enrolled</option>
+          <option value="available">Available</option>
+        </select>
+      </label>
+
+      <label>Level:
+        <select [(ngModel)]="levelFilter" name="levelFilter">
+          <option value="all">All Levels</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </label>
+
+      <button (click)="addCourse()">+ Add Course</button>
+    </div>
+
+    <p>Showing {{ filteredCourses.length }} of {{ courses.length }} courses</p>
+
+    <!--
+      trackBy: trackByCourseId — critical for performance with large lists.
+      Without it, Angular destroys/recreates every DOM node on each update.
+      With it, Angular diffs by ID and only updates changed nodes.
+    -->
+    <ul class="course-list">
+      <li *ngFor="let course of filteredCourses;
+                  let i = index;
+                  let first = first;
+                  let last = last;
+                  let even = even;
+                  trackBy: trackByCourseId"
+          [class.first-item]="first"
+          [class.last-item]="last"
+          [class.even-row]="even">
+
+        <!-- i = zero-based index in the filtered list -->
+        <span class="index">{{ i + 1 }}.</span>
+        <span class="title">{{ course.title }}</span>
+        <span class="badge" [class]="'level-' + course.level">{{ course.level }}</span>
+        <span class="rating">⭐ {{ course.rating }}</span>
+        <span class="status">{{ course.enrolled ? '✅ Enrolled' : '○ Available' }}</span>
+
+        <button (click)="toggleEnrollment(course)">
+          {{ course.enrolled ? 'Unenroll' : 'Enroll' }}
+        </button>
+        <button (click)="removeCourse(course.id)">✕ Remove</button>
+      </li>
+    </ul>
+
+    <p *ngIf="filteredCourses.length === 0" class="empty-state">
+      No courses match your filter criteria.
+    </p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    *ngSwitch — Multi-Branch Conditional
+    ════════════════════════════════════════════════════════════════════════
+
+    *ngSwitch wraps the container; *ngSwitchCase handles each branch.
+    *ngSwitchDefault is the fallback (like default in a JS switch).
+
+    Prefer *ngSwitch over multiple *ngIf when checking the same value
+    against multiple specific cases — it's cleaner and slightly more efficient.
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>*ngSwitch — Multi-Branch Conditional</h2>
+
+    <!-- Tab navigation — (click) sets selectedTab -->
+    <nav class="tab-nav">
+      <button *ngFor="let tab of ['overview', 'curriculum', 'reviews', 'instructor']"
+              [class.active]="selectedTab === tab"
+              (click)="selectedTab = tab">
+        {{ tab | titlecase }}
+      </button>
+    </nav>
+
+    <!--
+      [ngSwitch]="selectedTab" — the expression to switch on (property binding)
+      *ngSwitchCase="'value'"  — match a specific value
+      *ngSwitchDefault         — fallback if no case matches
+    -->
+    <div [ngSwitch]="selectedTab" class="tab-content">
+
+      <div *ngSwitchCase="'overview'" class="tab-panel">
+        <h3>Course Overview</h3>
+        <p>Learn Angular from the ground up. Covers components, directives, services, and more.</p>
+      </div>
+
+      <div *ngSwitchCase="'curriculum'" class="tab-panel">
+        <h3>Curriculum</h3>
+        <ul>
+          <li>Week 1: Components & Templates</li>
+          <li>Week 2: Directives & Pipes</li>
+          <li>Week 3: Services & DI</li>
+          <li>Week 4: Routing & HTTP</li>
+        </ul>
+      </div>
+
+      <div *ngSwitchCase="'reviews'" class="tab-panel">
+        <h3>Reviews</h3>
+        <p>⭐⭐⭐⭐⭐ "Best Angular course I've taken!" — Student A</p>
+        <p>⭐⭐⭐⭐ "Very thorough and well-paced." — Student B</p>
+      </div>
+
+      <div *ngSwitchCase="'instructor'" class="tab-panel">
+        <h3>About the Instructor</h3>
+        <p>10 years of Angular experience. Google Developer Expert.</p>
+      </div>
+
+      <!-- This would render if selectedTab doesn't match any case -->
+      <div *ngSwitchDefault class="tab-panel">
+        <p>Select a tab above.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    COMBINING *ngFor + *ngIf with ng-container
+    ════════════════════════════════════════════════════════════════════════
+
+    You CANNOT put two structural directives on the same element.
+    Solution: use ng-container to hold one directive, element holds the other.
+  ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>Combining Directives — ng-container Pattern</h2>
+
+    <!--
+      WRONG — two structural directives on same element (Angular will error):
+        <li *ngFor="let c of courses" *ngIf="c.enrolled">
+
+      CORRECT — ng-container holds *ngFor; li holds *ngIf:
+    -->
+    <h4>Enrolled courses only (using ng-container):</h4>
+    <ul>
+      <ng-container *ngFor="let course of courses; trackBy: trackByCourseId">
+        <li *ngIf="course.enrolled">
+          ✅ {{ course.title }}
+        </li>
+      </ng-container>
+    </ul>
+  </section>
+
+</div>

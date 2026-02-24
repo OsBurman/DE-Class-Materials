@@ -1,0 +1,424 @@
+# =============================================================================
+# Day 37 – CI/CD & DevOps | Part 2
+# File: 04-containerized-cd-pipeline.yml
+# Topic: End-to-End CD Pipeline — Docker Build, Push, Deploy to Kubernetes
+#        + CI/CD Best Practices for Teams
+# Domain: Bookstore Spring Boot Application
+# =============================================================================
+# This is the CONTINUOUS DELIVERY portion of the pipeline.
+# It picks up where 02-github-actions-pipeline.yml (CI) left off.
+#
+# Full flow:
+#   Code push → CI pipeline (build/test/quality) → CD pipeline (docker/deploy)
+#
+# Place at: .github/workflows/cd.yml
+# =============================================================================
+
+name: Bookstore CD Pipeline
+
+on:
+  # Triggered after CI pipeline completes successfully on main
+  workflow_run:
+    workflows: ["Bookstore CI Pipeline"]
+    types: [completed]
+    branches: [main]
+
+  # Also allow manual trigger with environment selection
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target deployment environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      image_tag:
+        description: 'Docker image tag to deploy (leave empty to use latest)'
+        required: false
+        type: string
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ENVIRONMENT VARIABLES
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/bookstore-app
+  # The K8s deployment name and namespace (from 03-kubernetes-manifests.yaml)
+  DEPLOYMENT_NAME: bookstore-deployment
+  K8S_NAMESPACE: bookstore-ns
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Only proceed if the CI pipeline succeeded
+  # ─────────────────────────────────────────────────────────────────────────
+  check-ci-status:
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: CI pipeline status check
+        run: echo "✅ CI pipeline passed — proceeding with deployment"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB 1: BUILD AND PUSH DOCKER IMAGE
+  # ─────────────────────────────────────────────────────────────────────────
+  docker-build-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: check-ci-status
+
+    # Export outputs so downstream jobs can use the image tag
+    outputs:
+      image_tag:    ${{ steps.meta.outputs.tags }}
+      version_tag:  ${{ steps.version.outputs.tag }}
+
+    steps:
+      # ── Step 1: Checkout ─────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Step 2: Set up QEMU (for multi-platform builds) ──────────────────
+      # Allows building linux/amd64 AND linux/arm64 images simultaneously
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # ── Step 3: Set up Docker Buildx (enhanced builder) ──────────────────
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ── Step 4: Authenticate to GitHub Container Registry (GHCR) ─────────
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}   # Auto-provided by GitHub
+
+      # ── Step 5: Generate image metadata (tags and labels) ─────────────────
+      # Automatically tags with: branch name, semver, latest, commit SHA
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha,prefix=sha-
+            type=raw,value=1.0.0-build.${{ github.run_number }}
+
+      # ── Step 6: Generate our own version tag ─────────────────────────────
+      - name: Set version tag
+        id: version
+        run: |
+          VERSION_TAG="1.0.0-build.${{ github.run_number }}"
+          echo "tag=${VERSION_TAG}" >> $GITHUB_OUTPUT
+          echo "IMAGE_TAG=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${VERSION_TAG}" >> $GITHUB_ENV
+
+      # ── Step 7: Build Java application ───────────────────────────────────
+      # Download cached dependencies before building
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build JAR
+        run: mvn package -DskipTests --no-transfer-progress
+
+      # ── Step 8: Build and push multi-platform Docker image ───────────────
+      # This is the key step — builds the image defined in your Dockerfile
+      # and pushes it directly to GHCR.
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64    # Multi-architecture (Intel + Apple Silicon)
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Layer caching — reuse unchanged layers between builds
+          cache-from: type=gha
+          cache-to:   type=gha,mode=max
+          build-args: |
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+            GIT_COMMIT=${{ github.sha }}
+            VERSION=${{ steps.version.outputs.tag }}
+
+      # ── Step 9: Output the image digest for traceability ─────────────────
+      - name: Image digest
+        run: |
+          echo "Image pushed: ${{ steps.meta.outputs.tags }}"
+          echo "Digest: ${{ steps.build.outputs.digest }}"
+
+      # ── Step 10: Scan image for vulnerabilities (shift-left security) ─────
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: table
+          exit-code: '1'           # Fail the pipeline on CRITICAL vulnerabilities
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB 2: DEPLOY TO STAGING
+  # ─────────────────────────────────────────────────────────────────────────
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: docker-build-push
+    environment:
+      name: staging                 # GitHub Environment with protection rules
+      url: https://staging.bookstore.com
+
+    steps:
+      # ── Step 1: Checkout (for K8s manifests) ──────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Step 2: Configure kubectl for staging cluster ─────────────────────
+      # Kubeconfig is stored as a GitHub secret (base64-encoded YAML)
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.STAGING_KUBECONFIG }}
+
+      # ── Step 3: Verify cluster connection ─────────────────────────────────
+      - name: Verify cluster access
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      # ── Step 4: Update the image in the Deployment (rolling update) ───────
+      - name: Deploy new image (rolling update)
+        run: |
+          VERSION_TAG="${{ needs.docker-build-push.outputs.version_tag }}"
+          FULL_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${VERSION_TAG}"
+
+          echo "Deploying image: ${FULL_IMAGE}"
+
+          kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} \
+            bookstore-app=${FULL_IMAGE} \
+            -n ${{ env.K8S_NAMESPACE }}
+
+      # ── Step 5: Wait for rollout to complete ──────────────────────────────
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }} \
+            -n ${{ env.K8S_NAMESPACE }} \
+            --timeout=5m              # Fail deployment if not ready within 5 min
+
+      # ── Step 6: Verify pods are running ───────────────────────────────────
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }} -l app=bookstore
+          kubectl get pods -n ${{ env.K8S_NAMESPACE }} \
+            -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.spec.containers[0].image}{"\n"}{end}'
+
+      # ── Step 7: Smoke tests against staging ───────────────────────────────
+      - name: Smoke test — health endpoint
+        run: |
+          echo "Running smoke tests against staging..."
+          for i in {1..10}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://staging.bookstore.com/actuator/health)
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Health check passed (attempt $i)"
+              break
+            fi
+            echo "Attempt $i — HTTP $STATUS — retrying in 10s..."
+            if [ $i -eq 10 ]; then
+              echo "❌ Smoke test failed after 10 attempts"
+              exit 1
+            fi
+            sleep 10
+          done
+
+      - name: Smoke test — list books
+        run: |
+          RESPONSE=$(curl -s https://staging.bookstore.com/books)
+          COUNT=$(echo "$RESPONSE" | jq 'length')
+          if [ "$COUNT" -gt "0" ]; then
+            echo "✅ Books endpoint returned $COUNT books"
+          else
+            echo "❌ Books endpoint returned empty — possible data migration failure"
+            exit 1
+          fi
+
+      # ── Step 8: Rollback on smoke test failure ────────────────────────────
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "🔄 Smoke tests failed — rolling back deployment"
+          kubectl rollout undo deployment/${{ env.DEPLOYMENT_NAME }} \
+            -n ${{ env.K8S_NAMESPACE }}
+          kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }} \
+            -n ${{ env.K8S_NAMESPACE }}
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB 3: DEPLOY TO PRODUCTION (requires manual approval)
+  # ─────────────────────────────────────────────────────────────────────────
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment:
+      name: production              # GitHub Environment with required reviewers configured
+      url: https://bookstore.com
+    # NOTE: Production deployment is gated by GitHub Environment protection rules.
+    # Go to: Settings → Environments → production → Required reviewers
+    # The workflow pauses here until an authorized reviewer approves.
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl (production)
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.PRODUCTION_KUBECONFIG }}
+
+      # ── Blue-Green cutover in production ──────────────────────────────────
+      # (Demonstrates blue-green — update green, validate, switch service)
+      - name: Deploy to green slot
+        run: |
+          VERSION_TAG="${{ needs.docker-build-push.outputs.version_tag }}"
+          FULL_IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${VERSION_TAG}"
+
+          # Update the green deployment image
+          kubectl set image deployment/bookstore-green \
+            bookstore-app=${FULL_IMAGE} \
+            -n ${{ env.K8S_NAMESPACE }}
+
+          kubectl rollout status deployment/bookstore-green \
+            -n ${{ env.K8S_NAMESPACE }} --timeout=5m
+
+      - name: Run pre-cutover smoke tests on green
+        run: |
+          # Port-forward to green for pre-cutover testing
+          kubectl port-forward deployment/bookstore-green 8081:8080 \
+            -n ${{ env.K8S_NAMESPACE }} &
+          sleep 5
+          curl -f http://localhost:8081/actuator/health
+
+      - name: Cut over to green (blue-green switch)
+        run: |
+          # Switch the Service selector from blue → green
+          kubectl patch service bookstore-service \
+            -n ${{ env.K8S_NAMESPACE }} \
+            -p '{"spec":{"selector":{"slot":"green"}}}'
+          echo "✅ Traffic switched to green (v${{ needs.docker-build-push.outputs.version_tag }})"
+
+      - name: Tag old blue deployment for future rollback
+        run: |
+          kubectl annotate deployment/bookstore-blue \
+            -n ${{ env.K8S_NAMESPACE }} \
+            deployment.kubernetes.io/previous-version="1.0.0" --overwrite
+
+      - name: Notify team of production deploy
+        run: |
+          echo "🚀 Production deployment complete!"
+          echo "Version: ${{ needs.docker-build-push.outputs.version_tag }}"
+          echo "Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          # curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+          #   -H 'Content-type: application/json' \
+          #   --data "{\"text\":\"🚀 Bookstore ${{ needs.docker-build-push.outputs.version_tag }} deployed to production!\"}"
+
+# =============================================================================
+# CI/CD BEST PRACTICES FOR TEAMS — Reference Guide
+# =============================================================================
+#
+# 1. BRANCH STRATEGY
+#    ─────────────────────────────────────────────────────────────────────
+#    main         → protected, requires CI pass + PR review
+#    develop      → integration branch for feature PRs
+#    feature/xxx  → short-lived feature branches
+#    hotfix/xxx   → emergency fixes directly to main
+#
+#    GitHub Branch Protection Rules (Settings → Branches → main):
+#      ☑ Require pull request reviews (at least 1)
+#      ☑ Require status checks to pass (CI pipeline)
+#      ☑ Require branches to be up to date
+#      ☑ Restrict force pushes
+#
+# 2. COMMIT HYGIENE
+#    ─────────────────────────────────────────────────────────────────────
+#    Conventional Commits format:
+#      feat: add book recommendation endpoint
+#      fix: resolve null pointer in order service
+#      test: add integration tests for checkout
+#      chore: upgrade Spring Boot to 3.2.0
+#      docs: update API documentation
+#
+#    Small, focused commits → easier to revert and bisect bugs
+#    Commit message should explain WHY, not just what
+#
+# 3. PULL REQUEST PRACTICES
+#    ─────────────────────────────────────────────────────────────────────
+#    → Keep PRs small (< 400 lines changed)
+#    → Link to issue/ticket in description
+#    → Self-review before requesting reviews
+#    → CI must pass before review is requested
+#    → Address all review comments before merge
+#
+# 4. SECRET MANAGEMENT
+#    ─────────────────────────────────────────────────────────────────────
+#    Never commit secrets to Git (not even in private repos).
+#    Use:
+#      - GitHub Secrets (Settings → Secrets → Actions)
+#      - AWS Secrets Manager / GCP Secret Manager / Azure Key Vault
+#      - HashiCorp Vault for self-hosted
+#    Rotate secrets regularly. Audit access.
+#
+# 5. PIPELINE PERFORMANCE
+#    ─────────────────────────────────────────────────────────────────────
+#    → Cache dependencies (Maven ~/.m2, npm node_modules)
+#    → Run independent stages in parallel
+#    → Fail fast — compile before testing
+#    → Use Docker layer caching (cache-from: type=gha)
+#    → Target: CI pipeline < 10 minutes for developer feedback loop
+#
+# 6. ENVIRONMENT PARITY
+#    ─────────────────────────────────────────────────────────────────────
+#    Dev ≈ Staging ≈ Production (same OS, same dependencies, same config structure)
+#    Use containers + IaC to enforce parity
+#    Use environment variables + ConfigMaps for env-specific values
+#    Never promote "works on my machine" — use the pipeline artifact
+#
+# 7. ROLLBACK PLAN
+#    ─────────────────────────────────────────────────────────────────────
+#    Always have a tested rollback procedure before deploying.
+#    Rolling updates: kubectl rollout undo
+#    Blue-green: switch service selector back to blue
+#    Canary: scale down canary to 0
+#    Test rollback in staging regularly
+#
+# 8. OBSERVABILITY IN THE PIPELINE
+#    ─────────────────────────────────────────────────────────────────────
+#    → Smoke tests after every deployment
+#    → Monitor error rate for 5–15 min after production deploy
+#    → Automated rollback trigger: if error rate spikes post-deploy
+#    → Link deployment events to your monitoring dashboard
+#      (annotate Grafana with deployment markers)
+#
+# 9. DOCUMENTATION
+#    ─────────────────────────────────────────────────────────────────────
+#    → README with: setup, run, test, deploy instructions
+#    → CONTRIBUTING.md with: branch strategy, commit conventions, PR process
+#    → RUNBOOKS for: deployment, rollback, incident response
+#    → Architecture Decision Records (ADRs) for significant decisions
+#
+# 10. TEAM COLLABORATION
+#     ─────────────────────────────────────────────────────────────────────
+#     → Shared CI/CD dashboard visible to whole team
+#     → Deployments announced in team channel (Slack/Teams)
+#     → Blameless post-mortems when things go wrong
+#     → Rotate on-call responsibility
+#     → "Red builds must be fixed immediately" culture — don't ignore failures

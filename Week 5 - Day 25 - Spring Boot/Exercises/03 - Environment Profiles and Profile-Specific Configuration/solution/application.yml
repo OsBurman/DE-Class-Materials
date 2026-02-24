@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev   # Default to dev locally; override at runtime with --spring.profiles.active=prod
+
+library:
+  log-level: INFO   # Base default; overridden by application-dev.yml or application-prod.yml

@@ -1,0 +1,137 @@
+# ============================================================
+# Exercise 10 — EKS Kubernetes on AWS: SOLUTION
+# ============================================================
+
+# Part 1 — Cluster Setup
+# a. Create EKS cluster
+# eksctl create cluster \
+#   --name de-bootcamp-cluster \
+#   --region us-east-1 \
+#   --version 1.29 \
+#   --nodegroup-name standard-workers \
+#   --node-type t3.medium \
+#   --nodes 2 \
+#   --nodes-min 1 \
+#   --nodes-max 4 \
+#   --managed
+
+# b. Update kubeconfig
+# aws eks update-kubeconfig --name de-bootcamp-cluster --region us-east-1
+
+# c. Verify cluster
+# kubectl get nodes                  # 2 nodes in Ready state
+# kubectl get pods --all-namespaces  # coredns, kube-proxy, aws-node system pods
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: order-app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+  namespace: order-app
+  labels:
+    app: order-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-service
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - name: order-service
+          image: YOUR_ECR_IMAGE_URI
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service-svc
+  namespace: order-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: order-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+# ============================================================
+# Part 3 — Deploy and Verify
+# a. kubectl create namespace order-app
+# b. kubectl apply -f deployment.yaml
+# c. kubectl rollout status deployment/order-service-deployment -n order-app
+# d. kubectl get service order-service-svc -n order-app  (EXTERNAL-IP = ELB DNS)
+# e. kubectl scale deployment order-service-deployment --replicas=5 -n order-app
+# f. kubectl set image deployment/order-service-deployment order-service=YOUR_ECR_IMAGE_URI:v2 -n order-app
+
+# ============================================================
+# Part 4 — Reflection Answers
+# ============================================================
+
+# 1. eksctl create cluster provisions (5+ resources):
+#    VPC with public/private subnets across 2 AZs, Internet Gateway, NAT Gateways,
+#    EKS control plane (managed API server + etcd), EC2 Auto Scaling Group (worker nodes),
+#    IAM roles (cluster role + node instance role), Security Groups, CloudFormation stacks,
+#    Launch Template for the managed node group.
+
+# 2. EKS vs ECS — choose EKS when:
+#    Team uses kubectl/Helm/Kustomize; need cloud portability; require Kubernetes-native
+#    tooling (Istio, Argo CD, KEDA, Prometheus Operator); complex scheduling needs.
+#    Choose ECS for simpler AWS-native deployments with less operational overhead.
+
+# 3. Liveness vs Readiness:
+#    Liveness: "is the container alive?" — failure → Kubernetes RESTARTS the container.
+#    Readiness: "is the container ready for traffic?" — failure → removed from Service
+#    endpoints (no restart). Use readiness for slow startup or temporary overload.
+
+# 4. Diagnosing CrashLoopBackOff:
+#    kubectl get pods -n order-app
+#    kubectl describe pod <pod-name> -n order-app      # events, exit code, OOMKilled
+#    kubectl logs <pod-name> -n order-app              # current stdout/stderr
+#    kubectl logs <pod-name> -n order-app --previous   # logs from last crashed instance
+
+# 5. Kubernetes Namespace:
+#    Virtual cluster within the physical EKS cluster — scopes names, applies resource
+#    quotas, and enables RBAC per team. Multiple teams share one cluster without
+#    accidentally deleting each other's resources.

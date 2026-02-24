@@ -1,0 +1,15 @@
+<!-- app.component.html  (solution) -->
+<nav style="display:flex; gap:1rem; padding:0.75rem; background:#eee;">
+  <!-- routerLink replaces href — stays within the SPA (no full reload) -->
+  <!-- routerLinkActive adds the 'active' CSS class when the route matches -->
+  <!-- exact: true prevents '' from matching every route that starts with '/' -->
+  <a routerLink="/"
+     routerLinkActive="active"
+     [routerLinkActiveOptions]="{ exact: true }">Home</a>
+
+  <a routerLink="/about"   routerLinkActive="active">About</a>
+  <a routerLink="/contact" routerLinkActive="active">Contact</a>
+</nav>
+
+<!-- router-outlet is the placeholder where the matched component renders -->
+<router-outlet></router-outlet>

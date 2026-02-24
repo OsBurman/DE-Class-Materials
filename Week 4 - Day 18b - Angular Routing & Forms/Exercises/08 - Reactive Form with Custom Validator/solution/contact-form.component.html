@@ -1,0 +1,78 @@
+<!--
+  [formGroup]="form"   — binds this <form> to the FormGroup defined in the component
+  (ngSubmit)           — fires on form submission; Angular prevents the default browser POST
+-->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" style="max-width:440px; padding:1.5rem;">
+  <h2>Contact Us</h2>
+
+  <!-- ════ Username ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="username">Username</label><br />
+    <!--
+      formControlName="username" — links this input to the 'username' FormControl in the group.
+      No [(ngModel)] needed: the FormGroup manages the value.
+    -->
+    <input
+      id="username"
+      type="text"
+      formControlName="username"
+      style="width:100%; padding:0.4rem;"
+    />
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('username')?.touched && form.get('username')?.errors?.['required']">
+      Username is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('username')?.touched && form.get('username')?.errors?.['minlength']">
+      Minimum 3 characters.
+    </div>
+    <!-- Custom validator error key matches the key returned in the ValidationErrors object -->
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('username')?.touched && form.get('username')?.errors?.['noSpaces']">
+      Username cannot contain spaces.
+    </div>
+  </div>
+
+  <!-- ════ Email ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="email">Email</label><br />
+    <input
+      id="email"
+      type="email"
+      formControlName="email"
+      style="width:100%; padding:0.4rem;"
+    />
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['required']">
+      Email is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('email')?.touched && form.get('email')?.errors?.['email']">
+      Please enter a valid email address.
+    </div>
+  </div>
+
+  <!-- ════ Message ════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="message">Message</label><br />
+    <textarea
+      id="message"
+      rows="4"
+      formControlName="message"
+      style="width:100%; padding:0.4rem;"
+    ></textarea>
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('message')?.touched && form.get('message')?.errors?.['required']">
+      Message is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;"
+         *ngIf="form.get('message')?.touched && form.get('message')?.errors?.['minlength']">
+      Message must be at least 10 characters.
+    </div>
+  </div>
+
+  <!-- [disabled]="form.invalid" keeps the button disabled until the whole FormGroup is valid -->
+  <button type="submit" [disabled]="form.invalid">Send</button>
+
+  <p *ngIf="submitted" style="color:green; margin-top:1rem;">✔ Message sent!</p>
+</form>

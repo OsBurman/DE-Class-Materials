@@ -1,0 +1,18 @@
+<!-- Exercise 05 Part B: *ngFor demo -->
+<div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;">
+  <h3>Task List</h3>
+
+  <ul>
+    <!-- TODO 6: Replace this static <li> with *ngFor="let task of tasks"
+                 so Angular renders one <li> per task.
+                 Each <li> should contain:
+                   - <input type="checkbox" [checked]="task.done" (change)="toggleTask(task.id)">
+                   - {{ task.title }} -->
+    <li>Task placeholder</li>
+  </ul>
+
+  <!-- TODO 7: Display the count of completed tasks.
+               Use tasks.filter(t => t.done).length for the completed count
+               and tasks.length for the total. -->
+  <p>Completed: ? of ?</p>
+</div>

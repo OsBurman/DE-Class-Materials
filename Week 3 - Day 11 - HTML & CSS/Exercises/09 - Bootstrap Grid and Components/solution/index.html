@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap Grid & Components</title>
+  <!-- Bootstrap 5 CSS via CDN — no local install required -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+  <!-- ── Part A: Responsive Navbar ───────────────────────────────── -->
+  <!-- navbar-expand-md: menu is visible on ≥768px, collapses on smaller screens -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+
+      <a class="navbar-brand" href="#">🚀 MyApp</a>
+
+      <!-- Hamburger toggle — only visible when menu is collapsed (< md) -->
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- ms-auto pushes the links to the right -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <div class="container my-4">
+
+    <!-- ── Part B & C: Responsive Grid + Cards ─────────────────── -->
+    <h2 class="mb-3">Part B &amp; C: Responsive Grid with Cards</h2>
+
+    <!-- g-4 = gap between grid items; row-cols-* is an alternative but explicit col classes give more control -->
+    <div class="row g-4">
+
+      <!-- col-12: full width on mobile | col-md-6: half on tablet | col-lg-4: third on desktop -->
+      <div class="col-12 col-md-6 col-lg-4">
+        <!-- h-100 stretches the card to the full height of its column for equal-height rows -->
+        <div class="card h-100">
+          <img src="https://placehold.co/600x200" class="card-img-top" alt="Design service">
+          <div class="card-body">
+            <h5 class="card-title">
+              🎨 Design
+              <span class="badge bg-success">New</span>  <!-- badge example -->
+            </h5>
+            <p class="card-text">Beautiful interfaces crafted with care for every device.</p>
+            <a href="#" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <img src="https://placehold.co/600x200" class="card-img-top" alt="Development service">
+          <div class="card-body">
+            <h5 class="card-title">⚙️ Development</h5>
+            <p class="card-text">Robust and scalable web applications built with modern tools.</p>
+            <a href="#" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100">
+          <img src="https://placehold.co/600x200" class="card-img-top" alt="Analytics service">
+          <div class="card-body">
+            <h5 class="card-title">📊 Analytics</h5>
+            <p class="card-text">Data-driven insights to help you grow your business.</p>
+            <a href="#" class="btn btn-primary">Learn More</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.row -->
+
+    <!-- ── Part D: Utility Classes ──────────────────────────────── -->
+    <h2 class="mt-5 mb-3">Part D: Utility Classes</h2>
+
+    <!-- 1. Spacing -->
+    <h5>1. Spacing Utilities</h5>
+    <div class="p-4 mb-3 bg-light border">
+      This div has <code>p-4</code> padding and <code>mb-3</code> margin-bottom.
+    </div>
+
+    <!-- 2. Typography -->
+    <h5>2. Typography Utilities</h5>
+    <p class="text-muted fs-5">Muted text at font-size 5 (fs-5)</p>
+    <p class="fw-bold text-primary">Bold primary text (fw-bold text-primary)</p>
+    <p class="font-monospace">Monospace font — useful for code (font-monospace)</p>
+
+    <!-- 3. Buttons — d-flex + gap-2 + flex-wrap creates a horizontal wrappable row -->
+    <h5>3. Button Colours</h5>
+    <div class="d-flex gap-2 flex-wrap mb-3">
+      <button class="btn btn-primary">Primary</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <button class="btn btn-success">Success</button>
+      <button class="btn btn-danger">Danger</button>
+      <button class="btn btn-warning">Warning</button>
+      <button class="btn btn-info">Info</button>
+    </div>
+
+    <!-- 4. Alerts -->
+    <h5>4. Alerts</h5>
+    <div class="alert alert-success">✅ Success! Your changes were saved.</div>
+    <div class="alert alert-warning">⚠️ Warning: Your session will expire soon.</div>
+    <div class="alert alert-danger">❌ Error: Something went wrong.</div>
+
+    <!-- 5. Offset Grid — offset-md-4 skips 4 columns, centring a col-md-4 block -->
+    <h5>5. Grid with Offset (Centred Column)</h5>
+    <div class="row">
+      <div class="col-md-4 offset-md-4 p-3 bg-info-subtle text-center border">
+        Centred column using <code>offset-md-4</code>
+      </div>
+    </div>
+
+    <!-- ── Part E: Accordion ─────────────────────────────────────── -->
+    <h2 class="mt-5 mb-3">Part E: Accordion Component</h2>
+
+    <div class="accordion" id="myAccordion">
+
+      <!-- Item 1 — starts open: accordion-button has no "collapsed", collapse div has "show" -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapse1"
+                  aria-expanded="true" aria-controls="collapse1">
+            What is Bootstrap?
+          </button>
+        </h2>
+        <div id="collapse1" class="accordion-collapse collapse show"
+             data-bs-parent="#myAccordion">
+          <div class="accordion-body">
+            Bootstrap is an open-source CSS framework for building responsive, mobile-first websites
+            using pre-built components and a 12-column grid system.
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 — closed by default -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapse2"
+                  aria-expanded="false" aria-controls="collapse2">
+            What is a CSS Grid System?
+          </button>
+        </h2>
+        <div id="collapse2" class="accordion-collapse collapse"
+             data-bs-parent="#myAccordion">
+          <div class="accordion-body">
+            Bootstrap's grid divides each row into 12 equal columns. You specify how many columns
+            an element occupies using classes like <code>col-4</code> (4/12 = one third).
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 — closed by default -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapse3"
+                  aria-expanded="false" aria-controls="collapse3">
+            Do I need custom CSS with Bootstrap?
+          </button>
+        </h2>
+        <div id="collapse3" class="accordion-collapse collapse"
+             data-bs-parent="#myAccordion">
+          <div class="accordion-body">
+            Not always. Bootstrap's utility classes cover most spacing, colour, typography, and
+            layout needs. Custom CSS is usually only needed for project-specific branding or
+            components not covered by the framework.
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /#myAccordion -->
+
+  </div><!-- /.container -->
+
+  <!-- Bootstrap JS bundle (includes Popper.js) — required for accordions, dropdowns, modals -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

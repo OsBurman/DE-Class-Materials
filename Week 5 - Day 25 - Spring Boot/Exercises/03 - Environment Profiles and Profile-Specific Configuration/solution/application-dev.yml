@@ -1,0 +1,6 @@
+server:
+  port: 8080
+
+library:
+  datasource-url: jdbc:h2:mem:devdb
+  log-level: DEBUG   # Overrides the INFO default in application.yml

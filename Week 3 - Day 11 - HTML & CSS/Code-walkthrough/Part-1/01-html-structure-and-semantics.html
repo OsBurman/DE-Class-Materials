@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 1 | HTML Document Structure, Semantics & Common Elements
+  ═══════════════════════════════════════════════════════════════════════════════
+
+  WHAT THE BROWSER DOES WITH THIS FILE:
+    1. Parses the HTML text top-to-bottom
+    2. Builds the DOM (Document Object Model) — a tree of nodes in memory
+    3. Renders the tree as visual content on screen
+
+  THE DOM TREE for a basic page looks like:
+    Document
+    └── html
+        ├── head  (metadata — invisible)
+        │   ├── meta (charset)
+        │   ├── meta (viewport)
+        │   └── title
+        └── body  (content — visible)
+            ├── header
+            │   └── nav
+            ├── main
+            │   ├── section
+            │   └── article
+            └── footer
+
+  BLOCK vs INLINE elements:
+    Block  — takes the full width of its container, starts on a new line
+             Examples: <div>, <p>, <h1>-<h6>, <ul>, <li>, <header>, <section>
+    Inline — only as wide as its content, sits in the flow of text
+             Examples: <span>, <a>, <strong>, <em>, <img>, <input>, <button>
+-->
+
+<!DOCTYPE html>                        <!-- Tells the browser: HTML5 mode -->
+<html lang="en">                       <!-- Root element; lang="en" helps screen readers -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     HEAD — Metadata (not rendered on screen)
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<head>
+  <meta charset="UTF-8" />            <!-- Character encoding: handles ñ, ü, 中, etc. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                                       <!-- ↑ Tells mobile browsers: don't zoom out -->
+  <meta name="description" content="Day 11 HTML structure and semantics demo" />
+  <title>Day 11 — HTML Structure & Semantics</title>
+  <!-- External stylesheet would go here: <link rel="stylesheet" href="style.css" /> -->
+</head>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     BODY — Everything the user actually sees
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<body>
+
+  <!-- ───────────────────────────────────────────────────────────────────────
+       SECTION 1: Semantic Structure
+       Semantic tags tell the browser AND screen readers what role each region plays.
+       Non-semantic alternative: <div id="header">, <div id="nav"> — no meaning.
+       ─────────────────────────────────────────────────────────────────────── -->
+
+  <header>                             <!-- Site-wide or section header -->
+    <h1>Tech Blog</h1>                 <!-- Only ONE h1 per page (SEO + accessibility) -->
+    <p>Practical articles for developers</p>
+
+    <nav>                              <!-- Navigation landmark — screen readers jump here -->
+      <ul>
+        <li><a href="#articles">Articles</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>                               <!-- Primary content — only ONE per page -->
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         SECTION 2: Headings & Paragraphs
+         Heading hierarchy matters for accessibility and SEO.
+         Screen readers use heading levels as a table of contents.
+         ───────────────────────────────────────────────────────────────────── -->
+    <section id="articles">
+      <h2>Featured Articles</h2>       <!-- h2 for sections inside main -->
+
+      <article>                        <!-- Self-contained piece of content (could be syndicated) -->
+        <h3>Getting Started with Java</h3>
+        <p>
+          Java is a <strong>statically typed</strong>, <em>object-oriented</em> language
+          that runs on the JVM. It was designed with the motto
+          <q>Write once, run anywhere.</q>
+        </p>
+        <p>
+          Published: <time datetime="2025-01-15">January 15, 2025</time>
+        </p>
+
+        <!-- ── Text-level inline elements ──────────────────────────────────── -->
+        <p>
+          Use <code>javac</code> to compile and <code>java</code> to run.<br />
+          <!-- ↑ <br /> is an inline element — line break (use sparingly) -->
+          The <abbr title="Java Development Kit">JDK</abbr> includes both tools.<br />
+          <mark>Important:</mark> always set your <code>JAVA_HOME</code> environment variable.
+        </p>
+      </article>
+
+      <!-- ─────────────────────────────────────────────────────────────────────
+           SECTION 3: Lists
+           ─────────────────────────────────────────────────────────────────── -->
+      <article>
+        <h3>List Types</h3>
+
+        <!-- Unordered list — bullet points, order does not matter -->
+        <h4>Unordered list (<code>&lt;ul&gt;</code>)</h4>
+        <ul>
+          <li>Spring Boot</li>
+          <li>React</li>
+          <li>PostgreSQL</li>
+        </ul>
+
+        <!-- Ordered list — numbered, order matters -->
+        <h4>Ordered list (<code>&lt;ol&gt;</code>)</h4>
+        <ol>
+          <li>Write the test</li>
+          <li>Watch it fail</li>
+          <li>Make it pass</li>
+          <li>Refactor</li>
+        </ol>
+
+        <!-- Nested list -->
+        <h4>Nested list</h4>
+        <ul>
+          <li>Frontend
+            <ul>
+              <li>HTML</li>
+              <li>CSS</li>
+              <li>JavaScript</li>
+            </ul>
+          </li>
+          <li>Backend
+            <ul>
+              <li>Java / Spring Boot</li>
+              <li>Node.js</li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- Description list — term + definition pairs -->
+        <h4>Description list (<code>&lt;dl&gt;</code>)</h4>
+        <dl>
+          <dt>DOM</dt>
+          <dd>Document Object Model — the browser's in-memory tree of HTML nodes</dd>
+          <dt>API</dt>
+          <dd>Application Programming Interface — a contract between two pieces of software</dd>
+        </dl>
+      </article>
+
+      <!-- ─────────────────────────────────────────────────────────────────────
+           SECTION 4: Links & Images
+           ─────────────────────────────────────────────────────────────────── -->
+      <article>
+        <h3>Links &amp; Images</h3>
+
+        <!-- Anchor tag — inline element -->
+        <p>
+          <!-- Absolute URL -->
+          <a href="https://developer.mozilla.org" target="_blank" rel="noopener noreferrer">
+            MDN Web Docs
+          </a>
+          <!-- ↑ target="_blank" opens in new tab
+               rel="noopener noreferrer" — security: prevents new tab from accessing window.opener -->
+        </p>
+        <p>
+          <!-- Relative URL — within same site -->
+          <a href="/articles/java-basics.html">Read the full article</a>
+        </p>
+        <p>
+          <!-- Anchor link — jump to same page element by id -->
+          <a href="#contact">Jump to Contact section</a>
+        </p>
+        <p>
+          <!-- Email link -->
+          <a href="mailto:hello@techblog.dev">Email us</a>
+        </p>
+
+        <!-- Image — inline (replaced) element -->
+        <figure>
+          <img
+            src="https://via.placeholder.com/600x300?text=Java+Architecture"
+            alt="Diagram showing how Java source code compiles to bytecode and runs on the JVM"
+            width="600"
+            height="300"
+          />
+          <!--
+            src   — path to the image file
+            alt   — required: description for screen readers and when image fails to load
+            width/height — prevents layout shift while image loads (CLS metric)
+          -->
+          <figcaption>Java compilation and execution pipeline</figcaption>
+        </figure>
+      </article>
+
+    </section><!-- /articles -->
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         SECTION 5: Other Semantic Elements
+         ─────────────────────────────────────────────────────────────────── -->
+    <section id="about">
+      <h2>About This Blog</h2>
+
+      <!-- aside: content related but not part of the main flow -->
+      <aside>
+        <h3>Did you know?</h3>
+        <p>HTML was invented by Tim Berners-Lee in 1991.</p>
+      </aside>
+
+      <!-- Details / Summary — native disclosure widget, no JS needed -->
+      <details>
+        <summary>What technologies do we cover?</summary>
+        <p>Java, Spring Boot, React, Angular, SQL, Docker, and more.</p>
+      </details>
+
+      <!-- Blockquote — for long quotations -->
+      <blockquote cite="https://www.w3.org/TR/html5/">
+        <p>The Web is for everyone.</p>
+        <footer>— W3C HTML5 Specification</footer>
+      </blockquote>
+
+      <!-- hr — thematic break (not just a visual line) -->
+      <hr />
+
+      <!-- address — contact information for nearest article or body -->
+      <address>
+        Written by <a href="mailto:instructor@techblog.dev">Your Instructor</a>
+      </address>
+    </section>
+
+  </main><!-- /main -->
+
+  <!-- Footer — site-wide footer -->
+  <footer id="contact">
+    <p>&copy; 2025 Tech Blog. All rights reserved.</p>
+    <p>
+      Built with
+      <abbr title="HyperText Markup Language">HTML</abbr> and
+      <abbr title="Cascading Style Sheets">CSS</abbr>
+    </p>
+  </footer>
+
+</body>
+</html>
+
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  QUICK REFERENCE — Block vs Inline Summary
+  ═══════════════════════════════════════════════════════════════════════════
+
+  BLOCK ELEMENTS (each starts on its own line):
+    Semantic: <header> <nav> <main> <article> <section> <aside> <footer>
+    Text:     <h1>–<h6> <p> <blockquote> <pre> <address>
+    List:     <ul> <ol> <li> <dl> <dt> <dd>
+    Other:    <div> <figure> <figcaption> <details> <summary> <hr>
+    Table:    <table> <thead> <tbody> <tfoot> <tr> <th> <td>
+    Form:     <form> <fieldset> <legend>
+
+  INLINE ELEMENTS (flow within text):
+    Text:     <a> <strong> <em> <span> <code> <abbr> <mark> <time> <q> <br>
+    Media:    <img> <video> <audio> <canvas> <svg>
+    Form:     <input> <button> <label> <select> <textarea>
+-->

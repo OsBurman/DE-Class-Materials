@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Styles, Classes and Attributes</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 2rem auto; }
+    #card { padding: 1rem; border: 1px solid #ccc; border-radius: 6px; }
+    .active  { outline: 3px solid green; }
+    .highlight { background-color: #fffbcc; }
+    button { margin-top: 1rem; padding: 0.4rem 0.8rem; }
+  </style>
+</head>
+<body>
+  <div id="card" data-user-id="42">
+    <h2>User Card</h2>
+    <p>This card represents a user profile element.</p>
+  </div>
+
+  <button id="toggle-btn">Toggle</button>
+  <p id="status-text"></p>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

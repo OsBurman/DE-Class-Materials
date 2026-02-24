@@ -1,0 +1,100 @@
+/* ============================================================
+  Day 16b — Angular Fundamentals
+  File: Components & Templates — Component Styles
+  ============================================================
+  Component styles are SCOPED by default.
+  Angular adds a unique attribute (_ngcontent-xxx) to every
+  element in this component's template, and rewrites these
+  selectors to match only those elements.
+
+  Result: .course-card here ONLY matches .course-card inside
+  THIS component — it won't affect .course-card in any other
+  component. This is Angular's View Encapsulation.
+  ============================================================ */
+
+.course-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 360px;
+  font-family: sans-serif;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  margin-top: 0;
+  color: #1a1a2e;
+}
+
+.instructor {
+  color: #555;
+  font-size: 14px;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+  color: #0077cc;
+}
+
+.discounted {
+  color: #e63946;
+}
+
+.rating {
+  color: #f5a623;
+}
+
+.availability {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #e8f5e9;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:first-child {
+  background: #0077cc;
+  color: white;
+}
+
+button:last-child {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.tag {
+  background: #eef2ff;
+  color: #4f46e5;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}

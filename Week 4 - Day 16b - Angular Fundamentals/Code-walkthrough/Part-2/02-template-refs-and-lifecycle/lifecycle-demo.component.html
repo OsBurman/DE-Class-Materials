@@ -1,0 +1,101 @@
+<!-- =============================================================================
+  lifecycle-demo.component.html — Lifecycle Hooks & Template Refs Display
+  =============================================================================  -->
+
+<div class="lifecycle-demo">
+  <h2>Angular Lifecycle Hooks Demo</h2>
+  <p class="subtitle">
+    Component: <code>courseId={{ courseId }}</code>,
+    <code>courseName="{{ courseName }}"</code>
+  </p>
+
+  <!-- ── @ViewChild demo ──────────────────────────────────────────────────── -->
+  <section class="demo-section">
+    <h3>@ViewChild — Class-Level Access to Template References</h3>
+    <p>
+      This input has a <code>#titleInput</code> template reference.
+      The class accesses it via <code>@ViewChild('titleInput')</code> and
+      auto-focuses it in <code>ngAfterViewInit</code>.
+    </p>
+
+    <!--
+      #titleInput — Template reference variable declared here.
+      Accessible in the template as titleInput.value, titleInput.focus(), etc.
+      Accessible in the class via @ViewChild('titleInput') titleInputRef.
+    -->
+    <input #titleInput
+           type="text"
+           [(ngModel)]="viewTitle"
+           name="viewTitle"
+           placeholder="Auto-focused via @ViewChild in ngAfterViewInit">
+
+    <button (click)="focusTitleInput()">Re-focus via @ViewChild</button>
+    <p *ngIf="viewTitle">You typed: <strong>{{ viewTitle }}</strong></p>
+  </section>
+
+  <!-- ── Lifecycle log ────────────────────────────────────────────────────── -->
+  <section class="demo-section">
+    <h3>Lifecycle Event Log</h3>
+    <p>
+      Events appear in reverse-chronological order (newest at top).
+      Change detection cycles (<code>ngDoCheck</code>) are capped at 5
+      log entries to keep the list readable.
+    </p>
+
+    <button (click)="clearLog()">Clear Log</button>
+
+    <ul class="lifecycle-log" *ngIf="lifecycleLog.length > 0; else emptyLog">
+      <li *ngFor="let entry of lifecycleLog" class="log-entry">
+        {{ entry }}
+      </li>
+    </ul>
+
+    <ng-template #emptyLog>
+      <p class="empty">Log is empty — interact with the component to generate events.</p>
+    </ng-template>
+  </section>
+
+  <!-- ── Lifecycle order reference ────────────────────────────────────────── -->
+  <section class="demo-section reference">
+    <h3>Lifecycle Hook Order (for reference)</h3>
+    <ol class="hook-list">
+      <li>
+        <code>constructor()</code>
+        <span>— DI injection only, @Input() NOT set yet</span>
+      </li>
+      <li>
+        <code>ngOnChanges(changes)</code>
+        <span>— runs before ngOnInit if @Input()s exist; runs again on every @Input() change</span>
+      </li>
+      <li>
+        <code>ngOnInit()</code>
+        <span>— initialization, API calls, @Input() values available — runs ONCE</span>
+      </li>
+      <li>
+        <code>ngDoCheck()</code>
+        <span>— every change-detection cycle (VERY frequent)</span>
+      </li>
+      <li>
+        <code>ngAfterContentInit()</code>
+        <span>— projected content ready — runs ONCE</span>
+      </li>
+      <li>
+        <code>ngAfterContentChecked()</code>
+        <span>— after each check of projected content</span>
+      </li>
+      <li>
+        <code>ngAfterViewInit()</code>
+        <span>— view rendered, @ViewChild available — runs ONCE</span>
+      </li>
+      <li>
+        <code>ngAfterViewChecked()</code>
+        <span>— after each check of the view</span>
+      </li>
+      <li>
+        <code>ngOnDestroy()</code>
+        <span>— CLEANUP: unsubscribe, clear timers — runs ONCE</span>
+      </li>
+    </ol>
+  </section>
+
+</div>

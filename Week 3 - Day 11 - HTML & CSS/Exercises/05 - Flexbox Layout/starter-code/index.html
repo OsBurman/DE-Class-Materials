@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexbox Layout</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Part A: Navigation Bar -->
+  <nav class="navbar">
+    <span class="logo">🚀 MyApp</span>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- Part D: Centred Hero -->
+    <section class="hero">
+      <h1>Welcome to MyApp</h1>
+      <p>The best app ever built.</p>
+      <button>Get Started</button>
+    </section>
+
+    <!-- Part B: Card Row with Wrapping -->
+    <h2>Our Services</h2>
+    <div class="card-row">
+      <div class="card">
+        <h3>🎨 Design</h3>
+        <p>Beautiful interfaces crafted with care.</p>
+      </div>
+      <div class="card">
+        <h3>⚙️ Development</h3>
+        <p>Robust and scalable web applications.</p>
+      </div>
+      <div class="card">
+        <h3>📊 Analytics</h3>
+        <p>Data-driven insights for your business.</p>
+      </div>
+      <div class="card">
+        <h3>☁️ Hosting</h3>
+        <p>Reliable cloud infrastructure worldwide.</p>
+      </div>
+    </div>
+
+    <!-- Part C: Sidebar Layout -->
+    <h2>Dashboard</h2>
+    <div class="sidebar-layout">
+      <aside class="sidebar">
+        <h3>Navigation</h3>
+        <ul>
+          <li>Overview</li>
+          <li>Reports</li>
+          <li>Settings</li>
+        </ul>
+      </aside>
+      <div class="content">
+        <h3>Main Content Area</h3>
+        <p>This section grows to fill all remaining horizontal space.</p>
+        <p>The sidebar stays fixed at 220px wide regardless of the viewport.</p>
+      </div>
+    </div>
+
+    <!-- Part E: Flex Item Order -->
+    <h2>Flex Item Order</h2>
+    <p>Without CSS, the order is A → B → C. Use the <code>order</code> property to display C first.</p>
+    <div class="order-demo" style="display: flex; gap: 1rem;">
+      <div class="item item-a" style="padding: 1rem; background: #f8d7da; border: 1px solid #ccc;">A</div>
+      <div class="item item-b" style="padding: 1rem; background: #fff3cd; border: 1px solid #ccc;">B</div>
+      <div class="item item-c" style="padding: 1rem; background: #d4edda; border: 1px solid #ccc;">C (should appear first)</div>
+    </div>
+
+  </div><!-- /.page-content -->
+
+</body>
+</html>

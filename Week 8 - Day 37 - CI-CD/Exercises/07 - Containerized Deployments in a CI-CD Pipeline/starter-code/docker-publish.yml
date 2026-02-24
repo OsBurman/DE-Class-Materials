@@ -1,0 +1,72 @@
+name: Build, Push, and Deploy Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+# ---------------------------------------------------------------------------
+# Secrets used in this workflow (configure in repo Settings → Secrets):
+#   DOCKER_HUB_USERNAME  — your DockerHub username
+#   DOCKER_HUB_TOKEN     — DockerHub access token (not your password)
+#   KUBE_CONFIG          — base64-encoded kubeconfig file
+# ---------------------------------------------------------------------------
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # TODO 1: Check out the repository
+      - name: Checkout repository
+        uses: # TODO
+
+      # -----------------------------------------------------------------------
+      # Requirement 2 — Docker Login
+      # TODO 2: Log in to DockerHub using docker/login-action@v3
+      #   username: from secrets.DOCKER_HUB_USERNAME
+      #   password: from secrets.DOCKER_HUB_TOKEN
+      # -----------------------------------------------------------------------
+      - name: Log in to DockerHub
+        uses: # TODO
+        with:
+          username: # TODO
+          password: # TODO
+
+      # -----------------------------------------------------------------------
+      # Requirement 3 — Build and Push Image
+      # TODO 3: Use docker/build-push-action@v5
+      #   context: .
+      #   push: true
+      #   tags: two tags — latest and git SHA
+      # -----------------------------------------------------------------------
+      - name: Build and Push Docker image
+        uses: # TODO
+        with:
+          context: # TODO
+          push: # TODO
+          tags: |
+            # TODO: ${{ secrets.DOCKER_HUB_USERNAME }}/springapp:latest
+            # TODO: ${{ secrets.DOCKER_HUB_USERNAME }}/springapp:${{ github.sha }}
+
+      # -----------------------------------------------------------------------
+      # Requirement 4 — Set Up kubectl
+      # TODO 4a: Decode KUBE_CONFIG secret from base64 and write to ~/.kube/config
+      # TODO 4b: Run kubectl cluster-info to verify connection
+      # -----------------------------------------------------------------------
+      - name: Configure kubectl
+        run: |
+          mkdir -p ~/.kube
+          # TODO 4a: echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          # TODO 4b: kubectl cluster-info
+
+      # -----------------------------------------------------------------------
+      # Requirement 5 — Rolling Update Deployment
+      # TODO 5a: kubectl set image to update spring-container to the new SHA-tagged image
+      # TODO 5b: kubectl rollout status to wait for completion (timeout 120s)
+      # -----------------------------------------------------------------------
+      - name: Deploy to Kubernetes
+        run: |
+          # TODO 5a: kubectl set image ...
+          # TODO 5b: kubectl rollout status ...

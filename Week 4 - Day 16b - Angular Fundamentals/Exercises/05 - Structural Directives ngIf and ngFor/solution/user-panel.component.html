@@ -1,0 +1,17 @@
+<!-- Exercise 05 Solution Part A: *ngIf -->
+<div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+  <h3>User Panel</h3>
+
+  <!-- *ngIf adds the element to the DOM when true; removes it entirely when false -->
+  <p *ngIf="isLoggedIn">Welcome back, {{ username }}! You are logged in.</p>
+
+  <!-- *ngIf="!isLoggedIn" — or use the else syntax below for clarity -->
+  <p *ngIf="!isLoggedIn">Please log in to continue.</p>
+
+  <!-- Alternative using else template (equally valid):
+    <p *ngIf="isLoggedIn; else loggedOut">Welcome back, {{ username }}!</p>
+    <ng-template #loggedOut><p>Please log in to continue.</p></ng-template>
+  -->
+
+  <button (click)="toggle()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
+</div>

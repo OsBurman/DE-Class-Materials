@@ -1,0 +1,64 @@
+// build.gradle — Solution
+// Exercise 03: Gradle Build Script and Dependency Management
+
+plugins {
+    id 'java'  // enables compileJava, test, jar tasks
+}
+
+// Project identity coordinates (mirrors Maven GAV)
+group   = 'com.library'
+version = '1.0.0-SNAPSHOT'
+
+// Set Java source/target compatibility
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+repositories {
+    // Download dependencies from the public Maven Central repository
+    mavenCentral()
+}
+
+dependencies {
+    // JUnit Jupiter API — needed at test compile time
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+
+    // JUnit Jupiter Engine — needed only at test runtime to discover and run tests
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+    // SLF4J API — the logging facade; needed at compile and runtime
+    implementation 'org.slf4j:slf4j-api:2.0.13'
+
+    // Logback Classic — the SLF4J implementation; compile and runtime
+    implementation 'ch.qos.logback:logback-classic:1.5.6'
+}
+
+test {
+    // Required to enable JUnit 5 test discovery
+    // Without this, Gradle uses JUnit 4 by default and finds no tests
+    useJUnitPlatform()
+}
+
+// Custom task: prints a greeting
+task hello {
+    group       = 'custom'
+    description = 'Prints a greeting from Gradle'
+
+    doLast {
+        // doLast registers an Action that runs when the task is executed
+        println 'Hello from Gradle! Java version: 17'
+    }
+}
+
+// Custom task: prints project metadata
+task projectInfo {
+    group       = 'custom'
+    description = 'Prints the project name, group, and version'
+
+    doLast {
+        // project.name comes from settings.gradle (rootProject.name)
+        // project.group and project.version are set above
+        println "Project: ${project.name}"
+        println "Group:   ${project.group}"
+        println "Version: ${project.version}"
+    }
+}

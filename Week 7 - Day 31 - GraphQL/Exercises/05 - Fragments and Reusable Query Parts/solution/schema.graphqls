@@ -1,0 +1,33 @@
+interface TaskInterface {
+  id: ID!
+  title: String!
+  done: Boolean!
+}
+
+type Task implements TaskInterface {
+  id: ID!
+  title: String!
+  done: Boolean!
+}
+
+type PriorityTask implements TaskInterface {
+  id: ID!
+  title: String!
+  done: Boolean!
+  priority: Int!
+}
+
+type Query {
+  tasks: [Task!]!
+  task(id: ID!): Task
+  taskOrPriority(id: ID!): TaskInterface
+}
+
+type Mutation {
+  createTask(title: String!): Task!
+  completeTask(id: ID!): Task
+}
+
+type Subscription {
+  taskCreated: Task!
+}

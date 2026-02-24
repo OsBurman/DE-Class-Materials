@@ -1,0 +1,30 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto;">
+  <h2>Task Dashboard
+    <!-- TODO 6: Add a button (click)="toggleCompleted()" labeled "Toggle Completed" -->
+  </h2>
+
+  <ul>
+    <!--
+      TODO 7: Use *ngFor to loop over 'tasks' with let task.
+              On each <li>: bind (click)="selectTask(task)" to make it selectable.
+              Use *ngIf on the <li> (or a wrapping <ng-container>) to hide tasks
+              with status 'done' when showCompleted is false:
+              *ngIf="showCompleted || task.status !== 'done'"
+    -->
+    <li>Task goes here</li>
+  </ul>
+
+  <!-- TODO 8: Use *ngIf to show this message ONLY when selectedTask is null -->
+  <p><em>No task selected. Click a task to see details.</em></p>
+
+  <!-- TODO 9: Use *ngIf to show this detail panel ONLY when selectedTask is not null -->
+  <div style="border: 1px solid #aaa; padding: 12px; border-radius: 6px;">
+    <h3>Selected Task Detail</h3>
+    <!-- TODO 10: Display selectedTask.title -->
+    <!-- TODO 11: Use [ngSwitch]="selectedTask?.status" with *ngSwitchCase for
+                  'todo'        → 🔲 Not started
+                  'in-progress' → ⏳ In Progress
+                  'done'        → ✅ Done
+    -->
+  </div>
+</div>

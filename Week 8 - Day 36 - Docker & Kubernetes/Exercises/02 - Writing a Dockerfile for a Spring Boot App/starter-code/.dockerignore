@@ -1,0 +1,8 @@
+# TODO 8: Add patterns to exclude the following from the Docker build context:
+#           .git directory
+#           all Markdown files (*.md)
+#           the src/ directory (source code — not needed, only the compiled JAR is)
+#           the .mvn/ directory
+#           Maven wrapper scripts (mvnw and mvnw.cmd)
+#
+# One pattern per line — same syntax as .gitignore

@@ -1,0 +1,50 @@
+body {
+  font-family: sans-serif;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Shared box styles */
+.box {
+  padding: 1rem;
+  margin: 1rem 0;
+  font-weight: bold;
+  color: #333;
+}
+
+/* TODO: 1. Static — add background-color: #e2e2e2 to .static-box
+            Add a comment: "position: static — normal flow, top/left have no effect" */
+
+/* TODO: 2. Relative — target .relative-box
+            Set position: relative
+            Set top: 20px (moves down 20px from its normal position)
+            Set left: 30px (moves right 30px from its normal position)
+            Set background-color: #cce5ff */
+
+/* TODO: 3. Absolute — target .absolute-box
+            Set position: absolute
+            Set bottom: 10px and right: 10px (anchored to .positioned-parent)
+            Set background-color: #d4edda */
+
+/* TODO: 4. Fixed — target .fixed-box
+            Set position: fixed
+            Set bottom: 20px and right: 20px
+            Set background-color: #343a40
+            Set color: white
+            Set padding: 0.75rem 1.25rem
+            Set border-radius: 4px */
+
+/* TODO: 5. Sticky — target .sticky-header
+            Set position: sticky
+            Set top: 0
+            Set background-color: #fff
+            Set border-bottom: 2px solid #dee2e6
+            Set padding: 0.75rem 1rem
+            Set z-index: 100 */
+
+/* TODO: 6. z-index — target .layer-1 and .layer-2
+            Both layers use position: absolute inside .layer-wrapper
+            .layer-1: left: 10px, top: 10px, z-index: 1, background-color: #f8d7da, width: 180px, height: 70px
+            .layer-2: left: 60px, top: 30px, z-index: 2, background-color: #d1ecf1, width: 180px, height: 70px
+            Both: padding: 0.5rem, border: 1px solid #999 */

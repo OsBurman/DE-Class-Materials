@@ -1,0 +1,9 @@
+# TODO: Write the same four settings in YAML format.
+#
+# Rules:
+#   - Use 2-space indentation for nesting
+#   - Dotted keys become nested YAML keys
+#     e.g. server.port=8081  →  server:\n  port: 8081
+#   - The 'library' group has two keys: max-loan-days and welcome-message
+#
+# Write your YAML below:

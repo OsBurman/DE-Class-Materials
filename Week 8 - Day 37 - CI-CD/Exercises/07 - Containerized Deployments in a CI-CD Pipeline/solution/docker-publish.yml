@@ -1,0 +1,67 @@
+name: Build, Push, and Deploy Docker Image
+# Exercise 07 — Containerized Deployments in a CI/CD Pipeline — SOLUTION
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-push-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------------
+      # Requirement 2 — Log in to DockerHub
+      # Using an access token (not a password) follows the principle of least privilege:
+      # tokens can be scoped to read/write and revoked without changing your password.
+      # ---------------------------------------------------------------------------
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # ---------------------------------------------------------------------------
+      # Requirement 3 — Build and Push
+      # Two tags:
+      #   :latest      — convenient for humans browsing the registry
+      #   :<git-sha>   — immutable, traceable; every deployment can be linked to a commit
+      # ---------------------------------------------------------------------------
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/springapp:latest
+            ${{ secrets.DOCKER_HUB_USERNAME }}/springapp:${{ github.sha }}
+
+      # ---------------------------------------------------------------------------
+      # Requirement 4 — Configure kubectl
+      # The kubeconfig is stored as a base64-encoded secret to safely transport
+      # the YAML (which may contain newlines) through GitHub's secrets storage.
+      # ---------------------------------------------------------------------------
+      - name: Configure kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+          kubectl cluster-info
+
+      # ---------------------------------------------------------------------------
+      # Requirement 5 — Rolling Update
+      # Use the SHA tag (not :latest) so Kubernetes knows a new image has arrived.
+      # rollout status waits up to 120 s and exits non-zero if the rollout fails,
+      # which causes the pipeline step to fail and notifies the team.
+      # ---------------------------------------------------------------------------
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/spring-deployment \
+            spring-container=${{ secrets.DOCKER_HUB_USERNAME }}/springapp:${{ github.sha }} \
+            -n default
+          kubectl rollout status deployment/spring-deployment -n default --timeout=120s

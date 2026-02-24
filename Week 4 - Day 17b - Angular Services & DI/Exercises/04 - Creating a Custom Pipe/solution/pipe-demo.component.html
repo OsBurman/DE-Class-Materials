@@ -1,0 +1,28 @@
+<div style="font-family: monospace; max-width: 700px; margin: 20px auto;">
+
+  <h2>Truncate Pipe Demo</h2>
+  <table style="border-collapse:collapse; width:100%;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding:4px 8px;">Original</th>
+        <th style="text-align:left; padding:4px 8px;">Default (30)</th>
+        <th style="text-align:left; padding:4px 8px;">Max 15</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let desc of descriptions">
+        <td style="padding:4px 8px;">{{ desc }}</td>
+        <td style="padding:4px 8px;">{{ desc | truncate }}</td>        <!-- default max = 30 -->
+        <td style="padding:4px 8px;">{{ desc | truncate:15 }}</td>     <!-- custom max = 15  -->
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Phone Format Pipe Demo</h2>
+  <ul>
+    <li *ngFor="let phone of phoneNumbers">
+      {{ phone }} → {{ phone | phoneFormat }}
+    </li>
+  </ul>
+
+</div>

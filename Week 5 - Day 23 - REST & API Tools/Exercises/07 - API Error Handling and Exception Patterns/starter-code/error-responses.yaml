@@ -1,0 +1,83 @@
+# OpenAPI Components — Error Response Schemas
+# Complete all TODO fields to produce valid, descriptive error schemas.
+
+components:
+  schemas:
+
+    ProblemDetails:
+      type: object
+      description: TODO: describe what this schema represents (hint: RFC 7807)
+      required:
+        - TODO   # list the required fields for a minimal Problem Details object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: TODO: describe what the type field contains
+          example: TODO
+        title:
+          type: string
+          description: TODO: describe what title contains and when it changes
+          example: TODO
+        status:
+          type: TODO   # what type is an HTTP status code?
+          description: TODO: describe this field
+          example: TODO
+        detail:
+          type: string
+          description: TODO: describe what makes detail different from title
+          example: TODO
+        instance:
+          type: string
+          format: uri
+          description: TODO: describe what instance points to
+          example: TODO
+
+    NotFoundError:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+      description: TODO: describe when this error is returned
+      example:
+        type: TODO
+        title: TODO
+        status: TODO
+        detail: TODO
+        instance: TODO
+
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+      description: TODO: describe when this error is returned
+      properties:
+        violations:
+          type: array
+          description: TODO: describe what each violation object contains
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: TODO
+              message:
+                type: string
+                description: TODO
+      example:
+        type: TODO
+        title: TODO
+        status: TODO
+        detail: TODO
+        instance: TODO
+        violations:
+          - field: TODO
+            message: TODO
+
+    ConflictError:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+      description: TODO: describe when this error is returned
+      example:
+        type: TODO
+        title: TODO
+        status: TODO
+        detail: TODO
+        instance: TODO

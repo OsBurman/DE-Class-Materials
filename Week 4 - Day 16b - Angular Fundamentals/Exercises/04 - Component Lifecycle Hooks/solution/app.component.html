@@ -1,0 +1,15 @@
+<h1>Lifecycle Hooks Demo</h1>
+
+<!-- *ngIf conditionally includes/excludes the child component from the DOM.
+     When showChild goes false, Angular calls ngOnDestroy on the child.
+     When it goes true again, Angular creates a fresh instance (ngOnChanges → ngOnInit → ngAfterViewInit). -->
+<div>
+  <app-lifecycle-child *ngIf="showChild" [message]="message"></app-lifecycle-child>
+</div>
+
+<div style="margin-top: 1rem;">
+  <button (click)="changeMessage()">Change Message</button>
+  <button (click)="toggleChild()" style="margin-left: 0.5rem;">Destroy / Re-create Child</button>
+</div>
+
+<p><em>Watch the browser console as you click the buttons!</em></p>

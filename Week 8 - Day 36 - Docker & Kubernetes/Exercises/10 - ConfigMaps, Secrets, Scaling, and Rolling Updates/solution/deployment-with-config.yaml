@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: spring-deployment
+  namespace: default
+  labels:
+    app: springapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: springapp
+
+  # Zero-downtime rolling update:
+  # maxSurge: 1     => one extra Pod may exist above desired count
+  # maxUnavailable: 0 => no Pod may be taken down until a new one is healthy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  template:
+    metadata:
+      labels:
+        app: springapp
+
+    spec:
+      containers:
+        - name: spring-container
+          image: springapp:1.0.0
+          ports:
+            - containerPort: 8080
+
+          # envFrom injects EVERY key in the ConfigMap as an environment variable.
+          # Great for non-sensitive configuration (profiles, ports, feature flags).
+          envFrom:
+            - configMapRef:
+                name: spring-config
+
+          # env.valueFrom.secretKeyRef injects individual Secret keys.
+          # Use this when you want precise control over which Secret values are exposed.
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: spring-secret
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-secret
+                  key: DB_PASSWORD
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

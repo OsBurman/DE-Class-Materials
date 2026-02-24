@@ -1,0 +1,36 @@
+<!-- Exercise 03: All Four Data Binding Types -->
+
+<h2>Data Binding Demo</h2>
+
+<!-- ── 1. Interpolation ──────────────────────────────────────────── -->
+<h3>1. Interpolation {{ }}</h3>
+<!-- TODO 4: Display username and score using {{ }} interpolation -->
+<p>Player: <!-- TODO: {{ username }} --></p>
+<p>Score: <!-- TODO: {{ score }} --></p>
+
+<!-- ── 2. Property Binding ─────────────────────────────────────── -->
+<h3>2. Property Binding [ ]</h3>
+<!-- TODO 5: Bind isDisabled to the button's disabled property using [disabled]="isDisabled" -->
+<button>Submit (TODO: bind disabled)</button>
+<!-- TODO 6: Bind imageUrl and imageAlt to <img> using [src] and [alt] -->
+<img width="80" alt="placeholder">
+
+<!-- ── 3. Event Binding ────────────────────────────────────────── -->
+<h3>3. Event Binding ( )</h3>
+<!-- TODO 7: Bind (click) to levelUp() on the first button -->
+<button>Level Up</button>
+<!-- TODO 8: Bind (click) to reset() on the second button -->
+<button>Reset</button>
+
+<!-- ── 4. Two-Way Binding ──────────────────────────────────────── -->
+<h3>4. Two-Way Binding [( )]</h3>
+<!-- TODO 9: Add [(ngModel)]="username" to the input below.
+             When you type, the interpolation above should update in real time. -->
+<input placeholder="Enter username">
+
+<!-- ── 5. Template Reference Variable ─────────────────────────── -->
+<h3>5. Template Reference Variable #ref</h3>
+<!-- TODO 10: Add #messageInput to the input, then pass messageInput.value to logMessage() -->
+<input placeholder="Type a message">
+<button>Log</button>
+<p>Last Message: <!-- TODO: {{ lastMessage }} --></p>

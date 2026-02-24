@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 13 — Events Interactive Demo (Part 2)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      padding: 24px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 4px; color: #6366f1; }
+    p.subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 24px; }
+    h2 { font-size: 1.1rem; color: #6366f1; border-bottom: 1px solid #e2e8f0;
+         padding-bottom: 6px; margin-bottom: 14px; }
+    section {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 7px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    button.primary   { background: #6366f1; color: white; }
+    button.primary:hover { background: #4f46e5; }
+    button.secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+    button.secondary:hover { background: #e2e8f0; }
+    button.danger    { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; }
+    button.danger:hover { background: #fca5a5; }
+    button.active    { background: #10b981; color: white; }
+    button:disabled  { opacity: 0.5; cursor: not-allowed; }
+    input[type="text"], input[type="email"], input[type="password"],
+    input[type="search"], select, textarea {
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      width: 100%;
+      max-width: 400px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: #6366f1; }
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px;
+             font-size: 0.75rem; font-weight: 600; }
+    .badge.green { background: #dcfce7; color: #16a34a; }
+    .badge.red   { background: #fee2e2; color: #dc2626; }
+    .badge.blue  { background: #dbeafe; color: #2563eb; }
+    .status { font-size: 0.85rem; color: #64748b; margin-top: 6px; }
+
+    /* ── Section 1: Basic event listeners ─────────────────────────── */
+    #toggle-btn.active { background: #10b981; }
+    #event-log {
+      background: #0f172a;
+      color: #94a3b8;
+      font-family: monospace;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      padding: 10px;
+      height: 100px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+    #event-log .log-entry { padding: 1px 0; border-bottom: 1px solid #1e293b; }
+    #event-log .log-entry:last-child { border: none; }
+
+    /* ── Section 2: Event object ──────────────────────────────────── */
+    #mouse-tracker {
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      border-radius: 6px;
+      padding: 16px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      min-height: 60px;
+      cursor: crosshair;
+      user-select: none;
+    }
+    #target-demo-outer {
+      background: #fef3c7;
+      border: 2px dashed #f59e0b;
+      border-radius: 6px;
+      padding: 16px;
+      cursor: pointer;
+    }
+    #target-demo-middle {
+      background: #dbeafe;
+      border: 2px dashed #3b82f6;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    #target-demo-inner {
+      background: #dcfce7;
+      border: 2px dashed #22c55e;
+      border-radius: 4px;
+      padding: 8px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* ── Section 3: Bubbling & Capturing ─────────────────────────── */
+    #bubble-outer {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: 6px;
+      padding: 16px;
+      cursor: pointer;
+    }
+    #bubble-middle {
+      background: #dbeafe;
+      border: 2px solid #3b82f6;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    #bubble-inner {
+      background: #dcfce7;
+      border: 2px solid #22c55e;
+      border-radius: 4px;
+      padding: 8px;
+      display: inline-block;
+    }
+    #capture-outer {
+      background: #fdf4ff;
+      border: 2px dashed #c084fc;
+      border-radius: 6px;
+      padding: 16px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    #capture-inner {
+      background: #ede9fe;
+      border: 2px solid #8b5cf6;
+      border-radius: 4px;
+      padding: 8px;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* ── Section 4: Delegation — Task List ──────────────────────── */
+    #task-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    #task-input { flex: 1; max-width: 300px; }
+    #task-list { list-style: none; padding: 0; }
+    #task-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+    #task-list li.done { text-decoration: line-through; color: #94a3b8; background: #f1f5f9; }
+    #task-list li .task-text { flex: 1; }
+    #task-list li .delete-task { margin-left: auto; }
+
+    /* ── Section 4b: Student Cards ──────────────────────────────── */
+    #student-list { list-style: none; padding: 0; }
+    #student-list li {
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #student-list li:hover { background: #f1f5f9; }
+    #student-list li.selected { background: #dbeafe; border-color: #3b82f6; }
+
+    #student-cards { display: grid; gap: 10px; margin-top: 12px; }
+    .student-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #f8fafc;
+    }
+    .student-card.editing { background: #fef9c3; border-color: #f59e0b; }
+    .student-card h3 { font-size: 0.95rem; margin-bottom: 4px; }
+    .student-card .card-actions { display: flex; gap: 6px; margin-top: 8px; }
+
+    /* ── Section 5: Form with prevention ────────────────────────── */
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.85rem; font-weight: 500;
+            margin-bottom: 4px; color: #475569; }
+    #form-errors {
+      display: none;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 0.875rem;
+      color: #dc2626;
+    }
+    #form-errors li { margin-left: 18px; }
+    #form-success {
+      display: none;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: #15803d;
+      font-size: 0.875rem;
+    }
+    #status-display {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #6366f1;
+      min-height: 20px;
+    }
+    .nav-link {
+      display: inline-block;
+      margin-right: 12px;
+      color: #6366f1;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    /* ── Section 6: Common events ───────────────────────────────── */
+    #live-input  { max-width: 300px; }
+    #char-count  { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+    #track-display { margin-top: 6px; font-size: 0.85rem; color: #6366f1; }
+    #keyboard-demo { max-width: 300px; }
+    #key-display { width: 300px; max-width: 100%; font-family: monospace; }
+    #focus-demo-input { max-width: 300px; }
+    #no-context-menu {
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 0.85rem;
+      color: #64748b;
+      cursor: not-allowed;
+      user-select: none;
+      display: inline-block;
+    }
+
+    /* ── Live search ─────────────────────────────────────────────── */
+    #search-input { max-width: 300px; margin-bottom: 10px; }
+    .search-item {
+      padding: 6px 10px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+    .search-item.hidden { display: none; }
+
+    /* ── Header scroll effect ─────────────────────────────────────── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 24px;
+      margin: -24px -24px 24px -24px;
+      transition: box-shadow 0.2s;
+    }
+    header.scrolled { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    header h1 { font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Day 13 — Events Interactive Demo</h1>
+    <p class="subtitle">Open DevTools → Console to see all event output</p>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 1 — addEventListener & removeEventListener
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s1">
+    <h2>1 — Event Listeners</h2>
+
+    <div class="row">
+      <button id="toggle-btn" class="primary">Toggle (click to activate)</button>
+      <button id="once-btn" class="secondary">Click 3× to remove listener</button>
+      <button id="flash-btn" class="secondary">{ once: true } — fires once</button>
+      <button id="multi-btn" class="secondary">Multiple handlers (check console)</button>
+    </div>
+
+    <div id="event-log">
+      <div class="log-entry" style="color:#6366f1;">// event log — watch for entries below</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 2 — Event Object & Properties
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s2">
+    <h2>2 — Event Object Properties</h2>
+
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">Move your mouse over the box, then click:</p>
+    <div id="mouse-tracker">Move mouse here → coordinates appear</div>
+
+    <div style="margin-top:14px;">
+      <label for="key-display" style="font-size:0.85rem;color:#64748b;">
+        Type in the box below — see key info appear:
+      </label>
+      <input type="text" id="key-display" placeholder="Type here to see key events…" />
+    </div>
+
+    <div style="margin-top:14px;">
+      <p style="font-size:0.85rem;color:#64748b;margin-bottom:6px;">
+        Click anywhere in the yellow area — see target vs currentTarget:
+      </p>
+      <div id="target-demo-outer">
+        Outer div (listener lives here)
+        <div id="target-demo-middle">
+          Middle div
+          <span id="target-demo-inner">Click me → inner span (target)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 3 — Bubbling & Capturing
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s3">
+    <h2>3 — Bubbling &amp; Capturing</h2>
+
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">
+      Click the green box — watch events bubble outward in the console:
+    </p>
+    <div id="bubble-outer">
+      🟡 Outer (bubble listener)
+      <div id="bubble-middle">
+        🔵 Middle (bubble listener)
+        <span id="bubble-inner">🟢 CLICK ME (Inner)</span>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <button id="stop-propagation-btn" class="secondary">
+        stopPropagation — click won't reach outer
+      </button>
+    </div>
+
+    <p style="font-size:0.85rem;color:#64748b;margin-top:14px;margin-bottom:6px;">
+      Capturing phase demo — same structure, but outer has a capture listener:
+    </p>
+    <div id="capture-outer">
+      🟣 Outer — capture listener (fires FIRST)
+      <br/><br/>
+      <span id="capture-inner">🔵 CLICK ME (Inner — fires second)</span>
+    </div>
+    <p style="font-size:0.8rem;color:#94a3b8;margin-top:6px;">
+      Expected order: 1. CAPTURE outer → 2. TARGET inner → 3. BUBBLE outer
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 4 — Event Delegation
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s4">
+    <h2>4 — Event Delegation</h2>
+
+    <!-- 4a: Task list — ONE listener on <ul> handles ALL items -->
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:10px;">
+      Task list — <strong>one listener</strong> on the &lt;ul&gt; handles all add/complete/delete:
+    </p>
+    <div class="row" id="task-input-row">
+      <input type="text" id="task-input" placeholder="Add a task…" />
+      <button id="add-task-btn" class="primary">Add Task</button>
+    </div>
+    <ul id="task-list">
+      <li data-task-id="1">
+        <span class="task-text">Learn about the DOM</span>
+        <button class="btn-complete secondary badge green">✓</button>
+        <button class="btn-delete delete-task danger">✕</button>
+      </li>
+      <li data-task-id="2">
+        <span class="task-text">Understand event bubbling</span>
+        <button class="btn-complete secondary badge green">✓</button>
+        <button class="btn-delete delete-task danger">✕</button>
+      </li>
+      <li data-task-id="3">
+        <span class="task-text">Master event delegation</span>
+        <button class="btn-complete secondary badge green">✓</button>
+        <button class="btn-delete delete-task danger">✕</button>
+      </li>
+    </ul>
+
+    <!-- 4b: Student list — clicking selects, one listener handles all -->
+    <p style="font-size:0.85rem;color:#64748b;margin-top:16px;margin-bottom:6px;">
+      Student list — click any item to select (one delegated listener):
+    </p>
+    <ul id="student-list">
+      <li data-student-id="101"><span class="name">Alice Johnson</span> — React track</li>
+      <li data-student-id="102"><span class="name">Bob Williams</span> — Angular track</li>
+      <li data-student-id="103"><span class="name">Carol Davis</span> — React track</li>
+    </ul>
+
+    <!-- 4c: Student cards with Edit/Delete — one listener on parent -->
+    <p style="font-size:0.85rem;color:#64748b;margin-top:16px;margin-bottom:6px;">
+      Student cards — <strong>one listener</strong> handles Edit AND Delete for all cards:
+    </p>
+    <div id="student-cards">
+      <div class="student-card" data-student-id="201">
+        <h3>Dave Miller <span class="badge blue">React</span></h3>
+        <p style="font-size:0.8rem;color:#64748b;">Week 4 — React Hooks project</p>
+        <div class="card-actions">
+          <button class="btn-edit secondary">Edit</button>
+          <button class="btn-delete danger">Delete</button>
+        </div>
+      </div>
+      <div class="student-card" data-student-id="202">
+        <h3>Eva Chen <span class="badge green">Angular</span></h3>
+        <p style="font-size:0.8rem;color:#64748b;">Week 4 — Angular Services</p>
+        <div class="card-actions">
+          <button class="btn-edit secondary">Edit</button>
+          <button class="btn-delete danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 5 — Preventing Default & Form
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s5">
+    <h2>5 — Preventing Default Behavior</h2>
+
+    <!-- Link navigation prevention -->
+    <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">
+      These links normally navigate — JS intercepts with <code>preventDefault()</code>:
+    </p>
+    <a href="/home"     class="nav-link">Home</a>
+    <a href="/courses"  class="nav-link">Courses</a>
+    <a href="/students" class="nav-link">Students</a>
+    <a href="/settings" class="nav-link">Settings</a>
+    <div id="status-display"></div>
+
+    <!-- Form submission prevention + validation -->
+    <form id="registration-form" style="margin-top:20px;">
+      <h3 style="margin-bottom:12px;font-size:0.95rem;">Register a New Student</h3>
+
+      <ul id="form-errors"></ul>
+      <div id="form-success">✅ Student registered successfully!</div>
+
+      <div class="form-group">
+        <label for="reg-name">Full Name *</label>
+        <input type="text" id="reg-name" placeholder="Jane Smith" />
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email *</label>
+        <input type="email" id="reg-email" placeholder="jane@bootcamp.dev" />
+      </div>
+      <div class="form-group">
+        <label for="reg-track">Track</label>
+        <select id="reg-track">
+          <option value="">— Select —</option>
+          <option value="react">React</option>
+          <option value="angular">Angular</option>
+        </select>
+      </div>
+      <button type="submit" class="primary">Register Student</button>
+    </form>
+
+    <!-- Context menu prevention -->
+    <p style="font-size:0.85rem;color:#64748b;margin-top:16px;margin-bottom:6px;">
+      Right-click blocked on this element:
+    </p>
+    <div id="no-context-menu">🚫 Right-click is disabled here (contextmenu event prevented)</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SECTION 6 — Common Event Types
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="s6">
+    <h2>6 — Common Event Types &amp; Interactive Features</h2>
+
+    <!-- input event — live character counter -->
+    <div class="form-group">
+      <label for="live-input">Live character counter (input event):</label>
+      <input type="text" id="live-input" maxlength="100" placeholder="Start typing…" />
+      <div id="char-count">0 / 100 characters</div>
+    </div>
+
+    <!-- change event — select -->
+    <div class="form-group" style="margin-top:12px;">
+      <label for="track-select">Select your track (change event):</label>
+      <select id="track-select">
+        <option value="">— choose —</option>
+        <option value="React">React</option>
+        <option value="Angular">Angular</option>
+        <option value="Both">Both</option>
+      </select>
+      <div id="track-display"></div>
+    </div>
+
+    <!-- focus / blur demo -->
+    <div class="form-group" style="margin-top:12px;">
+      <label for="focus-demo-input">Focus / blur demo (click in and out):</label>
+      <input type="text" id="focus-demo-input" placeholder="Click here to focus" />
+    </div>
+
+    <!-- keydown / keyup display -->
+    <div class="form-group" style="margin-top:12px;">
+      <label for="keyboard-demo">Keyboard events (keydown + keyup):</label>
+      <input type="text" id="keyboard-demo" placeholder="Press keys, watch console" />
+    </div>
+
+    <!-- click button -->
+    <div class="row" style="margin-top:12px;">
+      <button id="click-demo" class="secondary">Click me (click event demo)</button>
+    </div>
+
+    <!-- Live search — input event on search field, delegation on results -->
+    <div style="margin-top:20px;">
+      <p style="font-size:0.85rem;color:#64748b;margin-bottom:8px;">
+        Live search — filters the list as you type (input event):
+      </p>
+      <input type="search" id="search-input" placeholder="Search courses…" />
+      <div id="search-results">
+        <div class="search-item" data-name="JavaScript Fundamentals">JavaScript Fundamentals</div>
+        <div class="search-item" data-name="DOM Manipulation & Events">DOM Manipulation &amp; Events</div>
+        <div class="search-item" data-name="ES6+ Features">ES6+ Features</div>
+        <div class="search-item" data-name="React Fundamentals">React Fundamentals</div>
+        <div class="search-item" data-name="Angular Fundamentals">Angular Fundamentals</div>
+        <div class="search-item" data-name="Spring Boot">Spring Boot</div>
+        <div class="search-item" data-name="SQL Database Design">SQL Database Design</div>
+        <div class="search-item" data-name="Docker & Kubernetes">Docker &amp; Kubernetes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Scripts — loaded after DOM is ready
+       ═══════════════════════════════════════════════════════════════ -->
+  <script src="01-events-listeners-and-object.js"></script>
+  <script>
+    // ─────────────────────────────────────────────────────────────────────
+    // INLINE INTERACTIVE JAVASCRIPT
+    // These are "building interactive page features" — the final Part 2 topic.
+    // Each feature combines multiple concepts: events, delegation, DOM mutation.
+    // ─────────────────────────────────────────────────────────────────────
+
+    // ── FEATURE 1: Task List ─────────────────────────────────────────────
+    // Demonstrates: event delegation, DOMContentLoaded, createElement,
+    //               classList toggle, data attributes, input event, keydown
+    let nextTaskId = 4;
+
+    function createTaskItem(text) {
+      const li = document.createElement("li");
+      li.dataset.taskId = nextTaskId++;
+
+      const span = document.createElement("span");
+      span.className = "task-text";
+      span.textContent = text;
+
+      const completeBtn = document.createElement("button");
+      completeBtn.className = "btn-complete secondary badge green";
+      completeBtn.textContent = "✓";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn-delete delete-task danger";
+      deleteBtn.textContent = "✕";
+
+      li.append(span, completeBtn, deleteBtn);
+      return li;
+    }
+
+    // Add task on button click
+    const addTaskBtn = document.getElementById("add-task-btn");
+    const taskInput  = document.getElementById("task-input");
+    const taskList   = document.getElementById("task-list");
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (!text) {
+        taskInput.focus();
+        return;
+      }
+      taskList.appendChild(createTaskItem(text));
+      taskInput.value = "";
+      taskInput.focus();
+    }
+
+    addTaskBtn?.addEventListener("click", addTask);
+
+    // Also add on Enter key
+    taskInput?.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addTask();
+      }
+    });
+
+    // EVENT DELEGATION on the list — handles complete AND delete for ALL items
+    taskList?.addEventListener("click", function (e) {
+      const li = e.target.closest("li");
+      if (!li) return;
+
+      if (e.target.classList.contains("btn-complete")) {
+        li.classList.toggle("done");
+      }
+
+      if (e.target.classList.contains("btn-delete")) {
+        li.remove();
+      }
+    });
+
+    // ── FEATURE 2: Live Search Filter ───────────────────────────────────
+    // Demonstrates: input event, DOM traversal, classList toggle
+    const searchInput = document.getElementById("search-input");
+    const searchItems = document.querySelectorAll(".search-item");
+
+    searchInput?.addEventListener("input", function (e) {
+      const query = e.target.value.toLowerCase().trim();
+      searchItems.forEach(item => {
+        const name = item.dataset.name.toLowerCase();
+        item.classList.toggle("hidden", !name.includes(query));
+      });
+    });
+
+    // ── FEATURE 3: Event log (enriches Section 1 demo) ───────────────────
+    // Demonstrates: creating elements, append, scroll behavior
+    const eventLog = document.getElementById("event-log");
+
+    function logEvent(msg) {
+      const entry = document.createElement("div");
+      entry.className = "log-entry";
+      entry.textContent = `> ${msg}`;
+      eventLog?.append(entry);
+      eventLog.scrollTop = eventLog.scrollHeight; // auto-scroll to bottom
+    }
+
+    // Patch button handlers to also log to the on-page event log
+    document.getElementById("toggle-btn")?.addEventListener("click", (e) => {
+      logEvent(`toggle-btn clicked — classList: ${e.currentTarget.className}`);
+    });
+    document.getElementById("once-btn")?.addEventListener("click", () => {
+      logEvent("once-btn clicked");
+    });
+    document.getElementById("flash-btn")?.addEventListener("click", () => {
+      logEvent("flash-btn clicked (fires once)");
+    }, { once: true });
+    document.getElementById("multi-btn")?.addEventListener("click", () => {
+      logEvent("multi-btn: handler from inline script");
+    });
+
+    // ── FEATURE 4: Keyboard shortcut ────────────────────────────────────
+    // Demonstrates: keydown, multiple modifier key check, preventDefault
+    document.addEventListener("keydown", function (e) {
+      // Ctrl+/ or Cmd+/ → focus the search box
+      if ((e.ctrlKey || e.metaKey) && e.key === "/") {
+        e.preventDefault();
+        searchInput?.focus();
+        logEvent("Keyboard shortcut: Ctrl+/ → focused search");
+      }
+      // Escape → blur (unfocus) any focused input
+      if (e.key === "Escape") {
+        document.activeElement?.blur();
+        logEvent("Escape pressed → blurred active element");
+      }
+    });
+  </script>
+</body>
+</html>

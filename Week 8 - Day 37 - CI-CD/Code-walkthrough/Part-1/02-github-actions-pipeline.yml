@@ -1,0 +1,239 @@
+# =============================================================================
+# Day 37 – CI/CD & DevOps | Part 1
+# File: 02-github-actions-pipeline.yml
+# Topic: Full CI Pipeline — Build, Test, Quality Gate, Artifact Publish
+# Domain: Bookstore Spring Boot Application
+# =============================================================================
+# This is a REAL GitHub Actions workflow file.
+# Place it at: .github/workflows/ci.yml  in your repository root.
+#
+# GitHub Actions Concepts:
+#   workflow    → the entire YAML file; triggered by an event
+#   job         → a group of steps that run on one runner (virtual machine)
+#   step        → a single task inside a job (run a command or use an action)
+#   action      → a reusable, pre-built step from the GitHub Marketplace
+#   runner      → the virtual machine that executes the job
+#   artifact    → files saved from a job and downloadable from the run
+#   secret      → encrypted env var stored in GitHub repo settings
+# =============================================================================
+
+name: Bookstore CI Pipeline       # Displayed in GitHub Actions UI
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TRIGGER — when does this pipeline run?
+# ─────────────────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches:
+      - main                      # Run on every push to main
+      - develop                   # Run on every push to develop
+  pull_request:
+    branches:
+      - main                      # Run on every PR targeting main
+  workflow_dispatch:              # Allow manual trigger from GitHub UI
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ENVIRONMENT VARIABLES — available to all jobs
+# ─────────────────────────────────────────────────────────────────────────────
+env:
+  JAVA_VERSION: '17'
+  MAVEN_OPTS: '-Xmx2048m'        # Increase Maven heap for large builds
+  IMAGE_NAME: 'bookstore-app'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# JOB 1: BUILD AND TEST
+# ─────────────────────────────────────────────────────────────────────────────
+jobs:
+  build-and-test:
+    name: Build, Test & Quality Gate
+    runs-on: ubuntu-latest        # Use GitHub's free Ubuntu runner
+
+    # ── Services — spin up a real PostgreSQL container for integration tests ──
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: bookstore_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432             # Map container port to runner port
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5      # Wait for Postgres before starting steps
+
+    steps:
+      # ── Step 1: Checkout source code ────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # Full history needed for SonarQube blame data
+
+      # ── Step 2: Set up Java ─────────────────────────────────────────────────
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'           # Eclipse Temurin (formerly AdoptOpenJDK)
+          cache: 'maven'                    # Cache ~/.m2 between runs — speeds up builds
+
+      # ── Step 3: Cache Maven dependencies ────────────────────────────────────
+      # (setup-java's built-in cache handles this, but shown for clarity)
+      - name: Cache Maven local repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # ── Step 4: Compile the application ─────────────────────────────────────
+      # STAGE: BUILD
+      - name: Compile application
+        run: mvn compile --no-transfer-progress
+
+      # ── Step 5: Run unit tests + generate coverage report ───────────────────
+      # STAGE: UNIT TEST
+      # Surefire runs *Test.java files; JaCoCo instruments the code.
+      # -DskipITs skips integration tests (handled in a later step).
+      - name: Run unit tests
+        run: mvn test -DskipITs --no-transfer-progress
+        env:
+          SPRING_PROFILES_ACTIVE: test
+
+      # ── Step 6: Publish test results ─────────────────────────────────────────
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()              # Run even if tests failed — so we see the report
+        with:
+          junit_files: target/surefire-reports/**/*.xml
+
+      # ── Step 7: Code Quality Gate — Checkstyle ───────────────────────────────
+      # STAGE: CODE QUALITY
+      - name: Run Checkstyle (code style)
+        run: mvn checkstyle:check --no-transfer-progress
+
+      # ── Step 8: Code Quality Gate — SpotBugs ────────────────────────────────
+      - name: Run SpotBugs (static analysis)
+        run: mvn spotbugs:check --no-transfer-progress
+
+      # ── Step 9: Code Quality Gate — OWASP Dependency Check ──────────────────
+      # Scans all dependencies in pom.xml against the NVD (National Vulnerability DB)
+      - name: OWASP Dependency Check
+        run: |
+          mvn org.owasp:dependency-check-maven:check \
+            --no-transfer-progress \
+            -DfailBuildOnCVSS=7              # Fail on High/Critical CVEs (score ≥ 7)
+
+      # ── Step 10: Code Coverage Gate — JaCoCo ────────────────────────────────
+      # JaCoCo was configured in pom.xml to enforce ≥ 80% line coverage.
+      # This step checks the gate.
+      - name: Check code coverage (JaCoCo)
+        run: mvn jacoco:check --no-transfer-progress
+
+      # ── Step 11: Run integration tests ──────────────────────────────────────
+      # STAGE: INTEGRATION TEST
+      # Failsafe runs *IT.java files. Uses the PostgreSQL service defined above.
+      - name: Run integration tests
+        run: mvn failsafe:integration-test failsafe:verify --no-transfer-progress
+        env:
+          SPRING_PROFILES_ACTIVE: integration-test
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bookstore_test
+          SPRING_DATASOURCE_USERNAME: test_user
+          SPRING_DATASOURCE_PASSWORD: test_password
+
+      # ── Step 12: Package the application ────────────────────────────────────
+      # STAGE: PACKAGE / ARTIFACT
+      # -DskipTests: tests already ran in previous steps — no need to repeat
+      - name: Package JAR
+        run: mvn package -DskipTests --no-transfer-progress
+
+      # ── Step 13: Determine the artifact version ──────────────────────────────
+      - name: Set artifact version
+        id: version
+        run: |
+          # Extract version from pom.xml
+          POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          # Append CI build number for uniqueness
+          ARTIFACT_VERSION="${POM_VERSION}-build.${{ github.run_number }}"
+          echo "ARTIFACT_VERSION=${ARTIFACT_VERSION}" >> $GITHUB_ENV
+          echo "artifact_version=${ARTIFACT_VERSION}" >> $GITHUB_OUTPUT
+
+      # ── Step 14: Upload JAR as a GitHub Actions artifact ─────────────────────
+      # Makes the JAR downloadable from the run page for 30 days
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bookstore-jar-${{ steps.version.outputs.artifact_version }}
+          path: target/bookstore-app-*.jar
+          retention-days: 30
+
+      # ── Step 15: Upload coverage and test reports ────────────────────────────
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+          retention-days: 7
+
+      # ── Step 16: Publish to GitHub Packages (Maven) ──────────────────────────
+      # STAGE: PUBLISH ARTIFACT
+      # Only publish from the main branch — not from PRs
+      - name: Publish JAR to GitHub Packages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: mvn deploy -DskipTests --no-transfer-progress
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # Auto-provided by GitHub
+
+# ─────────────────────────────────────────────────────────────────────────────
+# JOB 2: NOTIFY — runs after build-and-test (success OR failure)
+# ─────────────────────────────────────────────────────────────────────────────
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-latest
+    needs: build-and-test         # Depends on Job 1 completing
+    if: always()                  # Run even if Job 1 failed
+
+    steps:
+      - name: Notify on success
+        if: needs.build-and-test.result == 'success'
+        run: |
+          echo "✅ Build PASSED: ${{ github.repository }} @ ${{ github.sha }}"
+          # In a real pipeline: call Slack webhook, send email, etc.
+          # curl -X POST ${{ secrets.SLACK_WEBHOOK }} \
+          #   -H 'Content-type: application/json' \
+          #   --data '{"text":"✅ Bookstore build passed!"}'
+
+      - name: Notify on failure
+        if: needs.build-and-test.result == 'failure'
+        run: |
+          echo "❌ Build FAILED: ${{ github.repository }} @ ${{ github.sha }}"
+          echo "Pipeline URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          # In a real pipeline: page the on-call, post to #alerts channel
+
+# =============================================================================
+# GITHUB ACTIONS KEY CONCEPTS REFERENCE
+# =============================================================================
+#
+# Context variables:
+#   ${{ github.sha }}           → full commit SHA
+#   ${{ github.ref }}           → branch ref (refs/heads/main)
+#   ${{ github.run_number }}    → sequential build number (1, 2, 3...)
+#   ${{ github.actor }}         → username who triggered the run
+#   ${{ github.repository }}    → "OsBurman/bookstore"
+#   ${{ secrets.MY_SECRET }}    → encrypted secret from repo settings
+#
+# Common actions:
+#   actions/checkout@v4         → clone the repository
+#   actions/setup-java@v4       → install JDK
+#   actions/cache@v3            → cache files between runs
+#   actions/upload-artifact@v4  → save files from the run
+#   actions/download-artifact@v4 → retrieve saved artifacts
+#
+# Conditional execution:
+#   if: always()                → run regardless of job status
+#   if: failure()               → only run if previous step failed
+#   if: success()               → only run if previous step succeeded
+#   if: github.ref == 'refs/heads/main' → only run on main branch

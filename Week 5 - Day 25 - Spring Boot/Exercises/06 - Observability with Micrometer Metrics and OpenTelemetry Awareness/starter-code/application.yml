@@ -1,0 +1,12 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        # TODO: Expose only "health", "info", and "metrics" endpoints
+        #       (comma-separated, quoted string)
+        include:
+
+  endpoint:
+    metrics:
+      # TODO: Set enabled to true
+      enabled:

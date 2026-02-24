@@ -1,0 +1,30 @@
+# GraphQL schema for the Task management server.
+# This file must live at src/main/resources/graphql/schema.graphqls
+
+# TODO 1: Define a Task type with three non-null fields:
+#         id: ID!
+#         title: String!
+#         done: Boolean!
+# type Task {
+#   ...
+# }
+
+# TODO 2: Define a Query type with:
+#         tasks: [Task!]!          (all tasks)
+#         task(id: ID!): Task      (single task, nullable if not found)
+# type Query {
+#   ...
+# }
+
+# TODO 3: Define a Mutation type with:
+#         createTask(title: String!): Task!
+#         completeTask(id: ID!): Task     (nullable if ID not found)
+# type Mutation {
+#   ...
+# }
+
+# TODO 4: Define a Subscription type with:
+#         taskCreated: Task!
+# type Subscription {
+#   ...
+# }

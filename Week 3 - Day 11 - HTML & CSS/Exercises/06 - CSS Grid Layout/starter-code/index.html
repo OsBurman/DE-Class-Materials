@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Grid Layout</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Part A: Classic Page Layout with Named Areas -->
+  <section>
+    <h2 style="padding: 0.5rem 1rem;">Part A: Named Grid Areas</h2>
+    <div class="page-grid">
+      <header class="pg-header">🏠 Header (spans full width)</header>
+      <aside class="pg-sidebar">
+        <h3>Sidebar</h3>
+        <ul>
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+      </aside>
+      <main class="pg-main">
+        <h3>Main Content</h3>
+        <p>This area takes the remaining width next to the sidebar.</p>
+        <p>The grid-template-areas property defines the visual layout as a string-based map.</p>
+      </main>
+      <footer class="pg-footer">Footer (spans full width)</footer>
+    </div>
+  </section>
+
+  <div style="max-width: 960px; margin: 0 auto; padding: 1rem;">
+
+    <!-- Part B: Auto-Fill Photo Gallery -->
+    <h2>Part B: Auto-Fill Gallery</h2>
+    <div class="gallery">
+      <div class="gallery-item">📷 1</div>
+      <div class="gallery-item">📷 2</div>
+      <div class="gallery-item">📷 3</div>
+      <div class="gallery-item">📷 4</div>
+      <div class="gallery-item">📷 5</div>
+      <div class="gallery-item">📷 6</div>
+      <div class="gallery-item">📷 7</div>
+      <div class="gallery-item">📷 8</div>
+    </div>
+
+    <!-- Part C: Spanning Items -->
+    <h2>Part C: Column &amp; Row Spanning</h2>
+    <div class="span-grid">
+      <div class="span-item span-item-a">A (spans 2 cols)</div>
+      <div class="span-item span-item-b">B (spans 2 rows)</div>
+      <div class="span-item">C</div>
+      <div class="span-item">D</div>
+      <div class="span-item">E</div>
+      <div class="span-item">F</div>
+    </div>
+
+  </div>
+
+</body>
+</html>

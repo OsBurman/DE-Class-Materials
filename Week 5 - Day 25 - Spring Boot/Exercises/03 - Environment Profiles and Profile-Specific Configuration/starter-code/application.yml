@@ -1,0 +1,12 @@
+# Base configuration — loaded for ALL profiles.
+# Profile-specific files (application-dev.yml, application-prod.yml) are merged on top.
+
+spring:
+  # TODO: Set spring.profiles.active to "dev" so the dev profile loads by default
+  profiles:
+    active:   # TODO: fill in value
+
+# TODO: Add a base default for library.log-level here (value: INFO)
+# Profile-specific files will override this value when dev or prod is active.
+library:
+  log-level:   # TODO: fill in value

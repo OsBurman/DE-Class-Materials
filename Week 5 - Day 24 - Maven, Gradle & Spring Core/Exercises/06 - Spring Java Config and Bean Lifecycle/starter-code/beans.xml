@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- beans.xml — XML-based Spring configuration (contrast with LibraryConfig.java) -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Equivalent of @Bean notificationService() -->
+    <bean id="notificationService" class="com.library.NotificationService"
+          init-method="init"/>
+
+    <!-- Equivalent of @Bean(initMethod="onStartup", destroyMethod="onShutdown") catalogService() -->
+    <bean id="catalogService" class="com.library.CatalogService"
+          init-method="onStartup" destroy-method="onShutdown">
+        <!-- Constructor injection: pass the notificationService bean by reference -->
+        <constructor-arg ref="notificationService"/>
+    </bean>
+
+</beans>

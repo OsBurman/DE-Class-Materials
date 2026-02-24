@@ -1,0 +1,21 @@
+<!-- Exercise 05 Solution Part B: *ngFor -->
+<div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px;">
+  <h3>Task List</h3>
+
+  <ul>
+    <!-- *ngFor repeats this <li> once for each item in the tasks array.
+         "let task" creates a local template variable for the current item.
+         Angular also provides: index, first, last, even, odd -->
+    <li *ngFor="let task of tasks">
+      <input
+        type="checkbox"
+        [checked]="task.done"
+        (change)="toggleTask(task.id)"
+      >
+      {{ task.title }}
+    </li>
+  </ul>
+
+  <!-- Template expressions can call methods and access array properties inline -->
+  <p>Completed: {{ tasks.filter(t => t.done).length }} of {{ tasks.length }}</p>
+</div>

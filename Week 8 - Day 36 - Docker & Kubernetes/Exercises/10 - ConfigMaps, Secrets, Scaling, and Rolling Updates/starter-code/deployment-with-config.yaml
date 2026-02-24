@@ -1,0 +1,66 @@
+# Exercise 10 — Deployment with ConfigMap and Secret Injection Starter
+# Complete every TODO.
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: spring-deployment
+  namespace: default
+  labels:
+    app: springapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: springapp
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # TODO: Set maxSurge to 1
+      maxSurge: # TODO
+      # TODO: Set maxUnavailable to 0 (zero-downtime rollouts)
+      maxUnavailable: # TODO
+
+  template:
+    metadata:
+      labels:
+        app: springapp
+
+    spec:
+      containers:
+        - name: spring-container
+          image: springapp:1.0.0
+          ports:
+            - containerPort: 8080
+
+          # TODO: Inject ALL keys from spring-config ConfigMap as env vars
+          envFrom:
+            - configMapRef:
+                # name: TODO
+
+          # TODO: Inject specific keys from spring-secret as env vars
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  # TODO: Reference the spring-secret Secret, key DB_USERNAME
+                  name: # TODO
+                  key: # TODO
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  # TODO: Reference the spring-secret Secret, key DB_PASSWORD
+                  name: # TODO
+                  key: # TODO
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

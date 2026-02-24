@@ -1,0 +1,10 @@
+spring:
+  kafka:
+    # TODO: Set the bootstrap-servers property to localhost:9092
+    bootstrap-servers:
+    producer:
+      # TODO: Set key-serializer to StringSerializer
+      key-serializer:
+      # TODO: Set value-serializer to StringSerializer
+      # (KafkaProducerConfig will override this with JsonSerializer for OrderEvent)
+      value-serializer:

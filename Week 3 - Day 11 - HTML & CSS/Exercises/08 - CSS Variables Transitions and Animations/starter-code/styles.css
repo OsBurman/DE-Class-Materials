@@ -1,0 +1,95 @@
+/* ── Part A: CSS Custom Properties ───────────────────────────────── */
+
+/* TODO: Define these variables on :root:
+         --color-primary: #0066cc
+         --color-primary-dark: #0050a0
+         --color-bg: #f8f9fa
+         --color-text: #212529
+         --color-border: #dee2e6
+         --radius: 6px
+         --transition-speed: 0.3s
+*/
+
+body {
+  font-family: sans-serif;
+  margin: 0;
+  /* TODO: set color: var(--color-text) */
+}
+
+/* ── Part B: Button Transitions ──────────────────────────────────── */
+
+/* TODO: Target .btn
+         Set background-color: var(--color-primary)
+         Set color: white
+         Set padding: 0.6rem 1.4rem
+         Set border: none
+         Set border-radius: var(--radius)
+         Set cursor: pointer
+         Set font-size: 1rem
+         Set transition: background-color var(--transition-speed) ease,
+                         transform var(--transition-speed) ease */
+
+/* TODO: Target .btn:hover
+         Set background-color: var(--color-primary-dark)
+         Set transform: translateY(-2px) */
+
+/* TODO: Target .btn:active
+         Set transform: translateY(0) */
+
+/* ── Part C: Card Hover Transition ───────────────────────────────── */
+
+/* TODO: Target .card
+         Set background: var(--color-bg)
+         Set border: 1px solid var(--color-border)
+         Set border-radius: var(--radius)
+         Set padding: 1.25rem
+         Set transition: box-shadow var(--transition-speed) ease,
+                         transform var(--transition-speed) ease */
+
+/* TODO: Target .card:hover
+         Set box-shadow: 0 8px 16px rgba(0,0,0,0.12)
+         Set transform: translateY(-4px) */
+
+/* ── Part D: Dark Theme Variable Override ────────────────────────── */
+
+/* TODO: .dark-theme {
+           Override --color-bg: #1e1e2e
+           Override --color-text: #cdd6f4
+           Override --color-border: #45475a
+         } */
+
+/* TODO: .theme-demo {
+           Set color: var(--color-text)
+           Set background: var(--color-bg)
+           Set border: 1px solid var(--color-border)
+         } */
+
+/* ── Part E: @keyframes Animations ──────────────────────────────── */
+
+/* TODO: Define @keyframes fadeIn
+         from { opacity: 0 }
+         to   { opacity: 1 } */
+
+/* TODO: Target .fade-in
+         Set animation: fadeIn 1s ease forwards */
+
+/* TODO: Define @keyframes bounce
+         0%   { transform: translateY(0) }
+         40%  { transform: translateY(-20px) }
+         60%  { transform: translateY(-10px) }
+         100% { transform: translateY(0) } */
+
+/* TODO: Target .bounce
+         Set animation: bounce 1s ease infinite */
+
+/* TODO: Define @keyframes spin
+         from { transform: rotate(0deg) }
+         to   { transform: rotate(360deg) } */
+
+/* TODO: Target .spinner
+         Set width: 40px
+         Set height: 40px
+         Set border: 4px solid var(--color-border)
+         Set border-top-color: var(--color-primary)
+         Set border-radius: 50%
+         Set animation: spin 1s linear infinite */

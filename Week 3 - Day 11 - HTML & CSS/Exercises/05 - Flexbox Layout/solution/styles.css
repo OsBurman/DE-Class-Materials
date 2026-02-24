@@ -1,0 +1,113 @@
+/* Global */
+body {
+  font-family: sans-serif;
+  margin: 0;
+}
+
+.page-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* ── Part A: Navigation Bar ──────────────────────────────────────── */
+
+/* Flex container: row (default), space-between pushes logo & links to opposite ends */
+.navbar {
+  display: flex;
+  justify-content: space-between;  /* logo left, links right */
+  align-items: center;             /* vertically centre both */
+  background-color: #343a40;
+  padding: 1rem 2rem;
+}
+
+.logo {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Turn the link list into a horizontal flex row */
+.navbar .nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+/* ── Part B: Card Row with Wrapping ─────────────────────────────── */
+
+/* flex-wrap: wrap lets cards drop to a new row when they can't fit */
+.card-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+/* flex: 1 1 220px → grow to fill space, shrink if needed, min 220px wide */
+.card {
+  flex: 1 1 220px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1.25rem;
+}
+
+/* ── Part C: Sidebar Layout ──────────────────────────────────────── */
+
+.sidebar-layout {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+/* flex: 0 0 220px → never grow, never shrink — locked at 220px */
+.sidebar {
+  flex: 0 0 220px;
+  background-color: #e9ecef;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+/* flex: 1 → take all remaining space after sidebar is allocated */
+.content {
+  flex: 1;
+  background-color: #fff;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+/* ── Part D: Centred Hero ────────────────────────────────────────── */
+
+/* flex-direction: column turns the main axis vertical.
+   justify-content + align-items both set to center = perfect centring. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertical centre (column axis) */
+  align-items: center;       /* horizontal centre (row/cross axis) */
+  text-align: center;
+  height: 200px;
+  background-color: #e8f4fd;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* ── Part E: Flex Item Order ─────────────────────────────────────── */
+
+/* All items default to order: 0; setting -1 puts item-c before the others */
+.item-c {
+  order: -1;   /* renders before items with order: 0 */
+}

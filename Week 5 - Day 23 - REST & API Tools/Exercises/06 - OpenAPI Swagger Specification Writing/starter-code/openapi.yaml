@@ -1,0 +1,168 @@
+openapi: 3.0.3
+
+info:
+  title: TODO: add the API title
+  version: TODO: add the version string
+  description: TODO: add a short description of the API
+
+paths:
+
+  /books:
+
+    get:
+      operationId: listBooks
+      summary: TODO: write a one-line summary
+      tags:
+        - Books
+      parameters:
+        - name: author
+          in: query
+          required: false
+          schema:
+            type: string
+          description: TODO: describe what this query parameter does
+      responses:
+        '200':
+          description: TODO: describe the 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'   # TODO: verify this ref is correct
+        '500':
+          description: TODO: describe the 500 response
+
+    post:
+      operationId: createBook
+      summary: TODO: write a one-line summary
+      tags:
+        - Books
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'   # TODO: verify this ref is correct
+      responses:
+        '201':
+          description: TODO: describe the 201 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'   # TODO: verify this ref is correct
+        '400':
+          description: TODO: describe the 400 response
+
+  /books/{bookId}:
+
+    get:
+      operationId: getBookById
+      summary: TODO: write a one-line summary
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: TODO: add the correct type for an ID
+          description: TODO: describe this path parameter
+      responses:
+        '200':
+          description: TODO: describe the 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: TODO: describe the 404 response
+
+    put:
+      operationId: updateBook
+      summary: TODO: write a one-line summary
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: TODO: add the correct type for an ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '200':
+          description: TODO: describe the 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: TODO: describe the 400 response
+        '404':
+          description: TODO: describe the 404 response
+
+    delete:
+      operationId: deleteBook
+      summary: TODO: write a one-line summary
+      tags:
+        - Books
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: TODO: add the correct type for an ID
+      responses:
+        '204':
+          description: TODO: describe the 204 response
+        '404':
+          description: TODO: describe the 404 response
+
+components:
+  schemas:
+
+    Book:
+      type: object
+      required:
+        - TODO: list required fields here
+      properties:
+        id:
+          type: TODO: what type should an ID be?
+          readOnly: true
+          description: TODO: describe this field
+        title:
+          type: TODO: what type should a title be?
+          description: TODO: describe this field
+        isbn:
+          type: TODO: what type should an ISBN be?
+          description: TODO: describe this field
+        publishedYear:
+          type: TODO: what type should a year be?
+          description: TODO: describe this field
+        authorId:
+          type: TODO: what type should a foreign key be?
+          description: TODO: describe this field
+
+    BookInput:
+      type: object
+      required:
+        - TODO: list required fields (no id here)
+      properties:
+        title:
+          type: string
+          description: TODO: describe this field
+        isbn:
+          type: TODO: fill in the type
+          description: TODO: describe this field
+        publishedYear:
+          type: TODO: fill in the type
+          description: TODO: describe this field
+        authorId:
+          type: TODO: fill in the type
+          description: TODO: describe this field

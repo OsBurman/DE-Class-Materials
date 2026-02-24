@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Selectors & Box Model</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <ul class="menu">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#" target="_blank">Docs ↗</a></li>
+    </ul>
+  </nav>
+
+  <section id="hero">
+    <h1>CSS Selectors Demo</h1>
+    <p>This page tests every major selector type.</p>
+  </section>
+
+  <main>
+
+    <h2>Highlighted Paragraphs</h2>
+    <p>This paragraph follows an h2 (adjacent sibling selector target).</p>
+    <p class="highlight">This paragraph has the class "highlight".</p>
+    <p>A normal paragraph with no extra class.</p>
+
+    <h2>Button Hover</h2>
+    <button class="btn">Hover over me</button>
+
+    <h2>Zebra List</h2>
+    <ul class="zebra-list">
+      <li>Item 1 (odd — light grey)</li>
+      <li>Item 2 (even — white)</li>
+      <li>Item 3 (odd — light grey)</li>
+      <li>Item 4 (even — white)</li>
+      <li>Item 5 (odd — light grey)</li>
+    </ul>
+
+    <h2>Specificity Conflict</h2>
+    <p>The span below has three competing rules (element, class, ID):</p>
+    <p>Result: <span id="conflict" class="blue-text">Which color wins?</span></p>
+    <p id="explain">The ID selector wins because its specificity (0,1,0,0) beats class (0,0,1,0) and element (0,0,0,1).</p>
+
+    <h2>Box Model</h2>
+    <div class="box">
+      box-sizing: content-box (default)<br>
+      width=200px + padding=20px + border=4px → total rendered width = 248px
+    </div>
+    <div class="box box-border">
+      box-sizing: border-box<br>
+      width=200px includes padding and border → total rendered width = 200px
+    </div>
+
+  </main>
+
+</body>
+</html>

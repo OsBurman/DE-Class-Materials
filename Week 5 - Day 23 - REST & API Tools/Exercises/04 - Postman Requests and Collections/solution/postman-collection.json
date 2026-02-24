@@ -1,0 +1,166 @@
+{
+  "info": {
+    "_postman_id": "ex04-library-api-practice-solution",
+    "name": "Library API Practice — Solution",
+    "description": "Exercise 04 — Complete solution.\n\nAll requests are fully configured. Import this collection along with the 'JSONPlaceholder' environment (baseUrl = https://jsonplaceholder.typicode.com) to run them.\n\nReflection Answers:\n1. A Collection is a saved group of requests; an Environment is a set of key-value variables (like baseUrl) that can be swapped without editing requests.\n2. Using {{baseUrl}} means you change one environment variable to point all requests at a different server (dev/staging/prod).\n3. PUT replaces the entire resource and requires all fields; PATCH sends only changed fields.\n4. 201 Created signals that a new resource was created (typically with a Location header pointing to it); 200 OK signals a successful action on an existing resource.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Posts",
+      "description": "CRUD operations on the /posts resource",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "Returns an array of 100 post objects. Each object has: userId, id, title, body."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "Returns the single post with id=1."
+          },
+          "response": []
+        },
+        {
+          "name": "Create a Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My New Post\",\n  \"body\": \"This is the post body.\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts"]
+            },
+            "description": "Creates a new post. JSONPlaceholder echoes the body and assigns id=101."
+          },
+          "response": []
+        },
+        {
+          "name": "Full Update a Post (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"Replaced Title\",\n  \"body\": \"Replaced body content.\",\n  \"userId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "Fully replaces post 1. All four fields are supplied."
+          },
+          "response": []
+        },
+        {
+          "name": "Partial Update a Post (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Only the Title Changed\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "Partially updates post 1 — only title is sent. The response still contains all four fields; the server merges the patch."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a Post",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1"]
+            },
+            "description": "Deletes post 1. JSONPlaceholder returns 200 with {}. A real API would return 204 No Content."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "description": "Nested resource: comments on a post",
+      "item": [
+        {
+          "name": "Get Comments for a Post",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1/comments",
+              "host": ["{{baseUrl}}"],
+              "path": ["posts", "1", "comments"]
+            },
+            "description": "Returns all comments for post 1. Demonstrates a nested sub-resource URL."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": []
+}

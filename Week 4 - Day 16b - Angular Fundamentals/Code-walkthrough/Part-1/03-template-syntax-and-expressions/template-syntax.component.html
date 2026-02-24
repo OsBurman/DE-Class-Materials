@@ -1,0 +1,255 @@
+<!-- =============================================================================
+  template-syntax.component.html — Angular Template Syntax Deep-Dive
+  =============================================================================
+  Paired with template-syntax.component.ts. Each section maps to a property
+  or method defined in the component class.
+  =============================================================================  -->
+
+<div class="syntax-demo">
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 1 — Interpolation  {{ expression }}
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>1. Interpolation — <code>{{ '{{' }} expression {{ '}}' }}</code></h2>
+
+    <!-- Basic property access -->
+    <p>App name: <strong>{{ appName }}</strong></p>
+
+    <!-- JS expression inside {{ }} — computed at runtime -->
+    <p>Current year: {{ currentYear }}</p>
+
+    <!-- Arithmetic expression -->
+    <p>Pi rounded: {{ pi.toFixed(2) }}</p>
+
+    <!-- Method call — returns a string -->
+    <p>Items joined: {{ items.join(' · ') }}</p>
+
+    <!-- Ternary (conditional expression) -->
+    <p>Items count: {{ items.length > 3 ? 'Many items' : 'Few items' }}</p>
+
+    <!--
+      ⚠️ WHAT YOU CANNOT DO inside {{ }}:
+         • Assignments:     {{ counter = 5 }}       ← ERROR
+         • new keyword:     {{ new Date() }}         ← ERROR
+         • Increment:       {{ counter++ }}           ← ERROR
+         • Bitwise OR:      {{ a | b }}               ← ERROR (| is for Pipes)
+    -->
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 2 — Template Statements  (event)="statement"
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>2. Template Statements — <code>(event)="statement"</code></h2>
+
+    <p>Counter: <strong>{{ counter }}</strong>  |  Last action: {{ lastAction }}</p>
+
+    <!-- Call a method from the component class -->
+    <button (click)="increment()">+ Increment</button>
+    <button (click)="decrement()">- Decrement</button>
+    <button (click)="reset()">Reset</button>
+
+    <!--
+      INLINE STATEMENT — simple assignments are allowed in event bindings:
+      Unlike interpolation, event handlers CAN have side effects.
+    -->
+    <button (click)="lastAction = 'button clicked directly'">Inline Statement</button>
+
+    <!--
+      Passing $event — the native DOM event object
+      $event.target.value = the current value of the input field
+    -->
+    <input type="text" (input)="lastAction = 'typed: ' + $event.target.value" placeholder="Type here">
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 3 — Pipes  {{ value | pipeName : arg1 : arg2 }}
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>3. Pipes — <code>{{ '{{' }} value | pipeName {{ '}}' }}</code></h2>
+
+    <!-- uppercase / lowercase / titlecase -->
+    <p>Original:   {{ greeting }}</p>
+    <p>uppercase:  {{ greeting | uppercase }}</p>
+    <p>lowercase:  {{ greeting | lowercase }}</p>
+    <p>titlecase:  {{ greeting | titlecase }}</p>
+
+    <!-- number — formats to locale number string -->
+    <!-- Format: '{{ minIntDigits }}.{{ minFracDigits }}-{{ maxFracDigits }}' -->
+    <p>Raw number:  {{ bigNumber }}</p>
+    <p>Formatted:   {{ bigNumber | number:'1.2-2' }}</p>
+
+    <!-- currency — formats as money -->
+    <!-- {{ value | currency : currencyCode : symbolDisplay : digitsInfo }} -->
+    <p>Price (raw):  {{ rawPrice }}</p>
+    <p>Price (USD):  {{ rawPrice | currency:'USD':'symbol':'1.2-2' }}</p>
+    <p>Price (EUR):  {{ rawPrice | currency:'EUR':'code' }}</p>
+
+    <!-- percent -->
+    <p>Percent: {{ percentValue | percent:'1.0-0' }}</p>
+
+    <!-- date — many format options -->
+    <!-- Common tokens: short, medium, long, full, shortDate, shortTime -->
+    <p>Raw date:    {{ today }}</p>
+    <p>shortDate:   {{ today | date:'shortDate' }}</p>
+    <p>medium:      {{ today | date:'medium' }}</p>
+    <p>Custom:      {{ today | date:'EEEE, MMMM d, y' }}</p>
+
+    <!-- Chaining pipes — apply left to right -->
+    <p>Chained: {{ product.name | uppercase | slice:0:7 }}</p>
+
+    <!-- json pipe — extremely useful for debugging -->
+    <pre>{{ product | json }}</pre>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 4 — Safe Navigation Operator  ?.
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>4. Safe Navigation Operator — <code>?.</code></h2>
+
+    <!--
+      userWithoutAddress.address is undefined.
+      WITHOUT ?.  → would throw: "Cannot read property 'city' of undefined"
+      WITH    ?.  → returns undefined → renders as empty string (no error)
+    -->
+    <p>User with address city:    {{ userWithAddress.address?.city }}</p>
+    <p>User WITHOUT address city: {{ userWithoutAddress.address?.city }}</p>
+
+    <!-- Deep chaining — each ?. protects one step -->
+    <p>Country: {{ userWithAddress.address?.country }}</p>
+
+    <!--
+      You can combine ?. with the nullish coalescing-like ternary:
+      Show a fallback if the value is missing.
+    -->
+    <p>City with fallback:
+      {{ userWithoutAddress.address?.city || 'Location not provided' }}
+    </p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 5 — Non-null Assertion Operator  !.
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>5. Non-null Assertion — <code>!.</code></h2>
+
+    <!--
+      confirmedUser is typed as User | null in the component.
+      Angular's strict mode would warn: "Object is possibly null."
+      Adding !. tells the compiler: "I guarantee it's not null at runtime."
+
+      ⚠️ USE WITH CARE — if confirmedUser IS null, this will throw at runtime.
+      Prefer *ngIf to guard the block when in doubt (see Part 2).
+    -->
+    <p>Name:  {{ confirmedUser!.name }}</p>
+    <p>Email: {{ confirmedUser!.email }}</p>
+    <p>Role:  {{ confirmedUser!.role | titlecase }}</p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 6 — ng-template: named template fragments
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>6. <code>&lt;ng-template&gt;</code> — Named Fragments</h2>
+
+    <!--
+      <ng-template> defines a block of HTML that is NOT rendered immediately.
+      It only renders when something explicitly refers to it (e.g. *ngIf else,
+      ngTemplateOutlet, etc.).
+
+      Template reference variable: #loadingBlock — gives the template a name.
+    -->
+    <ng-template #loadingBlock>
+      <p class="loading">⏳ Loading courses…</p>
+    </ng-template>
+
+    <!--
+      *ngIf with else clause — uses our named template as the fallback.
+      When items.length > 0 → renders the <ul>.
+      When items.length === 0 → renders the #loadingBlock template.
+    -->
+    <ng-container *ngIf="items.length > 0; else loadingBlock">
+      <ul>
+        <li *ngFor="let item of items">{{ item }}</li>
+      </ul>
+    </ng-container>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 7 — ng-container: invisible grouping wrapper
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>7. <code>&lt;ng-container&gt;</code> — No Extra DOM Element</h2>
+
+    <!--
+      PROBLEM: You cannot put two structural directives on the same element.
+        <li *ngFor="..." *ngIf="...">   ← ERROR — two structural directives
+
+      SOLUTION: Wrap with <ng-container> which adds NO element to the DOM.
+        Angular removes it during compilation — only its children remain.
+    -->
+    <ul>
+      <ng-container *ngFor="let item of items">
+        <!-- *ngIf on the inner element — this is fine because ng-container
+             holds the *ngFor and the <li> holds the *ngIf -->
+        <li *ngIf="item !== 'NgRx'">{{ item }}</li>
+      </ng-container>
+    </ul>
+
+    <!--
+      Another use case: grouping elements for *ngIf without adding a <div>
+      (avoids breaking CSS flex/grid layouts)
+    -->
+    <ng-container *ngIf="counter > 0">
+      <p>Counter is positive!</p>
+      <small>Keep clicking increment…</small>
+    </ng-container>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════════════
+    SECTION 8 — ng-content: Content Projection (slot API)
+    ════════════════════════════════════════════════════════════════════════ -->
+  <section class="demo-section">
+    <h2>8. <code>&lt;ng-content&gt;</code> — Content Projection</h2>
+
+    <!--
+      ng-content is DEFINED INSIDE a child component's template (not here).
+      It works like React's {children} prop or a <slot> in Web Components.
+
+      When a parent uses the component like:
+        <app-card>
+          <h3>Projected Title</h3>
+          <p>This paragraph comes from the parent.</p>
+        </app-card>
+
+      The child's template has <ng-content> where the projected content appears.
+
+      Named slots use the select attribute:
+        <ng-content select="[card-title]"></ng-content>
+        <ng-content select=".card-body"></ng-content>
+
+      The concept is demonstrated in the card-shell component below.
+    -->
+
+    <!-- Using a hypothetical card-shell component (see card-shell.component.ts) -->
+    <!-- <app-card-shell>
+      <h3 card-title>Projected Heading</h3>
+      <p>This body content is projected into the card.</p>
+    </app-card-shell> -->
+
+    <p class="note">
+      📌 <code>ng-content</code> is defined inside the <em>child</em> component template.
+      See <code>card-shell.component.html</code> for a full working example.
+    </p>
+  </section>
+
+</div>

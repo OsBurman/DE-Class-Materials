@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: library-service
+
+management:
+  server:
+    port: 8081   # Actuator endpoints run on a separate port from the app (8080)
+
+  endpoints:
+    web:
+      exposure:
+        include: "*"   # Expose every endpoint; restrict to "health,info,metrics" in production
+
+  endpoint:
+    env:
+      show-values: always   # Reveal actual property values in /actuator/env (dev only!)
+
+# Static info properties — contributed to /actuator/info automatically
+info:
+  app:
+    name: Library Service
+    version: 1.0.0

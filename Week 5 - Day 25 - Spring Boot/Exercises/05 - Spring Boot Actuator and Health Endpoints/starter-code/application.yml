@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: library-service
+
+management:
+  server:
+    # TODO: Set the management (Actuator) port to 8081
+    #       This separates Actuator traffic from your application traffic (which runs on 8080)
+    port:
+
+  endpoints:
+    web:
+      exposure:
+        # TODO: Expose all Actuator endpoints over HTTP.
+        #       Set include to "*" (use quotes — YAML interprets bare * as a special character)
+        include:
+
+  endpoint:
+    env:
+      # TODO: Show property values in the /actuator/env endpoint.
+      #       Set show-values to: always
+      show-values:
+
+# TODO: Add static info properties for /actuator/info:
+#   info.app.name: Library Service
+#   info.app.version: 1.0.0
+info:
+  app:
+    name:     # TODO
+    version:  # TODO

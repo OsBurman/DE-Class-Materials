@@ -1,0 +1,84 @@
+# Part 1 — Cluster Setup Commands
+# a. Create EKS cluster
+# TODO: eksctl create cluster ...
+
+# b. Update kubeconfig
+# TODO: aws eks update-kubeconfig ...
+
+# c. Verify cluster
+# TODO: kubectl get nodes
+# TODO: kubectl get pods --all-namespaces
+
+---
+# Part 2 — Kubernetes Manifests (complete all TODOs)
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: TODO   # order-app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: TODO       # order-service-deployment
+  namespace: TODO  # order-app
+spec:
+  replicas: TODO   # 3
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - name: order-service
+          image: TODO   # YOUR_ECR_IMAGE_URI
+          ports:
+            - containerPort: TODO   # 8080
+          resources:
+            requests:
+              cpu: TODO    # 100m
+              memory: TODO # 128Mi
+            limits:
+              cpu: TODO    # 250m
+              memory: TODO # 256Mi
+          livenessProbe:
+            httpGet:
+              path: TODO   # /health
+              port: TODO   # 8080
+            initialDelaySeconds: TODO  # 30
+            periodSeconds: TODO        # 10
+          readinessProbe:
+            httpGet:
+              path: TODO   # /ready
+              port: TODO   # 8080
+            initialDelaySeconds: TODO  # 10
+            periodSeconds: TODO        # 5
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: TODO  # prod
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: TODO       # order-service-svc
+  namespace: TODO  # order-app
+spec:
+  type: TODO       # LoadBalancer
+  selector:
+    app: order-service
+  ports:
+    - port: TODO        # 80
+      targetPort: TODO  # 8080
+
+# Part 3 — Deploy and Verify (add commands as comments)
+# a. Create namespace:    TODO
+# b. Apply manifest:      TODO
+# c. Watch rollout:       TODO
+# d. Get LB hostname:     TODO
+# e. Scale to 5 replicas: TODO
+# f. Update to :v2 image: TODO

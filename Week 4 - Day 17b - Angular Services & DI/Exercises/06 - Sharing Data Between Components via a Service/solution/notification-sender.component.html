@@ -1,0 +1,11 @@
+<div style="border:1px solid #ccc; padding:16px; margin:12px 0; border-radius:6px;">
+  <h3>Notification Sender</h3>
+  <input [(ngModel)]="draftMessage" type="text" placeholder="Type a message..." style="padding:6px;" />
+  <button (click)="send(draftMessage)" style="margin-left:6px;">Send</button>
+
+  <div style="margin-top:8px; display:flex; gap:8px;">
+    <button (click)="send('✅ Success')">✅ Success</button>
+    <button (click)="send('⚠️ Warning')">⚠️ Warning</button>
+    <button (click)="send('❌ Error')">❌ Error</button>
+  </div>
+</div>

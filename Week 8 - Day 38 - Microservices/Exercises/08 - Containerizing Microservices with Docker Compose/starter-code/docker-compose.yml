@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+
+  # ── Eureka Service Registry ──────────────────────────────────────────────────
+  eureka-server:
+    # TODO: Add build directive pointing to ./eureka-server
+    # TODO: Expose port 8761 on the host
+    # TODO: Connect to ecommerce-network
+    networks:
+      - ecommerce-network
+
+  # ── PostgreSQL Database ──────────────────────────────────────────────────────
+  postgres-db:
+    # TODO: Use image postgres:16 (no build needed — use `image:` not `build:`)
+    # TODO: Set POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB environment variables
+    # TODO: Expose port 5432 on the host
+    # TODO: Mount postgres-data volume to /var/lib/postgresql/data
+    # TODO: Connect to ecommerce-network
+    networks:
+      - ecommerce-network
+
+  # ── Inventory Service ────────────────────────────────────────────────────────
+  inventory-service:
+    # TODO: Add build directive pointing to ./inventory-service
+    # TODO: Expose port 8081 on the host
+    # TODO: Set SPRING_DATASOURCE_URL, USERNAME, PASSWORD environment variables
+    # TODO: Set EUREKA_CLIENT_SERVICEURL_DEFAULTZONE environment variable
+    # TODO: Declare depends_on: postgres-db and eureka-server
+    # TODO: Connect to ecommerce-network
+    networks:
+      - ecommerce-network
+
+  # ── Order Service ────────────────────────────────────────────────────────────
+  order-service:
+    # TODO: Add build directive pointing to ./order-service
+    # TODO: Expose port 8082 on the host
+    # TODO: Set SPRING_DATASOURCE_URL, USERNAME, PASSWORD environment variables
+    # TODO: Set EUREKA_CLIENT_SERVICEURL_DEFAULTZONE environment variable
+    # TODO: Set INVENTORY_SERVICE_URL environment variable
+    # TODO: Declare depends_on: postgres-db, eureka-server, inventory-service
+    # TODO: Connect to ecommerce-network
+    networks:
+      - ecommerce-network
+
+  # ── API Gateway ──────────────────────────────────────────────────────────────
+  api-gateway:
+    # TODO: Add build directive pointing to ./api-gateway
+    # TODO: Expose port 8080 on the host
+    # TODO: Set EUREKA_CLIENT_SERVICEURL_DEFAULTZONE environment variable
+    # TODO: Declare depends_on: eureka-server, order-service, inventory-service
+    # TODO: Connect to ecommerce-network
+    networks:
+      - ecommerce-network
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  ecommerce-network:
+    # TODO: Specify the driver (bridge)
+
+# ── Volumes ───────────────────────────────────────────────────────────────────
+volumes:
+  # TODO: Declare the postgres-data named volume here

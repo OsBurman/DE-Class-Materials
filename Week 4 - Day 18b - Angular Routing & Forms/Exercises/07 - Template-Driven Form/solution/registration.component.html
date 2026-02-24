@@ -1,0 +1,83 @@
+<!--
+  #f="ngForm"        — creates a template reference to the NgForm directive
+  (ngSubmit)         — fires when the form is submitted; Angular prevents the default POST
+-->
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" style="max-width:400px; padding:1.5rem;">
+  <h2>Register</h2>
+
+  <!-- ═══════════ Username ═══════════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="username">Username</label><br />
+    <!--
+      name="username"          — required; Angular uses this to register the control with NgForm
+      [(ngModel)]="model.username" — two-way binding: DOM ↔ component property
+      #username="ngModel"      — template ref to the NgModel instance for per-field state
+      required / minlength / maxlength — built-in HTML5 + Angular validators
+    -->
+    <input
+      id="username"
+      type="text"
+      name="username"
+      [(ngModel)]="model.username"
+      #username="ngModel"
+      required
+      minlength="3"
+      maxlength="20"
+      style="width:100%; padding:0.4rem;"
+    />
+    <!-- Show errors only after the user has touched (blurred) the field -->
+    <div style="color:red; font-size:0.85rem;" *ngIf="username.touched && username.errors?.['required']">
+      Username is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;" *ngIf="username.touched && username.errors?.['minlength']">
+      Minimum 3 characters.
+    </div>
+  </div>
+
+  <!-- ═══════════ Email ═══════════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="email">Email</label><br />
+    <input
+      id="email"
+      type="email"
+      name="email"
+      [(ngModel)]="model.email"
+      #email="ngModel"
+      required
+      email
+      style="width:100%; padding:0.4rem;"
+    />
+    <div style="color:red; font-size:0.85rem;" *ngIf="email.touched && email.errors?.['required']">
+      Email is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;" *ngIf="email.touched && email.errors?.['email']">
+      Please enter a valid email address.
+    </div>
+  </div>
+
+  <!-- ═══════════ Password ═══════════ -->
+  <div style="margin-bottom:1rem;">
+    <label for="password">Password</label><br />
+    <input
+      id="password"
+      type="password"
+      name="password"
+      [(ngModel)]="model.password"
+      #password="ngModel"
+      required
+      minlength="8"
+      style="width:100%; padding:0.4rem;"
+    />
+    <div style="color:red; font-size:0.85rem;" *ngIf="password.touched && password.errors?.['required']">
+      Password is required.
+    </div>
+    <div style="color:red; font-size:0.85rem;" *ngIf="password.touched && password.errors?.['minlength']">
+      Minimum 8 characters.
+    </div>
+  </div>
+
+  <!-- [disabled]="f.invalid" prevents submission while any control is invalid -->
+  <button type="submit" [disabled]="f.invalid">Register</button>
+
+  <p *ngIf="submitted" style="color:green; margin-top:1rem;">✔ Registration successful!</p>
+</form>

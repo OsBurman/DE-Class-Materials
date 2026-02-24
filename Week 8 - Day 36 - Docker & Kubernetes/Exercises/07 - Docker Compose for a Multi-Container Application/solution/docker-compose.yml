@@ -1,0 +1,60 @@
+# Exercise 07 — Docker Compose for a Multi-Container Application — SOLUTION
+
+services:
+
+  # ------------------------------------------------------------------
+  # Database service — PostgreSQL 15 on Alpine
+  # ------------------------------------------------------------------
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret   # In production use a .env file or Docker Secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+    # Health check ensures the app service waits until Postgres is ready to accept
+    # connections, not just until the container has started.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d appdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ------------------------------------------------------------------
+  # Application service — Spring Boot
+  # ------------------------------------------------------------------
+  app:
+    image: springapp:1.0.0
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080"
+    environment:
+      # "db" resolves to the Postgres container because both services share app-net.
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/appdb
+      SPRING_DATASOURCE_USERNAME: app
+      SPRING_DATASOURCE_PASSWORD: secret
+    # condition: service_healthy waits for the healthcheck to report "healthy"
+    # before Compose starts this container.
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-net
+
+# ------------------------------------------------------------------
+# Named volumes — data persists across "docker compose down"
+# Use "docker compose down -v" to also remove the volume.
+# ------------------------------------------------------------------
+volumes:
+  pgdata:
+
+# ------------------------------------------------------------------
+# Custom bridge network — enables automatic DNS between services.
+# ------------------------------------------------------------------
+networks:
+  app-net:
+    driver: bridge

@@ -1,0 +1,51 @@
+<!-- TODO 2 – Add #f="ngForm" to the form tag and (ngSubmit)="onSubmit(f)" -->
+<form style="max-width:400px; padding:1.5rem;">
+  <h2>Register</h2>
+
+  <!-- Username field -->
+  <div style="margin-bottom:1rem;">
+    <label for="username">Username</label><br />
+    <!-- TODO 3 – Add: name="username" [(ngModel)]="model.username" #username="ngModel"
+                        required minlength="3" maxlength="20" -->
+    <input
+      id="username"
+      type="text"
+      style="width:100%; padding:0.4rem;"
+    />
+    <!-- TODO 4 – Add error divs:
+      *ngIf="username.touched && username.errors?.['required']"  → "Username is required."
+      *ngIf="username.touched && username.errors?.['minlength']" → "Minimum 3 characters."
+    -->
+  </div>
+
+  <!-- Email field -->
+  <div style="margin-bottom:1rem;">
+    <label for="email">Email</label><br />
+    <!-- TODO 5 – Add: name="email" [(ngModel)]="model.email" #email="ngModel"
+                        required email -->
+    <input
+      id="email"
+      type="email"
+      style="width:100%; padding:0.4rem;"
+    />
+    <!-- TODO 5 – Add error divs for required and email validators -->
+  </div>
+
+  <!-- Password field -->
+  <div style="margin-bottom:1rem;">
+    <label for="password">Password</label><br />
+    <!-- TODO 5 – Add: name="password" [(ngModel)]="model.password" #password="ngModel"
+                        required minlength="8" -->
+    <input
+      id="password"
+      type="password"
+      style="width:100%; padding:0.4rem;"
+    />
+    <!-- TODO 5 – Add error divs for required and minlength validators -->
+  </div>
+
+  <!-- TODO 6 – Disable button when f.invalid -->
+  <button type="submit">Register</button>
+
+  <p *ngIf="submitted" style="color:green; margin-top:1rem;">✔ Registration successful!</p>
+</form>

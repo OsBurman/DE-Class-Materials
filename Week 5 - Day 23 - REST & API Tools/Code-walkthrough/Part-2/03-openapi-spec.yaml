@@ -1,0 +1,1297 @@
+openapi: 3.0.3
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWAGGER / OPENAPI SPECIFICATION
+# Day 23 — REST & API Tools | Part 2
+#
+# This is a complete, working OpenAPI 3.0 specification for a Bookstore REST API.
+# It demonstrates every OpenAPI concept covered in Day 23:
+#
+#   ✅ info, servers, tags
+#   ✅ paths and operations (GET, POST, PUT, PATCH, DELETE)
+#   ✅ path parameters ({bookId})
+#   ✅ query parameters (page, size, genre, search)
+#   ✅ request bodies with schemas
+#   ✅ response schemas with $ref
+#   ✅ components/schemas (reusable models)
+#   ✅ error response schemas (400, 401, 403, 404, 409, 422, 500)
+#   ✅ securitySchemes (Bearer JWT)
+#   ✅ enums, required fields, nullable fields
+#   ✅ pagination response wrapper
+#
+# HOW TO EXPLORE:
+#   1. Go to https://editor.swagger.io
+#   2. Paste this entire file (or File → Import URL if hosted)
+#   3. The Swagger UI renders on the right — try "Try it out" on any endpoint
+#
+#   OR run locally with Docker:
+#   docker run -p 8080:8080 -e SWAGGER_JSON=/spec.yaml \
+#     -v $(pwd):/usr/share/nginx/html/spec.yaml swaggerapi/swagger-ui
+# ─────────────────────────────────────────────────────────────────────────────
+
+info:
+  title: Bookstore REST API
+  version: "1.0.0"
+  description: |
+    A complete RESTful API for managing a bookstore's catalog, authors, and orders.
+
+    ## Authentication
+    Most endpoints require a Bearer JWT token.
+    Use `POST /auth/login` to obtain a token, then click **Authorize** above
+    and enter: `Bearer <your-token>`.
+
+    ## Versioning
+    This specification covers **API v1** (`/api/v1`).
+    Breaking changes will be released under `/api/v2`.
+
+    ## Error Format
+    All error responses follow this consistent structure:
+    ```json
+    {
+      "status": 404,
+      "error": "Not Found",
+      "message": "Book with ID 99 does not exist",
+      "timestamp": "2026-02-23T10:30:00Z",
+      "path": "/api/v1/books/99"
+    }
+    ```
+  contact:
+    name: API Support Team
+    email: api-support@bookstore.example.com
+    url: https://developer.bookstore.example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://bookstore.example.com/terms
+
+# ─── SERVERS ─────────────────────────────────────────────────────────────────
+# servers: tells Swagger UI where to send "Try it out" requests
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://staging.bookstore.example.com/api/v1
+    description: Staging server
+  - url: https://api.bookstore.example.com/api/v1
+    description: Production server
+
+# ─── TAGS ─────────────────────────────────────────────────────────────────────
+# tags: group operations in the Swagger UI sidebar
+tags:
+  - name: Authentication
+    description: Login and token refresh
+  - name: Books
+    description: Book catalog operations (CRUD + search)
+  - name: Authors
+    description: Author management
+  - name: Orders
+    description: Order placement and management
+
+# ─── SECURITY ─────────────────────────────────────────────────────────────────
+# Global default: all endpoints require Bearer JWT unless overridden
+security:
+  - BearerAuth: []
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PATHS — each path entry defines one URL and the HTTP operations on it
+# ─────────────────────────────────────────────────────────────────────────────
+paths:
+
+  # ── AUTHENTICATION ──────────────────────────────────────────────────────────
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Authenticate user and receive JWT token
+      description: |
+        Submit credentials to receive a signed JWT access token.
+        Include this token as `Authorization: Bearer <token>` on all subsequent requests.
+      operationId: login
+      security: []    # This endpoint does NOT require authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: "alice@example.com"
+              password: "s3cur3P@ssword"
+      responses:
+        '200':
+          description: Login successful — token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIn0.abc"
+                expiresIn: 3600
+                user:
+                  id: 1
+                  email: "alice@example.com"
+                  role: "CUSTOMER"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 401
+                error: "Unauthorized"
+                message: "Invalid email or password"
+                timestamp: "2026-02-23T10:30:00Z"
+                path: "/api/v1/auth/login"
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      operationId: refreshToken
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refreshToken]
+              properties:
+                refreshToken:
+                  type: string
+                  description: The refresh token received at login
+      responses:
+        '200':
+          description: New access token issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ── BOOKS ──────────────────────────────────────────────────────────────────
+  /books:
+    get:
+      tags: [Books]
+      summary: Get all books (paginated, filterable)
+      description: |
+        Returns a paginated list of books.
+        Supports filtering by genre and free-text search.
+      operationId: getAllBooks
+      parameters:
+        # ── Query parameters ───────────────────────────────────────────────
+        - name: page
+          in: query
+          description: Page number (0-indexed)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          example: 0
+        - name: size
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          example: 20
+        - name: genre
+          in: query
+          description: Filter by genre
+          required: false
+          schema:
+            $ref: '#/components/schemas/Genre'
+          example: FICTION
+        - name: search
+          in: query
+          description: Full-text search across title and description
+          required: false
+          schema:
+            type: string
+            minLength: 2
+          example: "clean code"
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          required: false
+          schema:
+            type: string
+            enum: [title, price, publishedDate, rating]
+            default: title
+        - name: order
+          in: query
+          description: Sort order
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+      responses:
+        '200':
+          description: Paginated list of books
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBooks'
+              example:
+                data:
+                  - id: 1
+                    isbn: "978-0132350884"
+                    title: "Clean Code"
+                    genre: NONFICTION
+                    price: 34.99
+                    inStock: true
+                    publishedDate: "2008-08-01"
+                    author:
+                      id: 1
+                      firstName: "Robert"
+                      lastName: "Martin"
+                meta:
+                  total: 150
+                  page: 0
+                  size: 20
+                  totalPages: 8
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [Books]
+      summary: Create a new book
+      description: |
+        Creates a new book record. The `isbn` must be unique.
+        Requires `ADMIN` or `LIBRARIAN` role.
+      operationId: createBook
+      requestBody:
+        required: true
+        description: Book data to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookRequest'
+            example:
+              isbn: "978-0385472579"
+              title: "The Pragmatic Programmer"
+              description: "From Journeyman to Master — a classic in software craftsmanship."
+              genre: NONFICTION
+              price: 39.99
+              publishedDate: "1999-10-30"
+              authorId: 2
+      responses:
+        '201':
+          description: Book created successfully
+          headers:
+            Location:
+              description: URL of the newly created book
+              schema:
+                type: string
+                format: uri
+              example: /api/v1/books/42
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: A book with this ISBN already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 409
+                error: "Conflict"
+                message: "A book with ISBN '978-0385472579' already exists"
+                timestamp: "2026-02-23T10:30:00Z"
+                path: "/api/v1/books"
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+
+  /books/{bookId}:
+    # ── Path parameter applies to all operations on this path ─────────────
+    parameters:
+      - name: bookId
+        in: path
+        description: Unique identifier of the book
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+        example: 42
+
+    get:
+      tags: [Books]
+      summary: Get a book by ID
+      operationId: getBookById
+      responses:
+        '200':
+          description: Book found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags: [Books]
+      summary: Replace a book entirely (full update)
+      description: |
+        Replaces all fields of the book. You MUST include all fields.
+        Omitted fields will be set to null/default.
+        Use PATCH for partial updates.
+      operationId: replaceBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookRequest'
+      responses:
+        '200':
+          description: Book replaced successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags: [Books]
+      summary: Partially update a book
+      description: |
+        Updates only the fields provided in the request body.
+        Fields not included in the body are left unchanged.
+      operationId: updateBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookRequest'
+            example:
+              price: 29.99
+              inStock: false
+      responses:
+        '200':
+          description: Book updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [Books]
+      summary: Delete a book
+      operationId: deleteBook
+      responses:
+        '204':
+          description: Book deleted successfully (no response body)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /books/{bookId}/reviews:
+    parameters:
+      - name: bookId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 42
+
+    get:
+      tags: [Books]
+      summary: Get all reviews for a book (nested resource)
+      operationId: getBookReviews
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of reviews for the book
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Review'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    post:
+      tags: [Books]
+      summary: Submit a review for a book
+      operationId: createReview
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewRequest'
+            example:
+              rating: 5
+              title: "Essential reading for every developer"
+              body: "Clean Code transformed the way I think about writing software."
+      responses:
+        '201':
+          description: Review submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: User has already reviewed this book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ── AUTHORS ────────────────────────────────────────────────────────────────
+  /authors:
+    get:
+      tags: [Authors]
+      summary: Get all authors
+      operationId: getAllAuthors
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Paginated list of authors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Author'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+    post:
+      tags: [Authors]
+      summary: Create a new author
+      operationId: createAuthor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAuthorRequest'
+      responses:
+        '201':
+          description: Author created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /authors/{authorId}/books:
+    parameters:
+      - name: authorId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 1
+    get:
+      tags: [Authors]
+      summary: Get all books by a specific author
+      operationId: getBooksByAuthor
+      responses:
+        '200':
+          description: List of books by this author
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ── ORDERS ─────────────────────────────────────────────────────────────────
+  /orders:
+    get:
+      tags: [Orders]
+      summary: Get current user's orders
+      operationId: getMyOrders
+      parameters:
+        - name: status
+          in: query
+          description: Filter by order status
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrderStatus'
+      responses:
+        '200':
+          description: List of orders for the authenticated user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [Orders]
+      summary: Place a new order
+      operationId: placeOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+            example:
+              items:
+                - bookId: 1
+                  quantity: 2
+                - bookId: 5
+                  quantity: 1
+              shippingAddress:
+                street: "123 Main St"
+                city: "Anytown"
+                state: "CA"
+                zipCode: "90210"
+                country: "US"
+      responses:
+        '201':
+          description: Order placed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          description: One or more books are out of stock
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: 422
+                error: "Unprocessable Entity"
+                message: "Book 'The Pragmatic Programmer' (ID: 2) is out of stock"
+                timestamp: "2026-02-23T10:30:00Z"
+                path: "/api/v1/orders"
+
+  /orders/{orderId}/cancel:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        example: 7
+    post:
+      tags: [Orders]
+      summary: Cancel an order (action endpoint)
+      description: |
+        Cancels an order that has not yet been shipped.
+        This is an **action endpoint** — using POST with a verb in the path
+        is acceptable for operations that don't map cleanly to CRUD.
+      operationId: cancelOrder
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Optional reason for cancellation
+              example:
+                reason: "Ordered by mistake"
+      responses:
+        '200':
+          description: Order cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Order cannot be cancelled (already shipped or delivered)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPONENTS — Reusable schemas, responses, and security definitions
+# ─────────────────────────────────────────────────────────────────────────────
+components:
+
+  # ── SECURITY SCHEMES ────────────────────────────────────────────────────────
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token obtained from `POST /auth/login`.
+        Include in the Authorization header as: `Bearer <token>`
+
+  # ── REUSABLE RESPONSES ──────────────────────────────────────────────────────
+  responses:
+    BadRequest:
+      description: Bad Request — invalid input data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 400
+            error: "Bad Request"
+            message: "Validation failed: 'price' must be a positive number"
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books"
+
+    Unauthorized:
+      description: Unauthorized — missing or invalid authentication token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 401
+            error: "Unauthorized"
+            message: "Authentication token is missing or has expired"
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books"
+
+    Forbidden:
+      description: Forbidden — authenticated but insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 403
+            error: "Forbidden"
+            message: "You do not have permission to perform this action"
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books"
+
+    NotFound:
+      description: Not Found — resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 404
+            error: "Not Found"
+            message: "Book with ID 99 does not exist"
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books/99"
+
+    UnprocessableEntity:
+      description: Unprocessable Entity — semantically invalid data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 422
+            error: "Unprocessable Entity"
+            message: "publishedDate cannot be in the future"
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books"
+
+    InternalServerError:
+      description: Internal Server Error — unexpected server-side failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            status: 500
+            error: "Internal Server Error"
+            message: "An unexpected error occurred. Please try again later."
+            timestamp: "2026-02-23T10:30:00Z"
+            path: "/api/v1/books"
+
+  # ── SCHEMAS ──────────────────────────────────────────────────────────────────
+  schemas:
+
+    # ── Authentication ─────────────────────────────────────────────────────────
+    LoginRequest:
+      type: object
+      description: Credentials for authentication
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "alice@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: "s3cur3P@ssword"
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT access token (include as Bearer in Authorization header)
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        expiresIn:
+          type: integer
+          description: Token lifetime in seconds
+          example: 3600
+        user:
+          $ref: '#/components/schemas/UserSummary'
+
+    UserSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [CUSTOMER, ADMIN, LIBRARIAN]
+
+    # ── Book ───────────────────────────────────────────────────────────────────
+    Book:
+      type: object
+      description: Complete book representation returned by the API
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: System-generated unique identifier
+          example: 42
+        isbn:
+          type: string
+          pattern: '^978-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$'
+          description: ISBN-13 format
+          example: "978-0132350884"
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Clean Code"
+        description:
+          type: string
+          nullable: true
+          example: "A handbook of agile software craftsmanship"
+        genre:
+          $ref: '#/components/schemas/Genre'
+        price:
+          type: number
+          format: double
+          minimum: 0
+          example: 34.99
+        inStock:
+          type: boolean
+          default: true
+          example: true
+        publishedDate:
+          type: string
+          format: date
+          example: "2008-08-01"
+        author:
+          $ref: '#/components/schemas/AuthorSummary'
+        averageRating:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+          nullable: true
+          readOnly: true
+          example: 4.7
+        reviewCount:
+          type: integer
+          readOnly: true
+          example: 1823
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2026-01-15T09:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          example: "2026-02-20T14:30:00Z"
+
+    CreateBookRequest:
+      type: object
+      description: Request body for creating or fully replacing a book (POST/PUT)
+      required:
+        - isbn
+        - title
+        - genre
+        - price
+        - publishedDate
+        - authorId
+      properties:
+        isbn:
+          type: string
+          example: "978-0132350884"
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Clean Code"
+        description:
+          type: string
+          nullable: true
+        genre:
+          $ref: '#/components/schemas/Genre'
+        price:
+          type: number
+          format: double
+          minimum: 0
+          example: 34.99
+        inStock:
+          type: boolean
+          default: true
+        publishedDate:
+          type: string
+          format: date
+          example: "2008-08-01"
+        authorId:
+          type: integer
+          format: int64
+          description: ID of the existing author
+          example: 1
+
+    UpdateBookRequest:
+      type: object
+      description: |
+        Request body for partial book update (PATCH).
+        All fields are optional — only included fields are updated.
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        genre:
+          $ref: '#/components/schemas/Genre'
+        price:
+          type: number
+          format: double
+          minimum: 0
+        inStock:
+          type: boolean
+
+    # ── Author ─────────────────────────────────────────────────────────────────
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          example: 1
+        firstName:
+          type: string
+          example: "Robert"
+        lastName:
+          type: string
+          example: "Martin"
+        bio:
+          type: string
+          nullable: true
+          example: "Robert C. Martin is a software engineer and instructor."
+        website:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://cleancoder.com"
+        bookCount:
+          type: integer
+          readOnly: true
+          description: Number of books by this author in the catalog
+          example: 5
+
+    AuthorSummary:
+      type: object
+      description: Abbreviated author info embedded in book responses
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    CreateAuthorRequest:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+          example: "Martin"
+        lastName:
+          type: string
+          example: "Fowler"
+        bio:
+          type: string
+          nullable: true
+        website:
+          type: string
+          format: uri
+          nullable: true
+
+    # ── Review ─────────────────────────────────────────────────────────────────
+    Review:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        bookId:
+          type: integer
+          format: int64
+        reviewer:
+          $ref: '#/components/schemas/UserSummary'
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        title:
+          type: string
+          maxLength: 100
+          example: "Essential reading for every developer"
+        body:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+
+    CreateReviewRequest:
+      type: object
+      required:
+        - rating
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        title:
+          type: string
+          maxLength: 100
+        body:
+          type: string
+          maxLength: 2000
+
+    # ── Order ──────────────────────────────────────────────────────────────────
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        totalAmount:
+          type: number
+          format: double
+          readOnly: true
+          example: 74.97
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+        placedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+
+    OrderItem:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/Book'
+        quantity:
+          type: integer
+          minimum: 1
+          example: 2
+        unitPrice:
+          type: number
+          format: double
+          description: Price at time of purchase (may differ from current book price)
+          example: 34.99
+        subtotal:
+          type: number
+          format: double
+          readOnly: true
+          example: 69.98
+
+    CreateOrderRequest:
+      type: object
+      required:
+        - items
+        - shippingAddress
+      properties:
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required:
+              - bookId
+              - quantity
+            properties:
+              bookId:
+                type: integer
+                format: int64
+              quantity:
+                type: integer
+                minimum: 1
+                maximum: 99
+        shippingAddress:
+          $ref: '#/components/schemas/Address'
+
+    Address:
+      type: object
+      required:
+        - street
+        - city
+        - state
+        - zipCode
+        - country
+      properties:
+        street:
+          type: string
+          example: "123 Main St"
+        city:
+          type: string
+          example: "Anytown"
+        state:
+          type: string
+          example: "CA"
+        zipCode:
+          type: string
+          example: "90210"
+        country:
+          type: string
+          example: "US"
+
+    # ── Enums ──────────────────────────────────────────────────────────────────
+    Genre:
+      type: string
+      description: Book genre classification
+      enum:
+        - FICTION
+        - NONFICTION
+        - SCIENCE_FICTION
+        - MYSTERY
+        - BIOGRAPHY
+        - HISTORY
+        - SELF_HELP
+        - TECHNOLOGY
+        - CHILDREN
+      example: TECHNOLOGY
+
+    OrderStatus:
+      type: string
+      description: Current lifecycle status of an order
+      enum:
+        - PENDING
+        - CONFIRMED
+        - PROCESSING
+        - SHIPPED
+        - DELIVERED
+        - CANCELLED
+        - REFUNDED
+      example: PENDING
+
+    # ── Pagination ─────────────────────────────────────────────────────────────
+    PaginationMeta:
+      type: object
+      description: Metadata included with all paginated responses
+      properties:
+        total:
+          type: integer
+          description: Total number of records matching the filter
+          example: 150
+        page:
+          type: integer
+          description: Current page (0-indexed)
+          example: 0
+        size:
+          type: integer
+          description: Items per page
+          example: 20
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 8
+
+    PaginatedBooks:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+
+    # ── Error Response ─────────────────────────────────────────────────────────
+    ErrorResponse:
+      type: object
+      description: |
+        Standard error response format returned by all error status codes
+        (400, 401, 403, 404, 409, 422, 500, etc.)
+      required:
+        - status
+        - error
+        - message
+        - timestamp
+        - path
+      properties:
+        status:
+          type: integer
+          description: HTTP status code
+          example: 404
+        error:
+          type: string
+          description: HTTP status reason phrase
+          example: "Not Found"
+        message:
+          type: string
+          description: Human-readable explanation of the error
+          example: "Book with ID 99 does not exist"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred (ISO 8601)
+          example: "2026-02-23T10:30:00Z"
+        path:
+          type: string
+          description: The request path that triggered the error
+          example: "/api/v1/books/99"
+        details:
+          type: array
+          description: Field-level validation errors (present for 400/422 responses)
+          nullable: true
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "price"
+              rejectedValue:
+                type: string
+                nullable: true
+                example: "-5.00"
+              message:
+                type: string
+                example: "must be greater than 0"

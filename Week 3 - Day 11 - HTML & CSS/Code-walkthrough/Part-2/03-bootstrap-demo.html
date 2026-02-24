@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════════
+  DAY 11 — PART 2 | Bootstrap Basics & Grid System
+  ═══════════════════════════════════════════════════════════════════════════════
+  Bootstrap is a CSS framework: pre-built utility classes + components.
+  CDN: no install needed — just add the <link> and <script> tags.
+
+  Topics covered:
+    • CDN setup (CSS + JS bundle)
+    • Bootstrap 12-column grid system
+    • Responsive breakpoints (xs, sm, md, lg, xl, xxl)
+    • Containers (container, container-fluid, container-{breakpoint})
+    • Utility classes (spacing, colours, typography, display, flex)
+    • Common components (navbar, cards, badges, alerts, buttons, forms, modals)
+    • Bootstrap icons CDN
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 — Bootstrap Basics</title>
+
+  <!-- ── Bootstrap 5.3 CSS via CDN ─────────────────────────────────────────
+       This single <link> gives you the entire Bootstrap stylesheet.
+       No npm, no build step needed for learning purposes.
+       In production use npm install bootstrap and import in your bundler.
+       ─────────────────────────────────────────────────────────────────── -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
+
+  <!-- Bootstrap Icons (optional icon library) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+  />
+
+  <!-- Small custom overrides — real projects override variables via SCSS -->
+  <style>
+    .demo-box {
+      background: #e0e7ff;
+      border: 1px solid #6366f1;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      color: #3730a3;
+    }
+    .section-divider {
+      border-top: 2px solid #dee2e6;
+      margin: 3rem 0;
+    }
+    pre {
+      background: #f1f5f9;
+      padding: 0.75rem 1rem;
+      border-radius: 0.375rem;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SECTION 1 — Bootstrap Navbar Component
+       ══════════════════════════════════════════════════════════════════════ -->
+
+  <!--
+    Bootstrap class breakdown:
+      navbar             — base navbar styles
+      navbar-expand-lg   — hamburger menu below lg, horizontal above lg
+      navbar-dark        — light text/icons (for dark backgrounds)
+      bg-dark            — dark background color
+      sticky-top         — stays at top of viewport when scrolling
+  -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+
+      <!-- Brand / Logo -->
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="bi bi-code-slash me-2"></i>DevBootcamp
+      </a>
+
+      <!-- Hamburger toggle button (visible only on mobile) -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarMain"
+        aria-controls="navbarMain"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible nav links -->
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto gap-1">
+          <!-- ms-auto = margin-start: auto → pushes links to right -->
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#grid">Grid</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#utilities">Utilities</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#components">Components</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#forms">Forms</a>
+          </li>
+        </ul>
+        <a href="#" class="btn btn-primary btn-sm ms-3">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       SECTION 2 — Hero / Jumbotron
+       ══════════════════════════════════════════════════════════════════════ -->
+  <header class="bg-primary text-white py-5">
+    <div class="container text-center">
+      <h1 class="display-4 fw-bold mb-3">Bootstrap 5 Fundamentals</h1>
+      <p class="lead mb-4">
+        A CSS framework for building responsive, mobile-first websites faster.
+      </p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="#grid" class="btn btn-light btn-lg">
+          <i class="bi bi-grid-3x3-gap me-2"></i>Explore Grid
+        </a>
+        <a href="https://getbootstrap.com/docs/5.3" target="_blank" class="btn btn-outline-light btn-lg">
+          Docs
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main class="py-5">
+    <div class="container">
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SECTION 3 — The 12-Column Grid System
+           ══════════════════════════════════════════════════════════════════ -->
+      <section id="grid" class="mb-5">
+        <h2 class="mb-1">The 12-Column Grid</h2>
+        <p class="text-muted mb-4">
+          Bootstrap divides every row into 12 equal columns.
+          <code>col-4</code> = 4 of 12 = 33.33%.
+          Columns must be direct children of a <code>.row</code>.
+        </p>
+
+        <!-- ── 3a. Equal columns ────────────────────────────────────────── -->
+        <h5>Equal columns: <code>col</code> (auto-distribute)</h5>
+        <div class="row g-3 mb-4">
+          <div class="col"><div class="demo-box">col</div></div>
+          <div class="col"><div class="demo-box">col</div></div>
+          <div class="col"><div class="demo-box">col</div></div>
+        </div>
+
+        <!-- ── 3b. Fixed column widths ─────────────────────────────────── -->
+        <h5>Fixed widths: <code>col-4</code>, <code>col-8</code></h5>
+        <div class="row g-3 mb-4">
+          <div class="col-8"><div class="demo-box">col-8 (main content)</div></div>
+          <div class="col-4"><div class="demo-box">col-4 (sidebar)</div></div>
+        </div>
+
+        <!-- ── 3c. Responsive breakpoint classes ─────────────────────────
+             Breakpoints:
+               (no prefix) = xs: all screen sizes
+               sm: ≥576px
+               md: ≥768px
+               lg: ≥992px
+               xl: ≥1200px
+               xxl: ≥1400px
+        ─────────────────────────────────────────────────────────────────── -->
+        <h5>Responsive: stack on mobile, side-by-side on md+</h5>
+        <p class="text-muted small mb-2">
+          <code>col-12 col-md-6 col-lg-4</code> — resize browser window to see changes
+        </p>
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="demo-box">col-12 → col-md-6 → col-lg-4</div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="demo-box">col-12 → col-md-6 → col-lg-4</div>
+          </div>
+          <div class="col-12 col-md-12 col-lg-4">
+            <div class="demo-box">col-12 → col-md-12 → col-lg-4</div>
+          </div>
+        </div>
+
+        <!-- ── 3d. Offset ──────────────────────────────────────────────── -->
+        <h5>Offset: <code>offset-md-3</code></h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6 offset-md-3">
+            <div class="demo-box">col-md-6 offset-md-3 (centered)</div>
+          </div>
+        </div>
+
+        <!-- ── 3e. Gutters ────────────────────────────────────────────── -->
+        <h5>Gutter control: <code>g-0</code> to <code>g-5</code></h5>
+        <div class="row g-0 mb-2">
+          <div class="col"><div class="demo-box" style="border-radius:0">g-0 (no gap)</div></div>
+          <div class="col"><div class="demo-box" style="border-radius:0">g-0 (no gap)</div></div>
+          <div class="col"><div class="demo-box" style="border-radius:0">g-0 (no gap)</div></div>
+        </div>
+        <div class="row g-4 mb-4">
+          <div class="col"><div class="demo-box">g-4 gap</div></div>
+          <div class="col"><div class="demo-box">g-4 gap</div></div>
+          <div class="col"><div class="demo-box">g-4 gap</div></div>
+        </div>
+
+        <!-- ── 3f. Container types ─────────────────────────────────────── -->
+        <h5>Container types</h5>
+        <pre>
+.container          — fixed max-width, centered, grows at each breakpoint
+.container-fluid    — 100% width at all breakpoints
+.container-md       — 100% below md, then fixed max-width
+        </pre>
+
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SECTION 4 — Utility Classes
+           ══════════════════════════════════════════════════════════════════ -->
+      <section id="utilities" class="mb-5">
+        <h2 class="mb-4">Utility Classes</h2>
+
+        <!-- ── Spacing: m-* and p-* ─────────────────────────────────────
+             Scale: 0 = 0, 1 = 0.25rem, 2 = 0.5rem, 3 = 1rem,
+                    4 = 1.5rem, 5 = 3rem
+             Sides: t=top, b=bottom, s=start(left), e=end(right), x=horizontal, y=vertical
+        ─────────────────────────────────────────────────────────────────── -->
+        <h5>Spacing: <code>m-*</code> / <code>p-*</code></h5>
+        <div class="d-flex gap-2 mb-4 flex-wrap">
+          <div class="p-1 bg-primary text-white rounded">p-1</div>
+          <div class="p-2 bg-primary text-white rounded">p-2</div>
+          <div class="p-3 bg-primary text-white rounded">p-3</div>
+          <div class="p-4 bg-primary text-white rounded">p-4</div>
+          <div class="px-4 py-1 bg-success text-white rounded">px-4 py-1</div>
+          <div class="mt-3 p-2 bg-danger text-white rounded">mt-3 p-2</div>
+        </div>
+
+        <!-- ── Colours ───────────────────────────────────────────────── -->
+        <h5>Background & text colours</h5>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <span class="p-2 bg-primary text-white rounded">primary</span>
+          <span class="p-2 bg-secondary text-white rounded">secondary</span>
+          <span class="p-2 bg-success text-white rounded">success</span>
+          <span class="p-2 bg-danger text-white rounded">danger</span>
+          <span class="p-2 bg-warning text-dark rounded">warning</span>
+          <span class="p-2 bg-info text-dark rounded">info</span>
+          <span class="p-2 bg-light text-dark border rounded">light</span>
+          <span class="p-2 bg-dark text-white rounded">dark</span>
+        </div>
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <span class="text-primary fw-bold">text-primary</span>
+          <span class="text-success fw-bold">text-success</span>
+          <span class="text-danger fw-bold">text-danger</span>
+          <span class="text-muted">text-muted</span>
+        </div>
+
+        <!-- ── Typography ───────────────────────────────────────────── -->
+        <h5>Typography utilities</h5>
+        <div class="mb-4">
+          <p class="display-6">display-6 heading</p>
+          <p class="lead">lead — slightly larger introductory paragraph text</p>
+          <p class="fw-bold">fw-bold</p>
+          <p class="fw-light">fw-light</p>
+          <p class="fst-italic">fst-italic</p>
+          <p class="text-uppercase ls-2">text-uppercase</p>
+          <p class="text-truncate" style="max-width:200px">text-truncate: long text gets ellipsis here</p>
+        </div>
+
+        <!-- ── Display / Flex utilities ─────────────────────────────── -->
+        <h5>Display & Flex utilities</h5>
+        <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded mb-4">
+          <span class="fw-bold">d-flex justify-content-between align-items-center</span>
+          <button class="btn btn-sm btn-primary">Action</button>
+        </div>
+        <div class="d-none d-md-block p-2 bg-warning rounded mb-4">
+          Hidden on mobile, visible on md+: <code>d-none d-md-block</code>
+        </div>
+
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SECTION 5 — Components
+           ══════════════════════════════════════════════════════════════════ -->
+      <section id="components" class="mb-5">
+        <h2 class="mb-4">Common Components</h2>
+
+        <!-- ── Cards ────────────────────────────────────────────────────── -->
+        <h5>Cards</h5>
+        <div class="row g-4 mb-5">
+
+          <div class="col-md-4">
+            <div class="card h-100">
+              <img
+                src="https://via.placeholder.com/400x200?text=Java"
+                class="card-img-top"
+                alt="Java course thumbnail"
+              />
+              <div class="card-body">
+                <span class="badge bg-primary mb-2">Backend</span>
+                <h5 class="card-title">Java Full Stack</h5>
+                <p class="card-text text-muted">
+                  Master Java, Spring Boot, and REST APIs in 8 weeks.
+                </p>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">8 weeks</small>
+                <a href="#" class="btn btn-primary btn-sm">Enroll</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card h-100 border-success">
+              <div class="card-header bg-success text-white">
+                Most Popular
+              </div>
+              <div class="card-body">
+                <span class="badge bg-warning text-dark mb-2">Frontend</span>
+                <h5 class="card-title">React &amp; TypeScript</h5>
+                <p class="card-text text-muted">
+                  Build modern UIs with React hooks, Redux, and TypeScript.
+                </p>
+                <ul class="list-unstyled">
+                  <li><i class="bi bi-check-circle-fill text-success me-2"></i>React 18</li>
+                  <li><i class="bi bi-check-circle-fill text-success me-2"></i>TypeScript</li>
+                  <li><i class="bi bi-check-circle-fill text-success me-2"></i>Testing Library</li>
+                </ul>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">6 weeks</small>
+                <a href="#" class="btn btn-success btn-sm">Enroll</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="bi bi-cloud me-2 text-info"></i>DevOps &amp; Cloud
+                </h5>
+                <p class="card-text text-muted">
+                  Docker, Kubernetes, CI/CD pipelines, and AWS deployment.
+                </p>
+              </div>
+              <div class="card-footer d-flex justify-content-between align-items-center">
+                <span class="badge bg-secondary">Coming Soon</span>
+                <a href="#" class="btn btn-outline-primary btn-sm">Notify Me</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── Badges and Alerts ──────────────────────────────────────── -->
+        <h5>Badges</h5>
+        <div class="mb-4 d-flex flex-wrap gap-2">
+          <span class="badge bg-primary">Primary</span>
+          <span class="badge bg-secondary">Secondary</span>
+          <span class="badge bg-success">Success</span>
+          <span class="badge bg-danger">Danger</span>
+          <span class="badge bg-warning text-dark">Warning</span>
+          <span class="badge rounded-pill bg-info text-dark">Pill badge</span>
+          <button type="button" class="btn btn-primary position-relative">
+            Inbox
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              9+ <span class="visually-hidden">unread messages</span>
+            </span>
+          </button>
+        </div>
+
+        <h5>Alerts</h5>
+        <div class="alert alert-primary d-flex align-items-center" role="alert">
+          <i class="bi bi-info-circle-fill me-2"></i>
+          <div><strong>Info:</strong> New course materials available in your dashboard.</div>
+        </div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle me-2"></i>
+          <strong>Success!</strong> Your registration was submitted.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Error:</strong> Payment processing failed. Please try again.
+        </div>
+
+        <!-- ── Buttons ───────────────────────────────────────────────── -->
+        <h5 class="mt-4">Buttons</h5>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <button class="btn btn-primary">Primary</button>
+          <button class="btn btn-secondary">Secondary</button>
+          <button class="btn btn-success">Success</button>
+          <button class="btn btn-danger">Danger</button>
+          <button class="btn btn-warning">Warning</button>
+          <button class="btn btn-outline-primary">Outline</button>
+          <button class="btn btn-link">Link</button>
+          <button class="btn btn-primary btn-sm">Small</button>
+          <button class="btn btn-primary btn-lg">Large</button>
+          <button class="btn btn-primary" disabled>Disabled</button>
+        </div>
+
+        <!-- ── List Group ─────────────────────────────────────────────── -->
+        <h5 class="mt-4">List Group</h5>
+        <ul class="list-group list-group-flush mb-4" style="max-width: 400px">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            HTML &amp; CSS
+            <span class="badge bg-success rounded-pill">Complete</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center active">
+            JavaScript
+            <span class="badge bg-light text-dark rounded-pill">In Progress</span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            React
+            <span class="badge bg-secondary rounded-pill">Upcoming</span>
+          </li>
+        </ul>
+
+        <!-- ── Modal trigger ─────────────────────────────────────────── -->
+        <h5 class="mt-4">Modal (requires Bootstrap JS)</h5>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#demoModal"
+        >
+          <i class="bi bi-window me-2"></i>Open Modal
+        </button>
+
+        <!-- Modal HTML — can be placed anywhere in <body> -->
+        <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="demoModalLabel">
+                  <i class="bi bi-info-circle me-2"></i>Enroll Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>You are about to enroll in <strong>Java Full Stack</strong>. This will begin on the next available cohort start date.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Confirm Enrollment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- ══════════════════════════════════════════════════════════════════
+           SECTION 6 — Bootstrap Forms
+           ══════════════════════════════════════════════════════════════════ -->
+      <section id="forms" class="mb-5">
+        <h2 class="mb-4">Bootstrap Form Styling</h2>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <form class="p-4 border rounded bg-light" novalidate>
+              <h4 class="mb-4">Quick Registration</h4>
+
+              <!-- Floating labels (Bootstrap 5 feature) -->
+              <div class="form-floating mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="floatName"
+                  placeholder="Full Name"
+                  required
+                />
+                <label for="floatName">Full Name</label>
+              </div>
+
+              <div class="form-floating mb-3">
+                <input
+                  type="email"
+                  class="form-control"
+                  id="floatEmail"
+                  placeholder="name@example.com"
+                  required
+                />
+                <label for="floatEmail">Email address</label>
+              </div>
+
+              <!-- Input group (prefix/suffix add-ons) -->
+              <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">Username</label>
+                <div class="input-group">
+                  <span class="input-group-text">@</span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    placeholder="yourhandle"
+                  />
+                </div>
+              </div>
+
+              <!-- Select -->
+              <div class="mb-3">
+                <label for="bootTrack" class="form-label fw-semibold">Track</label>
+                <select class="form-select" id="bootTrack" required>
+                  <option value="">Choose...</option>
+                  <option value="java">Java Full Stack</option>
+                  <option value="react">React Frontend</option>
+                  <option value="devops">DevOps</option>
+                </select>
+              </div>
+
+              <!-- Checkbox -->
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="termsCheck" required />
+                <label class="form-check-label" for="termsCheck">
+                  I agree to the <a href="#">Terms &amp; Conditions</a>
+                </label>
+              </div>
+
+              <!-- Submit -->
+              <div class="d-grid">
+                <!-- d-grid makes button full width -->
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="bi bi-person-check me-2"></i>Create Account
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- ── Validation states ─────────────────────────────────────── -->
+          <div class="col-lg-6">
+            <div class="p-4 border rounded bg-light">
+              <h4 class="mb-4">Validation States</h4>
+
+              <div class="mb-3">
+                <label for="validInput" class="form-label">Valid input</label>
+                <input type="text" class="form-control is-valid" id="validInput" value="jane@example.com" />
+                <div class="valid-feedback">Looks good!</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="invalidInput" class="form-label">Invalid input</label>
+                <input type="text" class="form-control is-invalid" id="invalidInput" value="not-an-email" />
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="disabledInput" class="form-label">Disabled input</label>
+                <input type="text" class="form-control" id="disabledInput" value="read only" disabled />
+              </div>
+
+              <!-- Range -->
+              <div class="mb-3">
+                <label for="customRange" class="form-label">Custom range</label>
+                <input type="range" class="form-range" id="customRange" min="0" max="100" step="10" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>DevBootcamp</h5>
+          <p class="text-muted mb-0">Practical full-stack engineering education.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="text-muted mb-0">Built with Bootstrap 5.3 &mdash; Day 11 Demo</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── Bootstrap 5 JS Bundle (includes Popper for dropdowns/modals) ─────
+       Must go at END of body for best performance.
+       ──────────────────────────────────────────────────────────────────── -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmCUhniJwn8GdRBFNOfIj44wFNrX"
+    crossorigin="anonymous"
+  ></script>
+
+</body>
+</html>

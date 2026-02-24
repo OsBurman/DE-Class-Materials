@@ -1,0 +1,15 @@
+<!-- Exercise 05 Part A: *ngIf demo -->
+<div style="border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+  <h3>User Panel</h3>
+
+  <!-- TODO 2: Use *ngIf to show this paragraph ONLY when isLoggedIn is true -->
+  <p>Welcome back, {{ username }}! You are logged in.</p>
+
+  <!-- TODO 3: Use *ngIf to show this paragraph ONLY when isLoggedIn is false -->
+  <p>Please log in to continue.</p>
+
+  <!-- TODO 4: Bind (click)="toggle()" to this button.
+               Display "Log Out" when isLoggedIn is true, "Log In" when false.
+               Hint: use {{ isLoggedIn ? 'Log Out' : 'Log In' }} for the button text -->
+  <button (click)="toggle()">Toggle</button>
+</div>

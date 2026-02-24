@@ -1,0 +1,18 @@
+# Exercise 10 — ConfigMap Manifest Starter
+# Complete every TODO.
+
+# TODO: Set apiVersion to v1
+apiVersion: # TODO
+# TODO: Set kind to ConfigMap
+kind: # TODO
+
+metadata:
+  # TODO: Name the ConfigMap spring-config
+  name: # TODO
+  namespace: default
+
+data:
+  # TODO: Add key SPRING_PROFILES_ACTIVE with value production
+  # SPRING_PROFILES_ACTIVE: TODO
+  # TODO: Add key SERVER_PORT with value "8080"
+  # SERVER_PORT: TODO

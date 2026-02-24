@@ -1,0 +1,10 @@
+# Exclude files that are not needed in the Docker build context.
+# Keeping the context small speeds up docker build and avoids
+# accidentally bundling secrets or large development artifacts.
+
+.git
+*.md
+src/
+.mvn/
+mvnw
+mvnw.cmd

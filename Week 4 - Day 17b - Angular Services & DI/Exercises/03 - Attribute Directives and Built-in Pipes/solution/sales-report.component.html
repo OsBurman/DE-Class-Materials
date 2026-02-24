@@ -1,0 +1,32 @@
+<h2>Sales Report</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Units rounded</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="let sale of sales"
+      [ngClass]="{ 'featured': sale.featured, 'high-value': sale.amount > 1000 }">
+
+      <!-- [ngStyle] sets font-weight based on featured flag -->
+      <td [ngStyle]="{ 'font-weight': sale.featured ? 'bold' : 'normal' }">
+        {{ sale.product | uppercase }}
+      </td>
+
+      <!-- currency pipe: formats as $1,200.00 by default (USD) -->
+      <td>{{ sale.amount | currency }}</td>
+
+      <!-- date pipe with mediumDate format: Feb 10, 2026 -->
+      <td>{{ sale.date | date:'mediumDate' }}</td>
+
+      <!-- number pipe with 1.0-0: no decimal places, comma separator -->
+      <td>{{ sale.amount | number:'1.0-0' }}</td>
+    </tr>
+  </tbody>
+</table>
