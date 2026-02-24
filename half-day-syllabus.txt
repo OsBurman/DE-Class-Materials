@@ -1,10 +1,1342 @@
-I am teaching a class on software engineering and each day will consist of two lectures, each one hour long. I have created folders for each day. Each day has topics separated into two parts. I want you to create two hour long lectures with slides that I can say to the class. I want to have both the slides and the verbatim script for it. 
+# Full-Stack Training Syllabus (Half-Day Sessions)
 
-Each week/day folder should have its own Slides Folder and in the Slides folder, there should be a folder called Part 1 with the slide descriptions and slides for part 1 and another folder called Part 2 with the slides descriptions and slides script for part 2. 
+---
 
-When you're done creating it, I want you to review what you've created and see if there's anything I'm missing that a person learning about these topics and this subject should know or anything excessive/extra in it. When you're doing that, there is a half-day-syllabus.txt file where you can see upcoming lessons and that way you won't add anything we are covering in previous or next lessons. If you think there is something we should add or take out in the slides you just created, don't change anything just mention it to me. 
+## Week 1 — Foundations & Core Java
 
-Let's do the following week and day now with these topics:
+---
+
+### Week 1 - Day 1 (Monday): Foundations — Linux, Git, SDLC & Agile
+
+**Part 1:**
+- Linux OS fundamentals and basic commands
+- Shell scripting fundamentals
+- SDLC stages and Fullstack overview
+
+**Part 2:**
+- Source Control Management with Git (repos, branching, merging, pull requests, commits, version control workflow)
+- Agile & Scrum methodology (sprint planning, story pointing, Jira/project boards, ceremonies)
+
+**Learning Objectives:**
+- Navigate Linux file system and execute basic commands
+- Use Git for version control and collaboration
+- Understand SDLC phases and Agile principles
+- Participate in Agile ceremonies and use Jira for tracking
+- Apply Git branching strategies and resolve merge conflicts
+
+---
+
+### Week 1 - Day 2 (Tuesday): Core Java Fundamentals — Part 1
+
+**Part 1:**
+- JVM, JRE, and JDK architecture
+- Java primitives and data types
+- Variables, literals, and constants
+- Type conversion, casting, autoboxing, and unboxing
+
+**Part 2:**
+- Strings and String operations
+- StringBuilder and StringBuffer (mutability, performance in loops)
+- Mathematical, logical, and comparison operators
+- Comments and code documentation
+
+**Learning Objectives:**
+- Explain the relationship between JVM, JRE, and JDK
+- Declare and initialize variables with appropriate data types
+- Perform type conversions and casting operations
+- Work with String manipulation methods
+
+---
+
+### Week 1 - Day 3 (Wednesday): Core Java Fundamentals — Part 2
+
+**Part 1:**
+- Control flow statements (if-else, switch)
+- Loops (for, while, do-while, enhanced for)
+- Break and continue statements
+
+**Part 2:**
+- Arrays (declaration, initialization, iteration)
+- Multi-dimensional arrays
+- Common programming patterns
+
+**Learning Objectives:**
+- Implement control flow logic using conditional statements
+- Use loops effectively for iteration
+- Create and manipulate arrays
+- Apply control flow to solve programming problems
+
+---
+
+### Week 1 - Day 4 (Thursday): OOP — Part 1
+
+**Part 1:**
+- Classes and objects
+- Constructors (default, parameterized, constructor chaining)
+- Class members (fields and methods)
+
+**Part 2:**
+- Access modifiers (public, private, protected, default)
+- Non-access modifiers (static, final, abstract)
+- Static vs non-static members
+- The 'this' keyword
+
+**Learning Objectives:**
+- Design and implement classes with proper encapsulation
+- Create objects and invoke methods
+- Apply access modifiers appropriately
+- Differentiate between static and instance members
+
+---
+
+### Week 1 - Day 5 (Friday): OOP — Part 2
+
+**Part 1:**
+- Inheritance (extends keyword, super keyword)
+- Method overriding vs overloading
+- Polymorphism (compile-time and runtime)
+
+**Part 2:**
+- Abstraction (abstract classes and interfaces)
+- Encapsulation best practices
+- Packages and imports
+
+**Learning Objectives:**
+- Implement inheritance hierarchies
+- Apply polymorphism through interfaces and abstract classes
+- Override and overload methods appropriately
+- Organize code using packages
+
+---
+
+
+---
+
+## Week 2 — Advanced Java
+
+---
+
+### Week 2 - Day 6 (Monday): Collections & Generics
+**Part 1:**
+- Java Collections Framework overview
+- List, Set, Map, Queue interfaces and implementations
+- ArrayList, LinkedList, HashSet, TreeSet, HashMap, TreeMap, LinkedHashMap
+- Iterators and enhanced for loop
+
+**Part 2:**
+- Generics syntax and use cases
+- Bounded types and wildcards
+- Comparable vs Comparator
+- Collections utility methods (sort, reverse, shuffle, etc.)
+
+**Learning Objectives:**
+- Use core collection types and choose appropriate implementations
+- Iterate and manipulate collections
+- Apply generics for type safety
+- Implement sorting and comparison logic
+
+---
+
+### Week 2 - Day 7 (Tuesday): Exception Handling & I/O
+**Part 1:**
+- Exception hierarchy (checked vs unchecked)
+- try-catch-finally blocks
+- Custom exceptions
+- Throwing and catching exceptions
+
+**Part 2:**
+- File I/O basics (File, FileReader, FileWriter)
+- Buffered streams
+- try-with-resources
+- Reading/writing text files
+
+**Learning Objectives:**
+- Handle exceptions using try-catch-finally
+- Create and use custom exceptions
+- Perform file input/output operations
+- Use try-with-resources for resource management
+
+---
+
+### Week 2 - Day 8 (Wednesday): Lambdas, Streams & DateTime
+**Part 1:**
+- Lambda expressions syntax and use cases
+- Functional interfaces (Predicate, Function, Consumer, Supplier)
+- Method references
+- Optional class and avoiding null pointer exceptions
+
+**Part 2:**
+- Stream API basics (creation, intermediate, terminal operations)
+- Common stream operations (filter, map, reduce, collect)
+- Common Java APIs (DateTime API — LocalDate, LocalTime, LocalDateTime, DateTimeFormatter, Period, Duration)
+
+**Learning Objectives:**
+- Write lambda expressions for concise code
+- Use functional interfaces effectively
+- Apply Stream API for data processing
+- Handle nullable values using Optional
+- Work with the Java DateTime API for date and time operations
+
+---
+
+### Week 2 - Day 9 (Thursday): Multithreading
+**Part 1:**
+- Thread basics and Thread class
+- Runnable interface
+- Thread lifecycle and states
+- Synchronization and thread safety
+- Deadlock and livelock scenarios
+
+**Part 2:**
+- Producer-consumer problem
+- Concurrent collections
+- ExecutorService and thread pools
+- CompletableFuture basics and advanced usage
+- Core concurrency utilities (CountDownLatch, Semaphore, etc.)
+- ScheduledExecutorService
+- Awareness: ForkJoinPool, Virtual Threads (Project Loom)
+
+**Learning Objectives:**
+- Create and manage threads using Thread class and Runnable
+- Implement synchronization to prevent race conditions
+- Identify and prevent deadlock situations
+- Use thread pools for efficient resource management
+- Compose asynchronous workflows with CompletableFuture including error handling
+- Apply key concurrency utilities to coordinate threads and manage shared state
+
+---
+
+### Week 2 - Day 10 (Friday): Advanced Java
+**Part 1:**
+- Big O notation and algorithm complexity
+- Time and space complexity analysis
+- Common design patterns (Singleton, Factory, Builder, Observer, Strategy)
+- Java Memory Model (JMM), Stack vs Heap memory
+
+**Part 2:**
+- Garbage collection concepts and algorithms
+- JVM tuning basics
+- Reference types (strong, weak, soft, phantom)
+- File I/O fundamentals (Readers, Writers, BufferedReader, BufferedWriter, try-with-resources for I/O)
+- Serialization and deserialization
+- Debugging techniques and tools
+
+**Learning Objectives:**
+- Analyze algorithm complexity using Big O
+- Apply common design patterns appropriately
+- Understand memory allocation in Java
+- Explain garbage collection mechanisms
+- Perform basic file input/output operations
+- Debug Java applications effectively
+
+---
+
+## Week 3 — Frontend Foundations
+
+---
+
+### Week 3 - Day 11 (Monday): HTML & CSS
+**Part 1:**
+- HTML document structure and DOM
+- HTML tags and semantic markup
+- Elements and attributes (inline vs block)
+- Common HTML tags (headings, paragraphs, lists, links, images)
+- HTML tables and forms (input types, labels, buttons, validation)
+
+**Part 2:**
+- CSS fundamentals and syntax
+- CSS selectors (element, class, ID, attribute, pseudo)
+- CSS specificity and cascade
+- CSS Box Model (margin, padding, border, content)
+- CSS positioning (static, relative, absolute, fixed, sticky)
+- Flexbox and Grid layout systems
+- Responsive web design principles, media queries
+- CSS variables, animations, transitions
+- Bootstrap basics and grid system
+
+**Learning Objectives:**
+- Create well-structured HTML documents with semantic markup
+- Build accessible forms with proper validation
+- Apply CSS selectors and understand specificity
+- Implement layouts using Flexbox and Grid
+- Create responsive designs with media queries
+- Use Bootstrap for rapid UI development
+- Apply animations and transitions for better UX
+
+---
+
+### Week 3 - Day 12 (Tuesday): JavaScript Fundamentals
+**Part 1:**
+- JavaScript basics and syntax
+- Variables (var, let, const) and scope
+- Data types (primitives and objects)
+- Type coercion and type conversion
+- Arrays and array methods
+- Template literals
+
+**Part 2:**
+- Functions (declarations, expressions, arrow functions)
+- 'this' keyword and context
+- Closures and lexical scope
+- Hoisting
+- Strict mode
+- Truthy and falsy values
+- Control flow statements, loops, error handling basics
+
+**Learning Objectives:**
+- Declare variables with appropriate scope
+- Understand JavaScript data types and type coercion
+- Create and manipulate arrays
+- Write functions using different syntaxes
+- Understand closures and scope chains
+- Work with 'this' keyword in different contexts
+- Handle errors with try/catch
+
+---
+
+### Week 3 - Day 13 (Wednesday): DOM Manipulation & Events
+**Part 1:**
+- DOM (Document Object Model) overview
+- Selecting elements (getElementById, querySelector, etc.)
+- DOM manipulation (creating, modifying, removing elements)
+- DOM traversal
+- Modifying styles and classes
+- Working with attributes
+
+**Part 2:**
+- Events and event listeners
+- Event bubbling and capturing
+- Event delegation
+- Event object and properties
+- Preventing default behavior
+- Common event types (click, submit, keydown, input, load)
+- Building interactive page features
+
+**Learning Objectives:**
+- Explain the DOM tree structure and how it relates to HTML
+- Select and target DOM elements using various methods
+- Create, modify, and remove DOM elements dynamically
+- Traverse the DOM to navigate between elements
+- Handle user events with event listeners
+- Understand event bubbling, capturing, and delegation
+- Build interactive web page features using DOM and events
+
+---
+
+### Week 3 - Day 14 (Thursday): ES6+, OOP in JS & Async JavaScript
+**Part 1:**
+- Classes and prototypes
+- Prototype chain and inheritance
+- Constructor functions vs class syntax
+- Object-oriented JavaScript patterns
+- Default parameters, spread/rest operators, destructuring
+- Enhanced object literals
+- ES Modules (import/export), module bundling
+- Map and Set data structures
+- Brief overview: Symbol, Iterator, Generators, WeakMap, WeakSet, Proxy, Reflect
+
+**Part 2:**
+- Event loop and call stack
+- Synchronous vs asynchronous code
+- Callbacks and callback hell
+- Promises (creation, chaining, error handling)
+- Promise.all, Promise.race, Promise.allSettled
+- Async/await keywords
+- Error handling with async/await
+- Fetch API, Axios, working with Response objects
+- JSON parsing and stringification
+- Working with external APIs
+
+**Learning Objectives:**
+- Implement object-oriented patterns in JavaScript
+- Use classes and understand prototypal inheritance
+- Apply ES6+ features for cleaner code (spread/rest, destructuring, modules)
+- Work with Map and Set data structures
+- Understand the event loop and asynchronous execution model
+- Implement asynchronous operations using Promises
+- Use async/await for cleaner asynchronous code
+- Make HTTP requests using Fetch API and Axios
+- Work with JSON data from APIs
+- Handle errors in asynchronous code
+
+---
+
+### Week 3 - Day 15 (Friday): TypeScript
+**Part 1:**
+- TypeScript basics and benefits
+- Type annotations and inference
+- Simple types (string, number, boolean)
+- Special types (any, unknown, never, void)
+- Object types and interfaces
+- Union types and type aliases
+- Arrays and tuples
+- Enums
+- Type casting and assertions
+- Functions and function types
+
+**Part 2:**
+- Generics basics
+- Classes in TypeScript
+- Decorators overview (syntax, class and method decorators)
+- Compiler and tsconfig.json configuration
+- Utility types (Partial, Required, Readonly, Pick, Omit)
+- Type guards
+- Interface vs Type comparison
+
+**Learning Objectives:**
+- Write type-safe TypeScript code
+- Configure TypeScript compiler
+- Use interfaces and type aliases effectively
+- Apply generics for reusable code
+- Understand when to use Interface vs Type
+
+---
+
+## Week 4 — Frontend Frameworks (React / Angular Dual Track)
+
+---
+
+### Week 4 - Day 16a (Monday): React Fundamentals
+**Part 1:**
+- React overview and philosophy
+- Single Page Applications (SPA)
+- Virtual DOM concept
+- JSX syntax and rules
+- Component basics (functional vs class components)
+- Creating functional components
+
+**Part 2:**
+- Props and data flow
+- Lists and keys
+- Rendering and conditional rendering
+- Component composition
+
+**Learning Objectives:**
+- Explain React's Virtual DOM and reconciliation
+- Create functional components with JSX
+- Pass and receive props between components
+- Render lists with proper key attributes
+- Implement conditional rendering
+
+---
+
+### Week 4 - Day 16b (Monday): Angular Fundamentals
+**Part 1:**
+- Angular overview and architecture
+- Angular CLI and project structure
+- TypeScript in Angular context
+- Components and templates
+- Template syntax and expressions
+
+**Part 2:**
+- Data binding (interpolation, property, event, two-way)
+- Template reference variables
+- Component lifecycle hooks
+- Modules and NgModule
+- Directives basics (*ngIf, *ngFor)
+
+**Learning Objectives:**
+- Set up Angular projects using CLI
+- Create components with proper structure
+- Implement data binding techniques
+- Use structural directives for dynamic templates
+- Understand component lifecycle
+
+---
+
+### Week 4 - Day 17a (Tuesday): React Hooks
+**Part 1:**
+- State management with useState hook
+- Side effects and useEffect hook
+- Effect dependencies and cleanup
+- Event handling in React
+
+**Part 2:**
+- Forms and controlled components
+- Uncontrolled components and refs
+- useRef hook
+- useContext hook and Context API
+- Custom hooks
+- Component lifecycle in functional components
+
+**Learning Objectives:**
+- Manage component state with useState
+- Handle side effects with useEffect
+- Create controlled forms
+- Share state using Context API
+- Build custom hooks for reusable logic
+
+---
+
+### Week 4 - Day 17b (Tuesday): Angular Services & DI
+**Part 1:**
+- Component communication (@Input, @Output, EventEmitter)
+- Directives (structural and attribute)
+- *ngIf, *ngFor, *ngSwitch in depth
+- Pipes (built-in and custom)
+
+**Part 2:**
+- Creating custom pipes
+- Services and Dependency Injection
+- Providers and injector hierarchy
+- Creating and injecting services
+- Sharing data between components
+- Component encapsulation
+
+**Learning Objectives:**
+- Pass data between parent and child components
+- Use structural directives effectively
+- Create and apply custom pipes
+- Create and inject services
+- Share data across components using services
+
+---
+
+### Week 4 - Day 18a (Wednesday): React Routing & Redux
+**Part 1:**
+- React Router and navigation
+- Route parameters and query strings
+- Nested routes and layouts
+- Higher Order Components (HOC)
+
+**Part 2:**
+- Redux fundamentals (store, actions, reducers)
+- Redux Toolkit basics
+- Connecting React to Redux
+- useSelector and useDispatch hooks
+- Redux DevTools
+- State management patterns
+
+**Learning Objectives:**
+- Implement client-side routing with React Router
+- Manage global state with Redux
+- Create actions and reducers
+- Connect components to Redux store
+- Debug Redux state with DevTools
+
+---
+
+### Week 4 - Day 18b (Wednesday): Angular Routing & Forms
+**Part 1:**
+- Routing and navigation in Angular
+- RouterModule and route configuration
+- Route parameters and query parameters
+- Nested routes
+
+**Part 2:**
+- Route guards (CanActivate, CanDeactivate)
+- Lazy loading modules
+- Forms in Angular (template-driven)
+- Forms in Angular (reactive forms)
+- FormBuilder and FormControl
+- Form validation (built-in and custom validators)
+
+**Learning Objectives:**
+- Implement routing with multiple views
+- Protect routes with route guards
+- Implement lazy loading for performance
+- Build template-driven forms
+- Create reactive forms with validation
+
+---
+
+### Week 4 - Day 19a (Thursday): React API & Testing
+**Part 1:**
+- API integration with Fetch/Axios
+- Error handling and loading states
+- Response data handling
+- Error boundaries
+
+**Part 2:**
+- React Testing Library basics
+- Jest testing framework
+- Writing component tests
+- Testing hooks and state
+- Mock API calls in tests
+- Environment variables in React (.env files)
+
+**Learning Objectives:**
+- Integrate APIs and handle responses
+- Implement error boundaries for error handling
+- Write unit tests for React components
+- Test hooks and state changes
+- Mock API calls in tests
+- Use environment variables for configuration
+
+---
+
+### Week 4 - Day 19b (Thursday): Angular HTTP & RxJS
+**Part 1:**
+- HttpClient and HTTP requests
+- GET, POST, PUT, DELETE operations
+- HttpParams and HttpHeaders
+- Interceptors for request/response modification
+- Error handling with catchError
+
+**Part 2:**
+- RxJS Observables and operators
+- Common operators (map, filter, tap, switchMap, mergeMap)
+- RxJS Subjects (BehaviorSubject, ReplaySubject)
+- Unsubscribing and memory leaks prevention
+- Async pipe in templates
+
+**Learning Objectives:**
+- Make HTTP requests with HttpClient
+- Work with RxJS Observables and operators
+- Handle HTTP errors gracefully
+- Use interceptors for cross-cutting concerns
+- Prevent memory leaks with proper unsubscription
+
+---
+
+### Week 4 - Day 20a (Friday): React Advanced & Deployment
+**Part 1:**
+- Component composition patterns
+- Render props pattern
+- Compound components
+- Performance optimization (React.memo, useMemo, useCallback)
+
+**Part 2:**
+- Code splitting and lazy loading
+- Suspense and concurrent features
+- React DevTools
+- Building for production
+- Deployment strategies
+- Best practices and project structure
+
+**Learning Objectives:**
+- Apply advanced React patterns
+- Optimize component performance
+- Implement code splitting for faster loads
+- Build and deploy React applications
+- Follow React best practices
+
+---
+
+### Week 4 - Day 20b (Friday): Angular Signals & Testing
+**Part 1:**
+- Signals in Angular (Angular 16+)
+- Creating and using signals
+- Computed signals
+- Effects with signals
+- Signals vs Observables comparison
+
+**Part 2:**
+- Testing in Angular with Jasmine and Karma
+- Writing component tests
+- Testing services and HTTP calls
+- TestBed and component fixtures
+- Mocking dependencies in tests
+
+**Learning Objectives:**
+- Use Signals for reactive state management
+- Create computed values with signals
+- Write unit tests with Jasmine and Karma
+- Test components, services, and HTTP interactions
+- Mock dependencies effectively
+
+---
+
+## Week 5 — SQL, REST Tooling & Spring Foundations
+
+---
+
+### Week 5 - Day 21 (Monday): Database Fundamentals & Queries — Part 1
+**Part 1:**
+- Database fundamentals and RDBMS concepts
+- SQL basics and syntax
+- Data Query Language (DQL)
+- SELECT statements and query structure
+- WHERE clause and filtering
+- Logical operators (AND, OR, NOT)
+- LIKE, IN, BETWEEN operators
+- ORDER BY and sorting (ASC, DESC)
+- LIMIT and pagination
+- DISTINCT keyword
+
+**Part 2:**
+- Aggregate functions (COUNT, SUM, AVG, MIN, MAX)
+- GROUP BY clause and HAVING clause
+- Understanding table relationships
+- INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN
+- CROSS JOIN and Self joins
+- Multiple joins in single query
+- Subqueries (single-row, multi-row)
+- Correlated subqueries
+- EXISTS and NOT EXISTS
+- CASE statements for conditional logic
+- Calculated columns and expressions
+
+**Learning Objectives:**
+- Write complex SELECT queries with filtering and sorting
+- Use aggregate functions for data analysis
+- Join multiple tables to retrieve related data
+- Choose appropriate join types for requirements
+- Write subqueries and use CASE statements
+- Apply conditional logic with CASE statements
+
+---
+
+### Week 5 - Day 22 (Tuesday): SQL Database Design & Advanced Topics
+**Part 1:**
+- Data Definition Language (DDL)
+- CREATE, ALTER, DROP statements
+- Database and table creation
+- SQL data types
+- Constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK, DEFAULT)
+- Normalization (1NF, 2NF, 3NF)
+- Data modeling principles
+- Entity-Relationship (ER) diagrams
+
+**Part 2:**
+- INSERT, UPDATE, DELETE statements (DML)
+- Indexes and performance optimization
+- Index types and when to use them
+- Views and their use cases
+- Stored procedures and user-defined functions
+- Triggers and sequences
+- Transactions (BEGIN, COMMIT, ROLLBACK)
+- ACID properties
+- Isolation levels
+- Query optimization techniques
+- Execution plans
+- Database backup and recovery basics
+
+**Learning Objectives:**
+- Design normalized database schemas
+- Create tables with appropriate constraints
+- Perform DML operations (INSERT, UPDATE, DELETE)
+- Use indexes to optimize query performance
+- Write stored procedures and functions
+- Manage transactions for data consistency
+- Apply database design best practices
+- Optimize queries for better performance
+
+---
+
+### Week 5 - Day 23 (Wednesday): REST & API Tools
+**Part 1:**
+- HTTP protocol overview
+- HTTP methods (GET, POST, PUT, PATCH, DELETE)
+- HTTP request/response lifecycle
+- HTTP status codes (2xx, 3xx, 4xx, 5xx)
+- HTTP headers (Content-Type, Authorization, etc.)
+- RESTful API principles and best practices
+- Resource naming conventions
+- API versioning strategies
+
+**Part 2:**
+- Postman interface and features
+- Creating and organizing API requests
+- Environment variables in Postman
+- Collections and test automation
+- API testing and validation
+- Response assertions
+- Swagger/OpenAPI specification
+- API documentation with Swagger
+- Swagger UI for API exploration
+- Defining paths, operations, and parameters
+- Request/response schemas and models
+- Error handling and status codes in APIs
+- Exception handling patterns
+
+**Learning Objectives:**
+- Understand HTTP protocol and methods
+- Design RESTful APIs following best practices
+- Test APIs using Postman with collections
+- Document APIs with Swagger/OpenAPI
+- Handle errors and exceptions in APIs
+- Validate API responses and status codes
+
+---
+
+### Week 5 - Day 24 (Thursday): Maven, Gradle & Spring Core
+**Part 1:**
+- Build automation concepts
+- Maven: Project Object Model (POM), directory structure
+- Maven lifecycle phases (compile, test, package, install, deploy)
+- Dependency management and Maven Central Repository
+- Maven plugins and goals
+- Gradle: Build scripts (Groovy/Kotlin DSL)
+- Gradle tasks and build configuration
+- Dependency management in Gradle
+- Comparing Maven vs Gradle
+- Coding standards and best practices
+- Naming conventions for classes, methods, variables
+- File organization and package structure
+- Code comments and documentation
+
+**Part 2:**
+- Spring Framework overview and architecture
+- Inversion of Control (IoC) principle
+- Dependency Injection concepts
+- Constructor, setter, field injection
+- XML-based and Java-based configuration
+- Spring Beans and Bean lifecycle
+- Component scanning and stereotypes
+- @Autowired annotation and auto-wiring
+- Bean scopes (singleton, prototype, request, session)
+- Lombok overview and usage in Spring projects
+
+**Learning Objectives:**
+- Create and configure Maven projects with pom.xml
+- Execute Maven lifecycle commands
+- Set up Gradle projects with build.gradle
+- Manage project dependencies using build tools
+- Apply coding standards and naming conventions
+- Understand IoC and Dependency Injection principles
+- Configure Spring applications with Java or XML
+- Create and manage Spring beans
+- Use component scanning and auto-wiring
+- Choose appropriate bean scopes for use cases
+- Use Lombok to reduce boilerplate safely in Spring projects
+
+---
+
+### Week 5 - Day 25 (Friday): Spring Boot
+**Part 1:**
+- Spring Boot overview and advantages
+- Spring Initializr for project setup
+- Spring Boot starters (Web, Data JPA, Security, etc.)
+- Auto-configuration mechanism
+- Application properties and YAML configuration
+- Profiles for environment-specific config
+
+**Part 2:**
+- Spring Boot Actuator for monitoring
+- Embedded servers (Tomcat, Jetty)
+- DevTools for development productivity
+- Building and packaging Spring Boot applications
+- Running Spring Boot applications
+- Observability foundations with Actuator & Micrometer
+- Awareness of OpenTelemetry exporters (high-level)
+
+**Learning Objectives:**
+- Set up Spring Boot projects using Initializr
+- Understand auto-configuration and starters
+- Configure applications using properties/YAML
+- Use profiles for different environments
+- Monitor applications with Actuator
+- Package and run Spring Boot applications
+- Explain how Spring Boot exposes metrics/health and how tracing can be exported (conceptual)
+
+---
+
+## Week 6 — Spring Ecosystem, Testing & Security
+
+---
+
+### Week 6 - Day 26 (Monday): Spring MVC & Spring AOP
+**Part 1:**
+- Spring MVC architecture and components
+- DispatcherServlet and request processing
+- Controllers and @Controller annotation
+- @RestController for REST APIs
+- Request mapping (@RequestMapping, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping)
+- Request parameters (@RequestParam), Path variables (@PathVariable)
+- Request body (@RequestBody), Response body (@ResponseBody)
+- ResponseEntity class for custom responses
+- HTTP headers and status codes
+- Service layer pattern, Repository layer pattern
+- Validation with Bean Validation API (@Valid, @NotNull, @Size, etc.)
+- Custom validators
+- Exception handling and error responses
+- WebSocket support in Spring (brief overview)
+- DTOs vs Entities, object mapping strategies (manual, MapStruct, ModelMapper awareness)
+- CORS basics in Spring MVC
+
+**Part 2:**
+- Aspect-Oriented Programming (AOP) concepts
+- Cross-cutting concerns (logging, security, transactions)
+- Spring AOP vs AspectJ
+- Join points and pointcuts
+- Advice types (before, after, around, after-returning, after-throwing)
+- @Aspect annotation, pointcut expressions
+- Logging with Logback and SLF4J
+- AOP for method execution time tracking
+- Transaction management with AOP
+- Code review best practices, error handling strategies
+- Debugging Spring applications
+
+**Learning Objectives:**
+- Build REST APIs with Spring MVC
+- Map HTTP requests to controller methods
+- Extract request parameters and path variables
+- Validate request data with annotations
+- Return appropriate HTTP responses with status codes
+- Organize code into controller, service, and repository layers
+- Design and use DTOs; map between DTOs and entities using MapStruct (and understand ModelMapper trade-offs)
+- Understand AOP concepts and terminology
+- Implement cross-cutting concerns with Spring AOP
+- Write pointcut expressions for method interception
+- Configure logging with Logback
+- Apply AOP for transaction management
+- Follow Spring development best practices
+
+---
+
+### Week 6 - Day 27 (Tuesday): Spring Data JPA
+**Part 1:**
+- Spring Data overview and benefits
+- Spring Data repositories (CrudRepository, JpaRepository)
+- Repository interfaces and automatic implementation
+- CRUD operations with repositories
+- Query methods and property expressions
+- Custom query methods by naming convention
+- @Query annotation for JPQL and native SQL
+- Pagination and sorting
+- Data Access Object (DAO) pattern
+- Transaction management (@Transactional)
+
+**Part 2:**
+- Hibernate ORM fundamentals
+- JPA vs Hibernate
+- Entity classes and @Entity annotation
+- Primary keys (@Id, @GeneratedValue)
+- Column mappings (@Column), Table mappings (@Table)
+- Relationships (@OneToOne, @OneToMany, @ManyToOne, @ManyToMany)
+- Fetch types (EAGER vs LAZY), Cascade operations
+- Hibernate Query Language (HQL), Java Persistence Query Language (JPQL)
+- Criteria API basics
+
+**Learning Objectives:**
+- Create Spring Data JPA repositories
+- Perform database operations using repository methods
+- Write custom queries with JPQL and native SQL
+- Map Java entities to database tables with Hibernate
+- Define entity relationships and associations
+- Manage transactions effectively
+- Query databases using HQL and JPQL
+
+---
+
+### Week 6 - Day 28 (Wednesday): Testing
+**Part 1:**
+- Test Driven Development (TDD) principles
+- Red-Green-Refactor cycle
+- Unit testing fundamentals and importance
+- JUnit 5 architecture (Jupiter, Platform, Vintage)
+- Writing test classes and methods
+- @Test annotation, assertions
+- Test lifecycle annotations (@BeforeEach, @AfterEach, @BeforeAll, @AfterAll)
+- @DisplayName for readable test names
+- Parameterized tests (@ParameterizedTest)
+- Test suites and organization
+- Code coverage metrics (line coverage, branch coverage)
+- Arrange-Act-Assert pattern
+
+**Part 2:**
+- Mocking concepts and benefits
+- Mockito framework basics
+- Creating mocks with @Mock and @InjectMocks
+- Stubbing methods with when().thenReturn()
+- Verifying interactions with verify()
+- Argument matchers (any(), eq())
+- Testing Spring Boot applications (@SpringBootTest, @WebMvcTest)
+- MockMvc for testing REST controllers
+- Integration testing basics (@DataJpaTest, @SpringBootTest with test profiles)
+- Achieving >85% test coverage
+- Testcontainers for integration tests
+- WireMock for mocking external HTTP services
+
+**Learning Objectives:**
+- Implement Test Driven Development workflow
+- Write unit tests with JUnit 5
+- Use assertions to verify expected behavior
+- Mock dependencies with Mockito
+- Test Spring Boot REST APIs with MockMvc
+- Understand the difference between unit and integration tests
+- Achieve high test coverage in projects
+- Organize and maintain test suites
+- Run realistic integration tests with Testcontainers
+- Mock external APIs and failure modes using WireMock
+
+---
+
+### Week 6 - Day 29 (Thursday): Spring Security & OWASP
+**Part 1:**
+- Secure coding fundamentals and principles
+- OWASP Top 10 vulnerabilities overview
+- Injection attacks (SQL injection, command injection)
+- Broken authentication and session management
+- Cross-Site Scripting (XSS)
+- Cross-Site Request Forgery (CSRF)
+- Security misconfiguration
+- Sensitive data exposure
+
+**Part 2:**
+- Spring Security overview and architecture
+- Authentication vs Authorization
+- SecurityFilterChain configuration
+- In-memory authentication
+- Database authentication with UserDetailsService
+- Password encoding (BCryptPasswordEncoder)
+- Authentication providers
+- Security configuration with @EnableWebSecurity
+- CSRF protection configuration
+
+**Learning Objectives:**
+- Identify and prevent OWASP Top 10 vulnerabilities
+- Apply secure coding practices
+- Configure Spring Security for applications
+- Implement authentication mechanisms
+- Encode passwords securely
+- Protect against CSRF attacks
+
+---
+
+### Week 6 - Day 30 (Friday): JWT & RBAC
+**Part 1:**
+- JSON Web Tokens (JWT) structure and claims
+- JWT authentication flow
+- Generating and validating JWTs
+- Token-based authentication vs session-based
+- JWT with Spring Security implementation
+- Custom authentication filters
+
+**Part 2:**
+- Role-Based Access Control (RBAC)
+- Method-level security (@PreAuthorize, @Secured)
+- URL-based security with antMatchers
+- Custom authorization logic
+- Security context and SecurityContextHolder
+- Handling authentication failures
+- Security best practices for REST APIs
+- HTTPS and secure communication
+- API keys and token management
+- Rate limiting and throttling concepts
+
+**Learning Objectives:**
+- Implement JWT authentication in Spring Boot
+- Generate and validate JWT tokens
+- Configure role-based access control
+- Secure REST endpoints with Spring Security
+- Apply method-level security annotations
+- Follow security best practices for web applications
+
+---
+
+## Week 7 — GraphQL, AI & MongoDB
+
+---
+
+### Week 7 - Day 31 (Monday): GraphQL
+**Part 1:**
+- GraphQL overview and benefits vs REST
+- GraphQL schema and type system
+- Schema Definition Language (SDL)
+- Types and scalars (String, Int, Boolean, Float, ID)
+- Object types and fields
+- Queries and query syntax
+- Mutations for data modification
+- Subscriptions for real-time updates
+
+**Part 2:**
+- Arguments and variables
+- Aliases for multiple fields
+- Fragments for reusable query parts
+- GraphQL server implementation in Java/Spring Boot
+- GraphQL Java libraries (GraphQL Java, Spring for GraphQL)
+- Resolvers and data fetching
+- GraphQL schema design best practices
+
+**Learning Objectives:**
+- Understand GraphQL fundamentals and architecture
+- Define GraphQL schemas with types and fields
+- Write GraphQL queries with variables and fragments
+- Build GraphQL servers with Java/Spring Boot
+- Implement resolvers for queries and mutations
+- Compare GraphQL benefits and trade-offs vs REST
+
+---
+
+### Week 7 - Day 32 (Tuesday): GraphQL Client
+**Part 1:**
+- GraphQL client libraries overview
+- Apollo Client for React
+- GraphQL clients for Angular (Apollo Angular)
+- Consuming GraphQL APIs from frontend
+- Query execution and response handling
+- Mutations from client applications
+- Error handling in GraphQL
+
+**Part 2:**
+- Caching strategies
+- Batching and request optimization
+- Testing GraphQL APIs in Postman
+- GraphQL Playground usage
+- GraphiQL for API exploration
+- Writing and debugging GraphQL queries
+- Field selection and nested queries
+- Performance optimization (N+1 problem, DataLoader)
+
+**Learning Objectives:**
+- Integrate GraphQL clients in React/Angular applications
+- Execute queries and mutations from frontend
+- Test GraphQL APIs using Postman and Playground
+- Handle errors and optimize GraphQL requests
+- Implement efficient data fetching strategies
+- Debug and troubleshoot GraphQL operations
+
+---
+
+### Week 7 - Day 33 (Wednesday): AI & Developer Productivity
+**Part 1:**
+- AI and Machine Learning fundamentals
+- Machine Learning (ML) vs Deep Learning (DL)
+- Supervised vs Unsupervised learning
+- Training vs Inference
+- Neural networks basics (neurons, layers, activation functions)
+- Transformers architecture overview
+- Tokens and tokenization
+- Embeddings and vector representations
+- Attention mechanisms
+- Large Language Models (LLMs) overview
+
+**Part 2:**
+- Prompting and prompt engineering basics
+- Few-shot learning and in-context learning
+- Agentic AI concepts and capabilities
+- Planning and reasoning in AI agents
+- Tool calling and function calling
+- Multi-step workflows with agents
+- Retrieval-Augmented Generation (RAG) fundamentals
+- Vector databases for embeddings (Pinecone, Weaviate, ChromaDB)
+- Retrieval pipelines and strategies
+- Grounding responses with context
+- Hallucination reduction techniques
+- Structured outputs from LLMs
+- JSON mode and schema enforcement
+- Chain-of-thought prompting
+- AI Developer Tools overview (GitHub Copilot, Copilot Chat, MCP server integration)
+- Secure API and database access via MCP
+- Code reviews and automation with AI
+
+**Learning Objectives:**
+- Understand AI/ML fundamentals and terminology
+- Differentiate between ML and DL approaches
+- Explain neural networks and transformer architecture
+- Understand how LLMs process and generate text
+- Write effective prompts for AI models
+- Apply few-shot learning techniques
+- Understand agentic AI and autonomous agents
+- Implement tool calling for AI agents
+- Build RAG pipelines for grounded responses
+- Use vector databases for semantic search
+- Reduce hallucinations with proper grounding
+- Extract structured data from LLM responses
+- Use GitHub Copilot for productivity
+- Integrate MCP servers for secure AI access
+- Apply AI tools throughout development lifecycle
+
+---
+
+### Week 7 - Day 34 (Thursday): Spring AI
+**Part 1:**
+- Spring AI overview and architecture
+- ChatModel and EmbeddingModel interfaces
+- PromptTemplate for dynamic prompts
+- Model integrations (OpenAI, Azure OpenAI, Anthropic, etc.)
+- @AiService annotation for AI-powered services
+- Building AI features in Spring Boot applications
+- Implementing chatbots and conversational interfaces
+
+**Part 2:**
+- Function calling with Spring AI
+- Structured output generation
+- RAG implementation with Spring AI
+- Vector store integration
+- AI model configuration and best practices
+- Error handling and fallback strategies
+- Monitoring and logging AI interactions
+
+**Learning Objectives:**
+- Integrate Spring AI into Spring Boot applications
+- Create AI-powered services with ChatModel
+- Build conversational interfaces with Spring AI
+- Implement function calling in Spring AI
+- Build RAG systems with Spring AI and vector stores
+- Configure and manage AI model integrations
+- Handle errors and implement fallback strategies
+
+---
+
+### Week 7 - Day 35 (Friday): MongoDB
+**Part 1:**
+- NoSQL database overview and types
+- SQL vs NoSQL comparison
+- MongoDB architecture and concepts
+- Document-oriented data model
+- BSON (Binary JSON) format
+- Collections and documents
+- ObjectId and document identifiers
+- MongoDB installation and setup
+- MongoDB shell (mongosh) basics
+
+**Part 2:**
+- CRUD operations in MongoDB (insert, find, update, delete)
+- Query operators ($eq, $gt, $lt, $in, $regex, etc.)
+- Aggregation framework and pipeline stages ($match, $group, $project, $lookup, $unwind)
+- Indexes in MongoDB
+- MongoDB Atlas (cloud-hosted MongoDB overview)
+- MongoDB with Spring Boot (Spring Data MongoDB)
+
+**Learning Objectives:**
+- Understand NoSQL concepts and use cases
+- Perform CRUD operations using MongoDB shell
+- Write MongoDB queries with operators
+- Design document schemas for applications
+- Integrate MongoDB with Spring Boot applications
+
+---
+
+## Week 8 — DevOps, Microservices & Cloud
+
+---
+
+### Week 8 - Day 36 (Monday): Docker & Kubernetes
+**Part 1:**
+- Docker overview and benefits
+- Containerization concepts
+- Docker architecture (client-server model)
+- Docker images vs containers
+- Dockerfile structure and instructions
+- Building Docker images
+- Docker CLI commands (run, ps, images, stop, rm, rmi)
+- Docker Registry and DockerHub
+- Publishing and pulling images
+- Container networking basics
+- Docker volumes for data persistence
+- Docker Compose for multi-container applications
+- Best practices for containerizing Spring Boot applications
+- Multi-stage Docker builds
+
+**Part 2:**
+- Kubernetes (K8s) overview
+- K8s architecture (master node, worker nodes)
+- Pods, Services, Deployments
+- ReplicaSets and scaling
+- ConfigMaps and Secrets
+- Kubectl CLI basics
+- Creating and managing deployments
+- Exposing services (ClusterIP, NodePort, LoadBalancer)
+- Container orchestration concepts
+- Scaling and self-healing
+- Rolling updates and rollbacks
+
+**Learning Objectives:**
+- Containerize applications using Docker
+- Write Dockerfiles for Java/Spring Boot apps
+- Build and run Docker containers
+- Push images to Docker registry
+- Use Docker Compose for multi-container applications
+- Understand Kubernetes architecture and components
+- Deploy applications to Kubernetes clusters
+- Create and manage pods, services, and deployments
+- Scale applications and implement rolling updates
+
+---
+
+### Week 8 - Day 37 (Tuesday): CI/CD & DevOps
+**Part 1:**
+- Continuous Integration/Continuous Delivery (CI/CD) overview
+- DevOps principles and culture
+- "Shift left" mentality in testing and deployment
+- CI/CD pipeline stages (build, test, deploy)
+- Build automation integration (Maven/Gradle in pipelines)
+- Automated testing in pipelines (unit, integration, smoke tests)
+- Code quality gates and static analysis
+- Artifact management and versioning
+
+**Part 2:**
+- Deployment strategies (blue-green, canary, rolling updates)
+- Infrastructure as Code (IaC) concepts
+- Environment management (dev, staging, production)
+- Monitoring, logging, and observability basics
+- Application health checks and alerting
+- Containerized deployments in CI/CD pipelines
+- GitHub Actions / Jenkins pipeline basics
+- Best practices for CI/CD in team environments
+- Observability & tracing in pipelines (high level): exporting metrics/logs, awareness of OpenTelemetry collectors and tracing propagation across services
+
+**Learning Objectives:**
+- Understand CI/CD principles and workflows
+- Explain DevOps culture and "shift left" mentality
+- Design CI/CD pipeline stages for build, test, and deploy
+- Integrate automated testing into CI/CD pipelines
+- Apply deployment strategies (blue-green, canary, rolling updates)
+- Understand Infrastructure as Code concepts
+- Configure basic CI/CD pipelines with GitHub Actions or Jenkins
+- Implement monitoring and logging for deployed applications
+- Describe where distributed tracing fits into observability
+
+---
+
+### Week 8 - Day 38 (Wednesday): Microservices
+**Part 1:**
+- Microservices overview and principles
+- Monolithic vs Microservices architecture
+- Advantages of microservices (scalability, independence, technology diversity)
+- Disadvantages of microservices (complexity, distributed systems challenges)
+- Microservices design patterns
+- Service decomposition strategies
+- API Gateway pattern
+- Service discovery (Eureka, Consul)
+- Load balancing
+
+**Part 2:**
+- Circuit breaker pattern (Resilience4j)
+- Command Query Responsibility Segregation (CQRS)
+- Event sourcing
+- Database per service pattern
+- Communication patterns (synchronous REST, asynchronous messaging)
+- Microservices best practices
+- Containerization for microservices
+- Distributed tracing concepts: traces, spans, context propagation
+- OpenTelemetry with Spring (awareness): instrumentation, exporters (Jaeger/Zipkin), correlation IDs
+
+**Learning Objectives:**
+- Understand microservices architecture principles
+- Compare microservices vs monolithic approaches
+- Design simple microservices that communicate via REST
+- Apply microservices design patterns
+- Implement service discovery and load balancing
+- Understand CQRS pattern and use cases
+- Explain distributed tracing and how it helps debug cross-service requests
+
+---
+
+### Week 8 - Day 39 (Thursday): Kafka
+**Part 1:**
+- Event-driven architecture fundamentals
+- Messaging patterns (pub/sub, point-to-point)
+- Apache Kafka overview and use cases
+- Kafka architecture (brokers, topics, partitions, replicas)
+- Producers and consumers
+- Consumer groups and load balancing
+- Kafka CLI fundamentals
+- Creating topics
+- Producing messages
+- Consuming messages
+
+**Part 2:**
+- Kafka clusters and replication
+- Offset management
+- Message ordering guarantees
+- Kafka with Spring Boot (Spring Kafka)
+- Producer development with KafkaTemplate
+- Consumer development with @KafkaListener
+- Error handling and retry mechanisms
+- Dead letter topics
+- Serialization and deserialization
+
+**Learning Objectives:**
+- Understand event-driven paradigm and benefits
+- Explain Kafka architecture and components
+- Create producers and consumers using Kafka CLI
+- Integrate Kafka with Spring Boot applications
+- Implement error handling for message processing
+- Design event-driven microservices communication
 
 ---
 
