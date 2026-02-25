@@ -12,11 +12,11 @@ import java.math.BigDecimal;
  * DTO for creating or updating a product.
  *
  * TODO Task 2: Add the following validation annotations:
- *   - name:          @NotBlank(message = "Name is required")
- *   - description:   @Size(max = 500)
- *   - price:         @NotNull + @DecimalMin(value = "0.0", inclusive = false)
- *   - stockQuantity: @Min(0)
- *   - category:      @NotBlank
+ * - name: @NotBlank(message = "Name is required")
+ * - description: @Size(max = 500)
+ * - price: @NotNull + @DecimalMin(value = "0.0", inclusive = false)
+ * - stockQuantity: @Min(0)
+ * - category: @NotBlank
  */
 @Data
 public class ProductRequestDto {

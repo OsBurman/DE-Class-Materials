@@ -26,14 +26,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // Page<Post> findByStatus(Post.Status status, Pageable pageable);
 
     // TODO Task 5d: JPQL search in title OR content
-    // @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.content LIKE %:keyword%")
+    // @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.content LIKE
+    // %:keyword%")
     // List<Post> search(@Param("keyword") String keyword);
 
     // TODO Task 5e: Native SQL — find N most recent posts
-    // @Query(value = "SELECT * FROM posts ORDER BY published_at DESC LIMIT :n", nativeQuery = true)
+    // @Query(value = "SELECT * FROM posts ORDER BY published_at DESC LIMIT :n",
+    // nativeQuery = true)
     // List<Post> findTopNRecent(@Param("n") int n);
 
-    // TODO Task 9 (N+1 fix): JOIN FETCH to load posts with their authors in one query
+    // TODO Task 9 (N+1 fix): JOIN FETCH to load posts with their authors in one
+    // query
     // @Query("SELECT p FROM Post p JOIN FETCH p.author WHERE p.status = :status")
     // List<Post> findPublishedWithAuthor(@Param("status") Post.Status status);
 }

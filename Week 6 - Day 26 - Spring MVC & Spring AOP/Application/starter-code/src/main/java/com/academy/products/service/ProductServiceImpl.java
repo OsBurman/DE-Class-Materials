@@ -28,15 +28,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductResponseDto> getAllProducts(String category) {
         // TODO: if category != null, call repository.findByCategory(category)
-        //       otherwise call repository.findAll()
-        //       map each Product → ProductResponseDto using toResponseDto()
+        // otherwise call repository.findAll()
+        // map each Product → ProductResponseDto using toResponseDto()
         return List.of();
     }
 
     @Override
     public ProductResponseDto getProductById(Long id) {
         // TODO: find by id or throw ProductNotFoundException(id)
-        //       then map to DTO
+        // then map to DTO
         return null;
     }
 
@@ -49,8 +49,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto updateProduct(Long id, ProductRequestDto dto) {
         // TODO: find existing product (throw if not found)
-        //       update all fields from dto
-        //       save and return DTO
+        // update all fields from dto
+        // save and return DTO
         return null;
     }
 

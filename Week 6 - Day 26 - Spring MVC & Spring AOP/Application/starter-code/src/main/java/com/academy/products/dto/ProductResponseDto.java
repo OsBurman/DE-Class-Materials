@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
  * DTO returned in API responses.
  *
  * TODO Task 3: Add a formattedPrice field (String, e.g., "$19.99")
- *   - Use BigDecimal.setScale(2) and String.format("$%.2f", price)
- *   - Compute it in the constructor or a static factory method
- *   - No setter — immutable response DTO
+ * - Use BigDecimal.setScale(2) and String.format("$%.2f", price)
+ * - Compute it in the constructor or a static factory method
+ * - No setter — immutable response DTO
  */
 @Getter
 @Builder

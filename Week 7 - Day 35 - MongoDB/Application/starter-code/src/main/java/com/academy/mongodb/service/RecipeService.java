@@ -37,7 +37,8 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    // TODO Task 3b: Get a single recipe by ID (throw IllegalArgumentException if not found)
+    // TODO Task 3b: Get a single recipe by ID (throw IllegalArgumentException if
+    // not found)
     public Recipe getRecipeById(String id) {
         return recipeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Recipe not found: " + id));
@@ -65,11 +66,12 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
-    // TODO Task 3f: Add a rating — use MongoTemplate $push to avoid reloading document
+    // TODO Task 3f: Add a rating — use MongoTemplate $push to avoid reloading
+    // document
     public Recipe addRating(String recipeId, Rating rating) {
         rating.setCreatedAt(Instant.now());
         // TODO:
-        // Query query  = Query.query(Criteria.where("_id").is(recipeId));
+        // Query query = Query.query(Criteria.where("_id").is(recipeId));
         // Update update = new Update().push("ratings", rating);
         // mongoTemplate.updateFirst(query, update, Recipe.class);
         // return getRecipeById(recipeId);
@@ -96,13 +98,15 @@ public class RecipeService {
         return List.of();
     }
 
-    // TODO Task 3j: MongoTemplate custom query — recipes with total time <= maxMinutes
+    // TODO Task 3j: MongoTemplate custom query — recipes with total time <=
+    // maxMinutes
     public List<Recipe> getQuickRecipes(int maxMinutes) {
         // TODO:
         // Query query = new Query(Criteria.where("$expr").is(
-        //     new org.bson.Document("$lte",
-        //         List.of(new org.bson.Document("$add", List.of("$prepTimeMinutes","$cookTimeMinutes")),
-        //                 maxMinutes))));
+        // new org.bson.Document("$lte",
+        // List.of(new org.bson.Document("$add",
+        // List.of("$prepTimeMinutes","$cookTimeMinutes")),
+        // maxMinutes))));
         // return mongoTemplate.find(query, Recipe.class);
         return List.of();
     }

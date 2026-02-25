@@ -10,12 +10,18 @@ import java.util.List;
  * Represents a blog author.
  *
  * TODO Task 1: Add JPA annotations:
- *   @Entity
- *   @Table(name = "authors")
- *   Add @Column annotations where appropriate (e.g., unique = true on email)
+ * 
+ * @Entity
+ * @Table(name = "authors")
+ *             Add @Column annotations where appropriate (e.g., unique = true on
+ *             email)
  */
 // TODO: @Entity, @Table(name = "authors")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Author {
 
     @Id
@@ -32,7 +38,8 @@ public class Author {
     private String bio;
 
     // TODO Task 1: Add OneToMany relationship
-    //   @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //   @Builder.Default
+    // @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch =
+    // FetchType.LAZY)
+    // @Builder.Default
     private List<Post> posts = new ArrayList<>();
 }

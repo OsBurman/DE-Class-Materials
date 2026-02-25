@@ -18,10 +18,9 @@ import java.util.*;
 public class ProductController {
 
     private final Map<String, Map<String, Object>> products = new LinkedHashMap<>(Map.of(
-        "P001", Map.of("id", "P001", "name", "Laptop Pro",    "price", new BigDecimal("1299.99"), "stock", 50),
-        "P002", Map.of("id", "P002", "name", "Wireless Mouse","price", new BigDecimal("29.99"),   "stock", 200),
-        "P003", Map.of("id", "P003", "name", "USB-C Hub",     "price", new BigDecimal("49.99"),   "stock", 150)
-    ));
+            "P001", Map.of("id", "P001", "name", "Laptop Pro", "price", new BigDecimal("1299.99"), "stock", 50),
+            "P002", Map.of("id", "P002", "name", "Wireless Mouse", "price", new BigDecimal("29.99"), "stock", 200),
+            "P003", Map.of("id", "P003", "name", "USB-C Hub", "price", new BigDecimal("49.99"), "stock", 150)));
 
     // TODO Task 3a: GET /api/products
     @GetMapping
@@ -35,7 +34,8 @@ public class ProductController {
     public ResponseEntity<Map<String, Object>> getProduct(@PathVariable String id) {
         // TODO: return 404 if not found
         var product = products.get(id);
-        if (product == null) return ResponseEntity.notFound().build();
+        if (product == null)
+            return ResponseEntity.notFound().build();
         return ResponseEntity.ok(product);
     }
 
@@ -45,13 +45,13 @@ public class ProductController {
             @PathVariable String id,
             @RequestParam(defaultValue = "1") int quantity) {
         var product = products.get(id);
-        if (product == null) return ResponseEntity.notFound().build();
+        if (product == null)
+            return ResponseEntity.notFound().build();
         int stock = (int) product.get("stock");
         return ResponseEntity.ok(Map.of(
-            "productId", id,
-            "requestedQuantity", quantity,
-            "available", stock >= quantity,
-            "currentStock", stock
-        ));
+                "productId", id,
+                "requestedQuantity", quantity,
+                "available", stock >= quantity,
+                "currentStock", stock));
     }
 }

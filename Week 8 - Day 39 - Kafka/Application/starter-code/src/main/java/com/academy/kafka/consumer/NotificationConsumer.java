@@ -29,15 +29,18 @@ public class NotificationConsumer {
             @Header(KafkaHeaders.OFFSET) long offset) {
 
         log.info("[Notification] Received: orderId={}, status={}, partition={}, offset={}",
-            event.getOrderId(), event.getStatus(), partition, offset);
+                event.getOrderId(), event.getStatus(), partition, offset);
 
         // TODO Task 4b: Send appropriate notification based on order status
         switch (event.getStatus()) {
-            case "CREATED"   -> log.info("[Notification] 📧 Order confirmation sent to customer {}", event.getCustomerId());
-            case "CONFIRMED" -> log.info("[Notification] 📦 Order {} confirmed — preparing shipment", event.getOrderId());
-            case "SHIPPED"   -> log.info("[Notification] 🚚 Shipping notification sent for order {}", event.getOrderId());
-            case "CANCELLED" -> log.info("[Notification] ❌ Cancellation confirmation sent for order {}", event.getOrderId());
-            default          -> log.warn("[Notification] Unknown status: {}", event.getStatus());
+            case "CREATED" ->
+                log.info("[Notification] 📧 Order confirmation sent to customer {}", event.getCustomerId());
+            case "CONFIRMED" ->
+                log.info("[Notification] 📦 Order {} confirmed — preparing shipment", event.getOrderId());
+            case "SHIPPED" -> log.info("[Notification] 🚚 Shipping notification sent for order {}", event.getOrderId());
+            case "CANCELLED" ->
+                log.info("[Notification] ❌ Cancellation confirmation sent for order {}", event.getOrderId());
+            default -> log.warn("[Notification] Unknown status: {}", event.getStatus());
         }
     }
 }

@@ -24,10 +24,14 @@ public class ProductRepository {
 
     // Pre-load some sample data
     public ProductRepository() {
-        save(Product.builder().name("Laptop Pro 15").description("High-performance laptop").price(new java.math.BigDecimal("1299.99")).category("Electronics").stockQuantity(50).build());
-        save(Product.builder().name("Wireless Headphones").description("Noise-cancelling over-ear").price(new java.math.BigDecimal("249.99")).category("Electronics").stockQuantity(120).build());
-        save(Product.builder().name("Standing Desk").description("Adjustable height desk").price(new java.math.BigDecimal("599.00")).category("Furniture").stockQuantity(30).build());
-        save(Product.builder().name("Java Design Patterns").description("Gang of Four reference").price(new java.math.BigDecimal("49.99")).category("Books").stockQuantity(200).build());
+        save(Product.builder().name("Laptop Pro 15").description("High-performance laptop")
+                .price(new java.math.BigDecimal("1299.99")).category("Electronics").stockQuantity(50).build());
+        save(Product.builder().name("Wireless Headphones").description("Noise-cancelling over-ear")
+                .price(new java.math.BigDecimal("249.99")).category("Electronics").stockQuantity(120).build());
+        save(Product.builder().name("Standing Desk").description("Adjustable height desk")
+                .price(new java.math.BigDecimal("599.00")).category("Furniture").stockQuantity(30).build());
+        save(Product.builder().name("Java Design Patterns").description("Gang of Four reference")
+                .price(new java.math.BigDecimal("49.99")).category("Books").stockQuantity(200).build());
     }
 
     // TODO Task 4: Return a new ArrayList of all values
@@ -40,7 +44,8 @@ public class ProductRepository {
         return Optional.empty(); // TODO
     }
 
-    // TODO Task 4: If product has no id, assign one. Put in store. Return the product.
+    // TODO Task 4: If product has no id, assign one. Put in store. Return the
+    // product.
     public Product save(Product product) {
         // TODO
         return product;

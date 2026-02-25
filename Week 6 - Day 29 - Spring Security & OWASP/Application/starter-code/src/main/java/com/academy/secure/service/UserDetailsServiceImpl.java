@@ -27,26 +27,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     // TODO Task 3: Use this map to look up users
     private Map<String, UserRecord> users() {
         return Map.of(
-            "admin", new UserRecord(passwordEncoder.encode("admin123"), "ADMIN"),
-            "user",  new UserRecord(passwordEncoder.encode("user123"),  "USER"),
-            "viewer",new UserRecord(passwordEncoder.encode("viewer123"),"VIEWER")
-        );
+                "admin", new UserRecord(passwordEncoder.encode("admin123"), "ADMIN"),
+                "user", new UserRecord(passwordEncoder.encode("user123"), "USER"),
+                "viewer", new UserRecord(passwordEncoder.encode("viewer123"), "VIEWER"));
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // TODO Task 3: Look up the user in the map
-        //   If not found, throw new UsernameNotFoundException("User not found: " + username)
-        //   If found, return:
-        //     User.builder()
-        //         .username(username)
-        //         .password(record.encodedPassword())
-        //         .roles(record.role())    // roles() wraps with ROLE_ prefix automatically
-        //         .build();
+        // If not found, throw new UsernameNotFoundException("User not found: " +
+        // username)
+        // If found, return:
+        // User.builder()
+        // .username(username)
+        // .password(record.encodedPassword())
+        // .roles(record.role()) // roles() wraps with ROLE_ prefix automatically
+        // .build();
 
         throw new UsernameNotFoundException("TODO: implement loadUserByUsername");
     }
 
     // Simple record to hold user data
-    record UserRecord(String encodedPassword, String role) {}
+    record UserRecord(String encodedPassword, String role) {
+    }
 }

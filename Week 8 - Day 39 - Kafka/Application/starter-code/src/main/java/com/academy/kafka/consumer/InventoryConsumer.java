@@ -24,28 +24,29 @@ public class InventoryConsumer {
 
     // TODO Task 5a: Add @RetryableTopic to auto-retry on failure with DLQ
     // @RetryableTopic(
-    //     attempts = "3",
-    //     backoff = @Backoff(delay = 1000, multiplier = 2),
-    //     dltTopicSuffix = ".DLQ",
-    //     topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE
+    // attempts = "3",
+    // backoff = @Backoff(delay = 1000, multiplier = 2),
+    // dltTopicSuffix = ".DLQ",
+    // topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE
     // )
     @KafkaListener(topics = "${kafka.topics.orders}", groupId = "inventory-group")
     public void handleOrderEvent(@Payload OrderEvent event) {
         log.info("[Inventory] Processing order: orderId={}, productId={}, qty={}",
-            event.getOrderId(), event.getProductId(), event.getQuantity());
+                event.getOrderId(), event.getProductId(), event.getQuantity());
 
         // TODO Task 5b: Simulate stock reservation
         // Throw an exception to test the DLQ — uncomment the line below:
-        // if ("P999".equals(event.getProductId())) throw new RuntimeException("Product not found in inventory");
+        // if ("P999".equals(event.getProductId())) throw new RuntimeException("Product
+        // not found in inventory");
 
         log.info("[Inventory] ✅ Reserved {} units of {} for order {}",
-            event.getQuantity(), event.getProductId(), event.getOrderId());
+                event.getQuantity(), event.getProductId(), event.getOrderId());
     }
 
     // TODO Task 5c: Handle messages that failed all retries (landed in DLQ)
     @DltHandler
     public void handleDlt(@Payload OrderEvent event,
-                          @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+            @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.error("[Inventory DLQ] ❌ Failed event from topic '{}': orderId={}", topic, event.getOrderId());
         // TODO: alert ops team, store in error database, etc.
     }

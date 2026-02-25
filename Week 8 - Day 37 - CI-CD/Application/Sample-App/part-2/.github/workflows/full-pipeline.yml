@@ -1,0 +1,244 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Full CI/CD Pipeline — Advanced Patterns
+# File location: .github/workflows/full-pipeline.yml
+#
+# PURPOSE: Demonstrates advanced GitHub Actions patterns used in production:
+#   - Matrix strategy: run the same job across multiple Java versions in parallel
+#   - Job dependencies: 'needs' keyword creates a pipeline of sequential jobs
+#   - Job outputs: pass data (like Docker image tags) between jobs
+#   - Environment URLs: link deployments to live environment URLs in the GitHub UI
+#   - Concurrency controls: prevent overlapping deployments
+#   - Security scanning: vulnerability detection integrated into the pipeline
+#
+# PIPELINE FLOW:
+#   test-matrix ─┐
+#                ├─→ build-push → deploy-staging → deploy-production
+#   security ────┘
+#
+# test-matrix and security-scan run IN PARALLEL (no 'needs').
+# build-push waits for BOTH (needs: [test-matrix, security-scan]).
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Full CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+# ── Concurrency Control ───────────────────────────────────────────────────────
+# Prevents two deployments from running at the same time.
+# If a new push comes in while a deployment is running:
+#   - The in-progress deployment is NOT cancelled (cancel-in-progress: false)
+#   - The new run waits in the queue
+# For CI jobs, you might set cancel-in-progress: true to save runner minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+
+  # ── Job 1: Matrix Test Strategy ──────────────────────────────────────────
+  # Runs tests across multiple Java versions simultaneously.
+  # This verifies your application works on all versions you want to support.
+  #
+  # MATRIX STRATEGY:
+  #   GitHub Actions creates one job instance PER matrix combination.
+  #   With java-version: [17, 21], you get 2 parallel jobs:
+  #     - "Test on Java 17"
+  #     - "Test on Java 21"
+  #   Both must pass for the 'needs: test-matrix' job to proceed.
+  #
+  # fail-fast: false — if Java 21 fails, don't cancel the Java 17 run.
+  #   Lets you see ALL failures, not just the first one.
+  test-matrix:
+    name: Test on Java ${{ matrix.java-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [17, 21]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # ${{ matrix.java-version }} is replaced with 17 or 21 for each instance
+      - uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: temurin
+          cache: maven
+
+      - run: mvn test
+
+  # ── Job 2: Security Scanning ───────────────────────────────────────────────
+  # Runs in parallel with test-matrix to save time.
+  # Security scans are separate from tests — different concern, different tool.
+  #
+  # In production, replace the echo statements with real tools:
+  #   Trivy:      aquasecurity/trivy-action — scans Docker images for CVEs
+  #   TruffleHog: trufflesecurity/trufflehog-actions-scan — detects leaked secrets in git history
+  #   Snyk:       snyk/actions — checks dependencies for vulnerabilities
+  #   Semgrep:    returntocorp/semgrep-action — static analysis for security issues
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner on source
+        run: |
+          echo "Scanning for vulnerabilities in container images and filesystems..."
+          echo "In production use: aquasecurity/trivy-action"
+          echo "  - Scans Docker images against CVE databases"
+          echo "  - Can fail the build if HIGH or CRITICAL CVEs found"
+          echo "  - Outputs SARIF report uploadable to GitHub Security tab"
+
+      - name: Check for secrets in code
+        run: |
+          echo "Scanning git history for accidentally committed secrets..."
+          echo "In production use: trufflesecurity/trufflehog-actions-scan"
+          echo "  - Detects API keys, tokens, passwords in commits"
+          echo "  - Scans full git history, not just the latest commit"
+          echo "  - Integrates with GitHub Advanced Security"
+
+  # ── Job 3: Build and Push Docker Image ────────────────────────────────────
+  # Runs AFTER both test-matrix and security-scan succeed.
+  # Only runs on the main branch — PRs don't push images to the registry.
+  #
+  # JOB OUTPUTS:
+  #   The 'outputs' section exposes values from steps to downstream jobs.
+  #   'deploy-staging' accesses the image tag via:
+  #     ${{ needs.build-push.outputs.image-tag }}
+  build-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [test-matrix, security-scan]
+    # Only build and push images from the main branch (not from PRs or feature branches)
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    # Expose the Docker image tags as job outputs for downstream jobs to use
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven
+
+      - run: mvn package -DskipTests
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Docker Metadata ──────────────────────────────────────────────────
+      # docker/metadata-action generates consistent image tags and labels.
+      # Tags produced for a push to main at commit abc1234:
+      #   ghcr.io/myorg/cicd-advanced:sha-abc1234   ← immutable, for rollback
+      #   ghcr.io/myorg/cicd-advanced:latest         ← mutable, for convenience
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha
+            type=raw,value=latest
+
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          # 'labels' adds standard OCI metadata to the image (author, source, etc.)
+          labels: ${{ steps.meta.outputs.labels }}
+
+  # ── Job 4: Deploy to Staging ───────────────────────────────────────────────
+  # Automatically deploys to staging after a successful image build.
+  # 'environment.url' sets the clickable link in the GitHub deployments UI.
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: build-push
+
+    environment:
+      name: staging
+      url: https://staging.academy.example.com
+
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "=== Staging Deployment ==="
+          echo "Image: ${{ needs.build-push.outputs.image-tag }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo ""
+          echo "In production, use one of:"
+          echo "  kubectl set image deployment/app app=<image-tag>"
+          echo "  aws ecs update-service --cluster prod --service app --force-new-deployment"
+          echo "  ssh deploy@staging-server 'docker pull <image> && docker-compose up -d'"
+
+      - name: Smoke test staging
+        run: |
+          echo "Running post-deployment smoke tests..."
+          echo "In production:"
+          echo "  curl -f https://staging.academy.example.com/actuator/health"
+          echo "  curl -f https://staging.academy.example.com/api/deployment-info"
+          echo "Expected: {\"status\":\"UP\"}"
+
+      - name: Notify Slack
+        run: |
+          echo "Sending deployment notification..."
+          echo "In production use: slackapi/slack-github-action"
+          echo "  - Posts to #deployments channel with build details"
+          echo "  - Includes commit message, author, and environment link"
+
+  # ── Job 5: Deploy to Production ───────────────────────────────────────────
+  # Requires manual approval before proceeding.
+  # To configure approval:
+  #   Repository Settings > Environments > production > Required reviewers
+  #   Add one or more reviewers who must approve before this job runs.
+  #
+  # When this job starts, GitHub:
+  #   1. Sends a notification email to all required reviewers
+  #   2. Pauses the workflow until someone approves
+  #   3. Runs this job only after approval
+  #
+  # The 'url' field creates a link in the GitHub deployments view so you can
+  # navigate directly to the deployed application.
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+
+    environment:
+      name: production
+      url: https://academy.example.com
+
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "=== Production Deployment ==="
+          echo "This job ran only after manual approval was granted."
+          echo ""
+          echo "Rollback capability:"
+          echo "  Previous stable image: ghcr.io/${{ github.repository }}:<previous-sha>"
+          echo "  To rollback: re-run the workflow with the previous SHA tag"
+          echo "  Or use: kubectl rollout undo deployment/app"
+          echo ""
+          echo "Post-deploy monitoring:"
+          echo "  Check error rate in Datadog / Grafana for 15 minutes"
+          echo "  If error rate spikes, execute rollback immediately"

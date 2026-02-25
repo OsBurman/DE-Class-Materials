@@ -19,7 +19,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Rating {
-    @Min(1) @Max(5)
+    @Min(1)
+    @Max(5)
     private int score;
     private String reviewer;
     private String comment;

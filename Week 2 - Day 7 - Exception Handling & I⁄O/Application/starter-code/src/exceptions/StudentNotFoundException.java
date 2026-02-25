@@ -9,5 +9,6 @@ package exceptions;
  */
 public class StudentNotFoundException extends RuntimeException {
 
-    // TODO: public StudentNotFoundException(String studentName) { super("Student not found: " + studentName); }
+    // TODO: public StudentNotFoundException(String studentName) { super("Student
+    // not found: " + studentName); }
 }

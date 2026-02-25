@@ -1,0 +1,93 @@
+# Kubernetes Deployment
+# Manages the desired state of our Pod replicas.
+# Kubernetes continuously reconciles actual state toward this desired state.
+#
+# Apply:  kubectl apply -f k8s/deployment.yaml
+# Check:  kubectl get deployment kubernetes-demo
+#         kubectl rollout status deployment/kubernetes-demo
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-demo
+  namespace: default
+  labels:
+    app: kubernetes-demo
+spec:
+  replicas: 2                          # Run 2 Pods for high availability
+
+  selector:
+    matchLabels:
+      app: kubernetes-demo             # This Deployment manages Pods with this label
+
+  # Rolling update strategy — zero-downtime deployments:
+  # maxSurge: 1       → Temporarily allow 1 extra Pod above the desired count
+  # maxUnavailable: 0 → Never reduce below the desired count (always 2+ Pods running)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  template:                            # Pod template — every Pod created from this spec
+    metadata:
+      labels:
+        app: kubernetes-demo           # Must match selector.matchLabels above
+        version: v1
+    spec:
+      containers:
+        - name: kubernetes-demo
+          image: kubernetes-demo:latest
+          imagePullPolicy: Never       # Use local image — for minikube (eval $(minikube docker-env))
+                                       # Change to Always when pushing to a remote registry
+
+          ports:
+            - containerPort: 8080
+
+          # Environment variables injected from ConfigMap (k8s/configmap.yaml)
+          # Keeps configuration external to the image — change config without rebuilding
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: APP_ENV
+            - name: APP_MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: APP_MESSAGE
+
+          # Resource requests: minimum guaranteed resources for scheduling
+          # Resource limits:   hard cap — container is killed/throttled if exceeded
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"              # 250 millicores = 0.25 CPU core
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
+          # Liveness probe: Is the container alive?
+          # Kubernetes restarts the container if this fails failureThreshold times.
+          # Path provided by Spring Boot Actuator with management.health.livenessstate.enabled=true
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60    # Give the app time to start before checking
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          # Readiness probe: Is the container ready to serve traffic?
+          # Kubernetes removes the Pod from the Service endpoints if this fails.
+          # The app is NOT restarted — it's just taken out of the load balancer rotation.
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3

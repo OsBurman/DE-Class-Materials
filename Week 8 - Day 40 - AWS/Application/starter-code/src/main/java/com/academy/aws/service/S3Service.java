@@ -53,7 +53,8 @@ public class S3Service {
                 .build();
 
         // TODO: uncomment when AWS is configured
-        // s3Client.putObject(request, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        // s3Client.putObject(request,
+        // RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
         log.info("Uploaded file to S3: key={}, bucket={}", key, bucketName);
         return key;
@@ -64,11 +65,11 @@ public class S3Service {
     public String generatePresignedUrl(String key, int expiryMinutes) {
         // TODO:
         // try (S3Presigner presigner = S3Presigner.create()) {
-        //     GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-        //         .signatureDuration(Duration.ofMinutes(expiryMinutes))
-        //         .getObjectRequest(r -> r.bucket(bucketName).key(key))
-        //         .build();
-        //     return presigner.presignGetObject(presignRequest).url().toString();
+        // GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+        // .signatureDuration(Duration.ofMinutes(expiryMinutes))
+        // .getObjectRequest(r -> r.bucket(bucketName).key(key))
+        // .build();
+        // return presigner.presignGetObject(presignRequest).url().toString();
         // }
         return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + key + "?TODO=implement";
     }
@@ -76,10 +77,11 @@ public class S3Service {
     // TODO Task 2c: List all objects in the bucket
     public List<String> listFiles() {
         // TODO:
-        // ListObjectsV2Request request = ListObjectsV2Request.builder().bucket(bucketName).build();
+        // ListObjectsV2Request request =
+        // ListObjectsV2Request.builder().bucket(bucketName).build();
         // return s3Client.listObjectsV2(request).contents().stream()
-        //         .map(S3Object::key)
-        //         .toList();
+        // .map(S3Object::key)
+        // .toList();
         return List.of("TODO: implement listFiles");
     }
 

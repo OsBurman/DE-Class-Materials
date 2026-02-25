@@ -43,8 +43,10 @@ public class StudyAssistantService {
     public String askWithContext(String topic, String question) {
         log.info("Processing question about '{}': {}", topic, question);
         // TODO:
-        // PromptTemplate template = new PromptTemplate(new ClassPathResource("prompts/study-assistant.st"));
-        // Prompt prompt = template.create(Map.of("topic", topic, "question", question));
+        // PromptTemplate template = new PromptTemplate(new
+        // ClassPathResource("prompts/study-assistant.st"));
+        // Prompt prompt = template.create(Map.of("topic", topic, "question",
+        // question));
         // ChatResponse response = chatClient.call(prompt);
         // return response.getResult().getOutput().getContent();
         return "TODO: implement askWithContext";
@@ -65,7 +67,8 @@ public class StudyAssistantService {
     }
 
     // TODO Task 1d: Explain a code snippet
-    // System prompt: "You are an expert Java developer explaining code to a student."
+    // System prompt: "You are an expert Java developer explaining code to a
+    // student."
     // User prompt: "Explain this code:\n" + code
     public String explainCode(String code) {
         log.info("Explaining code snippet ({} chars)", code.length());
@@ -74,7 +77,8 @@ public class StudyAssistantService {
     }
 
     // TODO Task 1e: Summarize long text
-    // System prompt: "Summarize the following text in 3-5 bullet points for a student."
+    // System prompt: "Summarize the following text in 3-5 bullet points for a
+    // student."
     public String summarize(String text) {
         log.info("Summarizing text ({} chars)", text.length());
         // TODO

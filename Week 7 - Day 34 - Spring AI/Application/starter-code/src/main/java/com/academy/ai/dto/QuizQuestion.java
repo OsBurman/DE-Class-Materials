@@ -7,8 +7,8 @@ import java.util.Map;
  * This record is COMPLETE.
  */
 public record QuizQuestion(
-    String question,
-    Map<String, String> options,
-    String correctAnswer,
-    String explanation
-) {}
+        String question,
+        Map<String, String> options,
+        String correctAnswer,
+        String explanation) {
+}

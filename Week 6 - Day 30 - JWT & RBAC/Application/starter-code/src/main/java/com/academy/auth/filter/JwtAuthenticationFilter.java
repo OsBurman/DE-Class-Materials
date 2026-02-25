@@ -42,8 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // TODO Step 2: Check for Bearer prefix — if not present, skip to next filter
         // if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-        //     filterChain.doFilter(request, response);
-        //     return;
+        // filterChain.doFilter(request, response);
+        // return;
         // }
 
         // TODO Step 3: Extract JWT from header (remove "Bearer " prefix)
@@ -53,15 +53,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // final String username = jwtService.extractUsername(jwt);
 
         // TODO Step 5: Load UserDetails and validate token
-        // if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-        //     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        //     if (jwtService.isTokenValid(jwt, userDetails)) {
-        //         UsernamePasswordAuthenticationToken authToken =
-        //             new UsernamePasswordAuthenticationToken(
-        //                 userDetails, null, userDetails.getAuthorities());
-        //         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        //         SecurityContextHolder.getContext().setAuthentication(authToken);
-        //     }
+        // if (username != null &&
+        // SecurityContextHolder.getContext().getAuthentication() == null) {
+        // UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        // if (jwtService.isTokenValid(jwt, userDetails)) {
+        // UsernamePasswordAuthenticationToken authToken =
+        // new UsernamePasswordAuthenticationToken(
+        // userDetails, null, userDetails.getAuthorities());
+        // authToken.setDetails(new
+        // WebAuthenticationDetailsSource().buildDetails(request));
+        // SecurityContextHolder.getContext().setAuthentication(authToken);
+        // }
         // }
 
         // TODO Step 6: Continue filter chain

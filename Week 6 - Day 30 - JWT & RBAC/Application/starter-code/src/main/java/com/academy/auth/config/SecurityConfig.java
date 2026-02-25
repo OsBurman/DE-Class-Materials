@@ -27,7 +27,8 @@ import java.util.Map;
 /**
  * JWT Security configuration.
  *
- * TODO Task 3: Implement the filterChain bean with STATELESS session management.
+ * TODO Task 3: Implement the filterChain bean with STATELESS session
+ * management.
  * TODO Task 5: Add the 3 in-memory test users.
  */
 @Configuration
@@ -48,14 +49,14 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = passwordEncoder();
         Map<String, User> users = Map.of(
-            "admin",  new User("admin",  encoder.encode("admin123"),  Role.ROLE_ADMIN),
-            "user",   new User("user",   encoder.encode("user123"),   Role.ROLE_USER),
-            "viewer", new User("viewer", encoder.encode("viewer123"), Role.ROLE_VIEWER)
-        );
+                "admin", new User("admin", encoder.encode("admin123"), Role.ROLE_ADMIN),
+                "user", new User("user", encoder.encode("user123"), Role.ROLE_USER),
+                "viewer", new User("viewer", encoder.encode("viewer123"), Role.ROLE_VIEWER));
 
         return username -> {
             User user = users.get(username);
-            if (user == null) throw new UsernameNotFoundException("User not found: " + username);
+            if (user == null)
+                throw new UsernameNotFoundException("User not found: " + username);
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getUsername())
                     .password(user.getEncodedPassword())
@@ -80,17 +81,18 @@ public class SecurityConfig {
     // TODO Task 3: Implement SecurityFilterChain
     // @Bean
     // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    //     return http
-    //         .csrf(csrf -> csrf.disable())
-    //         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //         .authorizeHttpRequests(auth -> auth
-    //             .requestMatchers("/auth/**").permitAll()
-    //             .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
-    //             .anyRequest().authenticated()
-    //         )
-    //         .authenticationProvider(authenticationProvider())
-    //         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-    //         .build();
+    // return http
+    // .csrf(csrf -> csrf.disable())
+    // .sessionManagement(s ->
+    // s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    // .authorizeHttpRequests(auth -> auth
+    // .requestMatchers("/auth/**").permitAll()
+    // .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+    // .anyRequest().authenticated()
+    // )
+    // .authenticationProvider(authenticationProvider())
+    // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+    // .build();
     // }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

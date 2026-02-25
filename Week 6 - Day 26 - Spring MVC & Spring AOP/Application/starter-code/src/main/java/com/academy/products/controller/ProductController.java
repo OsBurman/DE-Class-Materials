@@ -35,7 +35,8 @@ public class ProductController {
     // GET /api/products/{id}
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
-        // TODO: return 200 with product; ProductNotFoundException → 404 (handled by GlobalExceptionHandler)
+        // TODO: return 200 with product; ProductNotFoundException → 404 (handled by
+        // GlobalExceptionHandler)
         return ResponseEntity.ok(productService.getProductById(id));
     }
 

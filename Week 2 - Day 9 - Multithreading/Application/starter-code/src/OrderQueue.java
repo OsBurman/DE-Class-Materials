@@ -12,7 +12,8 @@ public class OrderQueue {
     // TODO Task 1: Add private int ordersProcessed counter
     // Add private List<String> completedOrders
 
-    // TODO: synchronized addOrder(String order) — adds to the queue and prints confirmation
+    // TODO: synchronized addOrder(String order) — adds to the queue and prints
+    // confirmation
     public synchronized void addOrder(String order) {
         // orders.add(order);
         // System.out.println("📥 Order queued: " + order);

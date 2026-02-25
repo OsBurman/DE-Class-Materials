@@ -1,0 +1,7 @@
+{
+  "name": "day19a-part2-react-testing",
+  "version": "1.0.0",
+  "scripts": { "dev": "vite", "build": "vite build", "preview": "vite preview", "test": "vitest" },
+  "dependencies": { "react": "^18.2.0", "react-dom": "^18.2.0" },
+  "devDependencies": { "vite": "^5.0.8", "@vitejs/plugin-react": "^4.2.1", "vitest": "^1.2.0", "@testing-library/react": "^14.1.2", "@testing-library/user-event": "^14.5.2", "@testing-library/jest-dom": "^6.2.0", "jsdom": "^24.0.0" }
+}

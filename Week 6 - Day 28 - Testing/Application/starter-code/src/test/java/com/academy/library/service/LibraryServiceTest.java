@@ -17,10 +17,11 @@ import static org.mockito.Mockito.*;
  * TDD Test Class for LibraryService.
  *
  * ⚠️ IMPORTANT: Write your tests BEFORE implementing LibraryService.java
- *   Follow Red → Green → Refactor:
- *   1. Write a test (Red — it fails because method throws UnsupportedOperationException)
- *   2. Write the minimum code in LibraryService to make it pass (Green)
- *   3. Refactor if needed, re-run tests
+ * Follow Red → Green → Refactor:
+ * 1. Write a test (Red — it fails because method throws
+ * UnsupportedOperationException)
+ * 2. Write the minimum code in LibraryService to make it pass (Green)
+ * 3. Refactor if needed, re-run tests
  */
 class LibraryServiceTest {
 
@@ -41,7 +42,7 @@ class LibraryServiceTest {
     @AfterEach
     void tearDown() {
         // TODO: Add any cleanup if needed (usually not required with Mockito)
-        verifyNoMoreInteractions(mockBookRepository);  // ensures we didn't call unexpected methods
+        verifyNoMoreInteractions(mockBookRepository); // ensures we didn't call unexpected methods
     }
 
     // ================================================================
@@ -50,10 +51,11 @@ class LibraryServiceTest {
     @Test
     @DisplayName("checkOutBook: should mark book unavailable and return it")
     void checkOutBook_shouldMarkUnavailable_whenBookIsAvailable() {
-        // Arrange — TODO: create an available book, stub mockBookRepository.findByIsbn() to return it
-        // Act    — TODO: call libraryService.checkOutBook(isbn)
+        // Arrange — TODO: create an available book, stub
+        // mockBookRepository.findByIsbn() to return it
+        // Act — TODO: call libraryService.checkOutBook(isbn)
         // Assert — TODO: verify book.isAvailable() == false
-        //                verify mockBookRepository.save() was called once
+        // verify mockBookRepository.save() was called once
     }
 
     // ================================================================
@@ -99,15 +101,15 @@ class LibraryServiceTest {
     // ================================================================
     @ParameterizedTest
     @CsvSource({
-        "978-0-06-112008-4, true",
-        "978-0-7432-7356-5, false"
+            "978-0-06-112008-4, true",
+            "978-0-7432-7356-5, false"
     })
     @DisplayName("checkOutBook: should succeed for available books, fail for unavailable")
     void checkOutBook_parameterized(String isbn, boolean isAvailable) {
         // TODO: Arrange: create a book with the given isbn and isAvailable flag
-        //       stub findByIsbn() to return it
+        // stub findByIsbn() to return it
         // Act & Assert:
-        //   if isAvailable == true  → should return book without throwing
-        //   if isAvailable == false → should throw BookNotAvailableException
+        // if isAvailable == true → should return book without throwing
+        // if isAvailable == false → should throw BookNotAvailableException
     }
 }

@@ -19,10 +19,9 @@ public class TaskController {
 
     // In-memory tasks for simplicity
     private final List<Map<String, String>> tasks = new java.util.ArrayList<>(List.of(
-        Map.of("id", "1", "title", "Set up project", "status", "DONE"),
-        Map.of("id", "2", "title", "Write unit tests", "status", "IN_PROGRESS"),
-        Map.of("id", "3", "title", "Deploy to production", "status", "TODO")
-    ));
+            Map.of("id", "1", "title", "Set up project", "status", "DONE"),
+            Map.of("id", "2", "title", "Write unit tests", "status", "IN_PROGRESS"),
+            Map.of("id", "3", "title", "Deploy to production", "status", "TODO")));
 
     // GET /api/tasks — any authenticated user
     @GetMapping

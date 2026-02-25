@@ -32,7 +32,8 @@ public interface RecipeRepository extends MongoRepository<Recipe, String> {
 
     // TODO Task 2e: Find recipes with total time under a limit (prep + cook)
     // Use a @Query with JSON filter
-    // @Query("{ $expr: { $lte: [ { $add: ['$prepTimeMinutes', '$cookTimeMinutes'] }, ?0 ] } }")
+    // @Query("{ $expr: { $lte: [ { $add: ['$prepTimeMinutes', '$cookTimeMinutes']
+    // }, ?0 ] } }")
     // List<Recipe> findByTotalTimeLessThanEqual(int maxTotalMinutes);
 
     // TODO Task 2f: Paginated retrieval by category

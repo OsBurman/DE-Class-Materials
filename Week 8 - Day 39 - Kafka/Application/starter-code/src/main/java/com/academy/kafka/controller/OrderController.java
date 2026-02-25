@@ -40,10 +40,9 @@ public class OrderController {
         producerService.publishOrderEvent(event);
 
         return ResponseEntity.status(201).body(Map.of(
-            "orderId", event.getOrderId(),
-            "status",  event.getStatus(),
-            "message", "Order event published to Kafka"
-        ));
+                "orderId", event.getOrderId(),
+                "status", event.getStatus(),
+                "message", "Order event published to Kafka"));
     }
 
     // TODO Task 6b: PUT /api/orders/{orderId}/status
@@ -64,9 +63,8 @@ public class OrderController {
         producerService.publishOrderEvent(event);
 
         return ResponseEntity.ok(Map.of(
-            "orderId", orderId,
-            "newStatus", newStatus,
-            "message", "Status update event published"
-        ));
+                "orderId", orderId,
+                "newStatus", newStatus,
+                "message", "Status update event published"));
     }
 }

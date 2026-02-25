@@ -9,13 +9,18 @@ import java.time.LocalDateTime;
  * Represents a comment on a post.
  *
  * TODO Task 4: Add JPA annotations:
- *   - @Entity, @Table(name = "comments")
- *   - @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "post_id") on the post field
- *   - @Column(nullable = false) on content and commenterName
- *   - @Column(nullable = false) and default value logic for createdAt
+ * - @Entity, @Table(name = "comments")
+ * - @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "post_id") on the
+ * post field
+ * - @Column(nullable = false) on content and commenterName
+ * - @Column(nullable = false) and default value logic for createdAt
  */
 // TODO: @Entity, @Table(name = "comments")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
 
     @Id

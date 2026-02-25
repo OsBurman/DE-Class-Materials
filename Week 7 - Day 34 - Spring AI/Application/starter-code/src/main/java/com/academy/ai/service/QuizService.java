@@ -31,16 +31,17 @@ public class QuizService {
     public QuizQuestion generateQuestion(String topic, String difficulty) {
         log.info("Generating {} question about '{}'", difficulty, topic);
         // TODO:
-        // PromptTemplate template = new PromptTemplate(new ClassPathResource("prompts/quiz-generator.st"));
-        // Prompt prompt = template.create(Map.of("topic", topic, "difficulty", difficulty));
+        // PromptTemplate template = new PromptTemplate(new
+        // ClassPathResource("prompts/quiz-generator.st"));
+        // Prompt prompt = template.create(Map.of("topic", topic, "difficulty",
+        // difficulty));
         // String json = chatClient.call(prompt).getResult().getOutput().getContent();
         // return objectMapper.readValue(json, QuizQuestion.class);
         return new QuizQuestion(
-            "TODO: implement generateQuestion",
-            Map.of("A", "opt A", "B", "opt B", "C", "opt C", "D", "opt D"),
-            "A",
-            "Not yet implemented"
-        );
+                "TODO: implement generateQuestion",
+                Map.of("A", "opt A", "B", "opt B", "C", "opt C", "D", "opt D"),
+                "A",
+                "Not yet implemented");
     }
 
     // TODO Task 2b: Generate a 5-question quiz on a topic

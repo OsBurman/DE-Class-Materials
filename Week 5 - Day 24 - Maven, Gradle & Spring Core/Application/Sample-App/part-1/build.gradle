@@ -1,0 +1,85 @@
+/*
+ * Day 24 Part 1 — Gradle Build Script (Groovy DSL)
+ * ==================================================
+ * This build.gradle is a REFERENCE FILE showing the Gradle equivalent
+ * of the Maven pom.xml.  To actually run with Gradle you would need the
+ * Gradle wrapper (gradlew) — use the pom.xml for this demo.
+ *
+ * Key Gradle concepts:
+ *   • plugins {} block   — applies functionality (like Maven lifecycle phases)
+ *   • repositories {}    — where to download dependencies (mavenCentral())
+ *   • dependencies {}    — what libraries to include
+ *   • tasks {}           — Gradle's unit of work (like Maven goals)
+ *   • configurations {}  — dependency scopes (implementation, testImplementation, etc.)
+ *
+ * Gradle vs Maven comparison:
+ *   Feature          │ Maven               │ Gradle
+ *   ─────────────────┼─────────────────────┼────────────────────────────
+ *   Config format    │ XML (pom.xml)        │ Groovy/Kotlin DSL (build.gradle)
+ *   Build model      │ Fixed lifecycle      │ Task graph (DAG) — flexible
+ *   Performance      │ Sequential           │ Incremental + parallel + caching
+ *   Convention       │ Convention over conf.│ Convention + custom tasks easy
+ *   Popularity       │ Most common in Java  │ Default for Android; Spring uses it
+ *   Spring Initializr│ ✓ supported          │ ✓ supported
+ *
+ * Run with Gradle (if you have Gradle installed):
+ *   gradle run          — run the application
+ *   gradle test         — run tests
+ *   gradle build        — compile + test + package
+ *   gradle dependencies — show dependency tree
+ *   gradle tasks        — list available tasks
+ */
+
+plugins {
+    id 'java'
+    id 'application'        // adds 'run' task
+}
+
+group   = 'com.academy'
+version = '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Gradle equivalent of Maven's <repositories>
+repositories {
+    mavenCentral()          // https://repo.maven.apache.org/maven2
+    mavenLocal()            // ~/.m2/repository  (installed artifacts)
+}
+
+// Gradle dependency scopes vs Maven scopes:
+//   implementation     ≈ Maven compile  (compile + runtime, not exported)
+//   api                ≈ Maven compile  (compile + runtime, EXPORTED to consumers) — needs java-library plugin
+//   compileOnly        ≈ Maven provided
+//   runtimeOnly        ≈ Maven runtime
+//   testImplementation ≈ Maven test
+//   testRuntimeOnly    ≈ Maven test runtime
+dependencies {
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    runtimeOnly    'org.slf4j:slf4j-simple:2.0.9'
+    implementation 'org.apache.commons:commons-lang3:3.13.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testRuntimeOnly    'org.junit.platform:junit-platform-launcher'
+}
+
+application {
+    mainClass = 'com.academy.Main'
+}
+
+test {
+    useJUnitPlatform()      // tell Gradle to use JUnit 5
+}
+
+// Custom task example — Gradle is highly extensible
+tasks.register('printInfo') {
+    group       = 'demo'
+    description = 'Print project information'
+    doLast {
+        println "Project: ${project.name} v${project.version}"
+        println "Java:    ${System.getProperty('java.version')}"
+        println "Gradle:  ${gradle.gradleVersion}"
+    }
+}

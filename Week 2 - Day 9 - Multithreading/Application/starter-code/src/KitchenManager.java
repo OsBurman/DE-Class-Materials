@@ -22,15 +22,16 @@ public class KitchenManager {
     // TODO Task 5: runWithLatch()
     // - Create a CountDownLatch(3) for 3 chefs
     // - Pass latch to ChefWorkers; they call latch.countDown() when done
-    // - After submitting tasks, call latch.await() then print "All orders complete!"
+    // - After submitting tasks, call latch.await() then print "All orders
+    // complete!"
     public void runWithLatch() throws InterruptedException {
     }
 
     // TODO Task 6: prepareSpecialDish(String dish)
     // Return a CompletableFuture<String>:
-    //   .supplyAsync(() -> { Thread.sleep(500); return "Prepared: " + dish; })
-    //   .thenApply(result -> result + " with garnish")
-    //   .thenAccept(result -> System.out.println("🍽️ " + result))
+    // .supplyAsync(() -> { Thread.sleep(500); return "Prepared: " + dish; })
+    // .thenApply(result -> result + " with garnish")
+    // .thenAccept(result -> System.out.println("🍽️ " + result))
     // In Main: call this twice and combine with CompletableFuture.allOf()
     public CompletableFuture<Void> prepareSpecialDish(String dish) {
         return CompletableFuture.completedFuture(null); // replace with your implementation

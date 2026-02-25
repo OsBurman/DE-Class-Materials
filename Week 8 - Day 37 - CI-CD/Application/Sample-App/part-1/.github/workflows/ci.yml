@@ -1,0 +1,134 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CI Workflow: Build and Test
+# File location: .github/workflows/ci.yml
+#
+# PURPOSE: Continuous Integration — runs on every push and pull request.
+# Ensures that code always compiles and all tests pass before merging.
+#
+# WHEN IT RUNS:
+#   - Push to main, develop, or any feature/** branch
+#   - Pull request targeting main or develop
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: CI - Build and Test
+
+# ── Trigger Events ────────────────────────────────────────────────────────────
+# 'on' defines what events cause this workflow to run.
+# push.branches: run on direct commits to these branches
+# pull_request.branches: run when a PR targets these branches
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+# ── Jobs ──────────────────────────────────────────────────────────────────────
+# A workflow contains one or more jobs.
+# By default, jobs run IN PARALLEL. Use 'needs' to create dependencies.
+jobs:
+
+  # ── Job 1: Build and Test ──────────────────────────────────────────────────
+  build-and-test:
+    name: Build and Test
+    # 'runs-on' specifies the type of virtual machine (runner) to use.
+    # ubuntu-latest is the most common — fast, free for public repos.
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Step 1: Checkout ────────────────────────────────────────────────────
+      # Every workflow starts by checking out your repository code.
+      # Without this, the runner has no files to work with.
+      # actions/checkout@v4 is a first-party GitHub Action.
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # ── Step 2: Set Up Java ─────────────────────────────────────────────────
+      # actions/setup-java installs the specified JDK on the runner.
+      # 'distribution: temurin' = Eclipse Temurin (formerly AdoptOpenJDK) — free, production-grade.
+      # 'cache: maven' = automatically caches ~/.m2 between runs — dramatically speeds up builds.
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # ── Step 3: Run Tests ───────────────────────────────────────────────────
+      # 'run' executes a shell command on the runner.
+      # mvn test: compiles source + test code, then runs all JUnit tests.
+      # If ANY test fails, Maven exits with a non-zero code → GitHub marks the step FAILED.
+      - name: Run Tests
+        run: mvn test
+
+      # ── Step 4: Build JAR ───────────────────────────────────────────────────
+      # mvn package -DskipTests: compiles and packages the application into a JAR.
+      # We skip tests here because they already ran in the step above.
+      # The JAR lands in target/cicd-demo-0.0.1-SNAPSHOT.jar
+      - name: Build JAR
+        run: mvn package -DskipTests
+
+      # ── Step 5: Upload Test Results ─────────────────────────────────────────
+      # 'if: always()' — this step runs even if previous steps failed.
+      # This is critical: you want to see test reports whether tests pass or fail.
+      # Artifacts are stored for 90 days by default and downloadable from the Actions UI.
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: target/surefire-reports/
+
+      # ── Step 6: Upload Coverage Report ──────────────────────────────────────
+      # JaCoCo generates an HTML coverage report during 'mvn test'.
+      # This uploads the report so you can review coverage in the Actions UI.
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: target/site/jacoco/
+
+      # ── Step 7: Upload JAR Artifact ──────────────────────────────────────────
+      # 'if: success()' — only upload the JAR if the build succeeded.
+      # 'retention-days: 7' — automatically deletes the artifact after 7 days.
+      # In a CD workflow, you would download this artifact and deploy it.
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: application-jar
+          path: target/*.jar
+          retention-days: 7
+
+  # ── Job 2: Code Quality ────────────────────────────────────────────────────
+  # This job runs AFTER build-and-test (see 'needs').
+  # No point checking code quality if the build is broken.
+  code-quality:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    # 'needs' creates a dependency — this job waits for build-and-test to succeed.
+    needs: build-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # ── Checkstyle ──────────────────────────────────────────────────────────
+      # Checkstyle enforces a consistent coding style (indentation, naming, etc.).
+      # The '|| echo' makes this a non-blocking check — it won't fail the build
+      # if Checkstyle isn't configured. Remove the '|| echo' in a real project.
+      # To enable: add checkstyle-maven-plugin to pom.xml with a checkstyle.xml rules file.
+      - name: Check Code Style (Checkstyle)
+        run: mvn checkstyle:check || echo "Checkstyle not configured - add checkstyle plugin for production"
+
+      # ── OWASP Dependency Check ───────────────────────────────────────────────
+      # Scans all Maven dependencies against the National Vulnerability Database (NVD).
+      # Fails the build if any dependency has a known CVE above your threshold.
+      # To enable: add org.owasp:dependency-check-maven plugin to pom.xml.
+      # Note: First run is slow (~10 min) as it downloads the CVE database.
+      - name: Security Scan (OWASP)
+        run: mvn dependency-check:check || echo "OWASP dependency check not configured - add for production"

@@ -9,9 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * This class is COMPLETE — do not modify.
  *
  * Run with:
- *   mvn spring-boot:run                           (default profile)
- *   mvn spring-boot:run -Dspring-boot.run.profiles=dev
- *   mvn spring-boot:run -Dspring-boot.run.profiles=prod
+ * mvn spring-boot:run (default profile)
+ * mvn spring-boot:run -Dspring-boot.run.profiles=dev
+ * mvn spring-boot:run -Dspring-boot.run.profiles=prod
  */
 @SpringBootApplication
 public class TasksApplication {

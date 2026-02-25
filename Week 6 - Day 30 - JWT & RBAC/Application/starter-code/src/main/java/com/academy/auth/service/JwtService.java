@@ -56,7 +56,8 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // TODO Task 1d: Validate token — check username matches and token is not expired
+    // TODO Task 1d: Validate token — check username matches and token is not
+    // expired
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
@@ -81,10 +82,10 @@ public class JwtService {
         // TODO Task 1e: Parse the JWT and return claims
         // Hint:
         // return Jwts.parser()
-        //            .verifyWith(getSigningKey())
-        //            .build()
-        //            .parseSignedClaims(token)
-        //            .getPayload();
+        // .verifyWith(getSigningKey())
+        // .build()
+        // .parseSignedClaims(token)
+        // .getPayload();
         throw new UnsupportedOperationException("TODO: implement extractAllClaims");
     }
 
@@ -92,12 +93,12 @@ public class JwtService {
         // TODO Task 1f: Build and sign the JWT
         // Hint:
         // return Jwts.builder()
-        //            .claims(extraClaims)
-        //            .subject(subject)
-        //            .issuedAt(new Date())
-        //            .expiration(new Date(System.currentTimeMillis() + expiration))
-        //            .signWith(getSigningKey())
-        //            .compact();
+        // .claims(extraClaims)
+        // .subject(subject)
+        // .issuedAt(new Date())
+        // .expiration(new Date(System.currentTimeMillis() + expiration))
+        // .signWith(getSigningKey())
+        // .compact();
         throw new UnsupportedOperationException("TODO: implement buildToken");
     }
 

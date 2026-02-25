@@ -4,9 +4,11 @@
  * TODO Task 1:
  * 1. Add a private constructor
  * 2. Add a private static CoffeeShop instance field
- * 3. Implement getInstance() — create the instance only if it's null (lazy initialization)
+ * 3. Implement getInstance() — create the instance only if it's null (lazy
+ * initialization)
  * 4. Add private List<OrderObserver> observers
- * 5. Implement addObserver(), notifyObservers(Order order), placeOrder(Order order)
+ * 5. Implement addObserver(), notifyObservers(Order order), placeOrder(Order
+ * order)
  */
 public class CoffeeShop {
 

@@ -1,0 +1,14 @@
+{
+  "name": "day15-part2-typescript-advanced",
+  "version": "1.0.0",
+  "description": "Day 15 Part 2 — Generics, Classes, Decorators, Utility Types, Type Guards",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.11.5"
+  }
+}

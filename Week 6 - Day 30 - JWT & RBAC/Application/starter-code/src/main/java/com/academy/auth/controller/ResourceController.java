@@ -25,10 +25,9 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ResourceController {
 
     private final List<Map<String, Object>> resources = new ArrayList<>(List.of(
-        Map.of("id", 1L, "name", "Public Report",     "owner", "admin"),
-        Map.of("id", 2L, "name", "User Dashboard",    "owner", "user"),
-        Map.of("id", 3L, "name", "Admin Console",     "owner", "admin")
-    ));
+            Map.of("id", 1L, "name", "Public Report", "owner", "admin"),
+            Map.of("id", 2L, "name", "User Dashboard", "owner", "user"),
+            Map.of("id", 3L, "name", "Admin Console", "owner", "admin")));
     private final AtomicLong nextId = new AtomicLong(4);
 
     // TODO Task 5a: accessible by VIEWER, USER, and ADMIN
@@ -45,10 +44,9 @@ public class ResourceController {
             Authentication authentication) {
         // TODO: create resource and add to list
         Map<String, Object> resource = Map.of(
-            "id",    nextId.getAndIncrement(),
-            "name",  body.getOrDefault("name", "Unnamed"),
-            "owner", authentication.getName()
-        );
+                "id", nextId.getAndIncrement(),
+                "name", body.getOrDefault("name", "Unnamed"),
+                "owner", authentication.getName());
         resources.add(resource);
         return ResponseEntity.status(201).body(resource);
     }
@@ -71,8 +69,7 @@ public class ResourceController {
     @GetMapping("/me")
     public ResponseEntity<Map<String, Object>> me(Authentication authentication) {
         return ResponseEntity.ok(Map.of(
-            "username",    authentication.getName(),
-            "authorities", authentication.getAuthorities().toString()
-        ));
+                "username", authentication.getName(),
+                "authorities", authentication.getAuthorities().toString()));
     }
 }

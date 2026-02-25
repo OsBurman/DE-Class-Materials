@@ -22,7 +22,7 @@ public class OrderEvent {
     private String productId;
     private int quantity;
     private BigDecimal totalPrice;
-    private String status;   // CREATED, CONFIRMED, SHIPPED, CANCELLED
+    private String status; // CREATED, CONFIRMED, SHIPPED, CANCELLED
     private Instant timestamp;
-    private String source;   // service that published the event
+    private String source; // service that published the event
 }

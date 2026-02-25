@@ -5,13 +5,12 @@ import specific.*;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("=== Animal Kingdom ===\n");
-
-        // TODO Task 5: Polymorphic array — Animal[] holds all 4 concrete types
-        Animal[] animals = new Animal[4];
-        // animals[0] = new Dog("Rex", 4, "Domestic", "Golden");
-        // animals[1] = new Eagle("Bald", 7, "Mountains");
-        // animals[2] = new Duck("Donald", 3, "Wetlands");
+                em.out.println("=== Animal Ki m ===\n");
+                   
+                ODO Task 5: Polymorphic array nimal[] holds all 4 concrete types
+                al[] animals = new Animal[4]  
+                nimals[0] = new Dog("Rex", 4, " mestic", "Golden");
+                nimals[1] = new Eagle("Bald", 7 "Mountains") // animals[2] = new Duck("Donald", 3, "Wetlands");
         // animals[3] = new Crocodile("Croc", 12, "Swamp");
 
         // TODO: Loop over the array and call describe() and makeSound() on each
@@ -28,7 +27,12 @@ public class Main {
         //   if (animals[i] instanceof Trainable) {
         //       Trainable t = (Trainable) animals[i];
         //       System.out.println(t.train("sit"));
+        // 
         //   }
 
     }
 }
+
+        //  
+        // 
+        // 

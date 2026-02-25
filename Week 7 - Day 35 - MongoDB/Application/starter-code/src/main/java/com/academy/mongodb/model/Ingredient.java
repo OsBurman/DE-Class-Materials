@@ -19,6 +19,6 @@ import jakarta.validation.constraints.NotBlank;
 public class Ingredient {
     @NotBlank
     private String name;
-    private String quantity;   // e.g., "2 cups", "1 tsp"
-    private String unit;       // optional alternative unit
+    private String quantity; // e.g., "2 cups", "1 tsp"
+    private String unit; // optional alternative unit
 }

@@ -35,10 +35,9 @@ public class AttachmentController {
         try {
             String key = s3Service.uploadFile(file);
             return ResponseEntity.ok(Map.of(
-                "key",     key,
-                "message", "Uploaded successfully",
-                "size",    String.valueOf(file.getSize())
-            ));
+                    "key", key,
+                    "message", "Uploaded successfully",
+                    "size", String.valueOf(file.getSize())));
         } catch (IOException e) {
             log.error("Upload failed", e);
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));

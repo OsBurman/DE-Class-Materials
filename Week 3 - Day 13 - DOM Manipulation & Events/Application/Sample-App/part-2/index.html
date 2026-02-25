@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 13 Part 2 — Events & Event Handling</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; background: #f5f7fa; }
+    h1   { color: #1e3a5f; }
+    h2   { color: #1e3a5f; border-left: 4px solid #e06c1b; padding-left: .6rem; margin-top: 2rem; }
+    .card { background: white; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    button { background: #1e3a5f; color: white; border: none; padding: .4rem .9rem; border-radius: 4px; cursor: pointer; margin: .2rem; }
+    button:hover { background: #e06c1b; }
+    #log { background: #1e1e1e; color: #d4e157; font-family: monospace; font-size: .85rem; padding: .8rem; border-radius: 6px; min-height: 80px; max-height: 200px; overflow-y: auto; }
+    .bubble-outer { background: #c8e6c9; padding: 1.2rem; border-radius: 8px; border: 2px solid #388e3c; cursor: pointer; }
+    .bubble-mid   { background: #fff9c4; padding: .8rem; border-radius: 6px; border: 2px solid #f9a825; margin-top: .5rem; cursor: pointer; }
+    .bubble-inner { background: #ffccbc; padding: .5rem; border-radius: 4px; border: 2px solid #e64a19; margin-top: .5rem; cursor: pointer; display: inline-block; }
+    #delegation-list { list-style: none; padding: 0; }
+    #delegation-list li { background: #e8f0fe; padding: .4rem .8rem; margin-bottom: .3rem; border-radius: 4px; cursor: pointer; }
+    #delegation-list li:hover { background: #bbdefb; }
+    input[type="text"] { padding: .35rem; border: 1px solid #ccc; border-radius: 4px; width: 220px; }
+    #key-output { font-family: monospace; font-size: 1.1rem; background: #f0f0f0; padding: .5rem; border-radius: 4px; min-height: 1.8rem; }
+    #form-result { margin-top: .5rem; color: #1e3a5f; font-weight: bold; }
+    .highlight-anim { animation: highlightPulse .5s; }
+    @keyframes highlightPulse {
+      0%   { background: #fff59d; }
+      100% { background: transparent; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Day 13 Part 2 — Events & Event Handling</h1>
+<p>Open in browser. Interact with each section to see event system in action.</p>
+
+<!-- ─── Event Log ─────────────────────────────────────── -->
+<div class="card">
+  <h2>Event Log</h2>
+  <div id="log">Interact with demos below to see events logged here…</div>
+  <button onclick="clearLog()" style="margin-top:.5rem">Clear Log</button>
+</div>
+
+<!-- ─── 1. Adding Event Listeners ────────────────────── -->
+<div class="card">
+  <h2>1. addEventListener</h2>
+  <button id="btn-click">Click Me (click)</button>
+  <button id="btn-dblclick">Double-Click Me</button>
+  <button id="btn-remove">Click Once (then removed)</button>
+</div>
+
+<!-- ─── 2. Event Bubbling & Capturing ────────────────── -->
+<div class="card">
+  <h2>2. Event Bubbling & Capturing</h2>
+  <p>Click anywhere in the nested boxes. Events <strong>bubble</strong> from inner → outer.</p>
+  <div class="bubble-outer" id="outer">
+    Outer (green)
+    <div class="bubble-mid" id="mid">
+      Mid (yellow)
+      <div class="bubble-inner" id="inner">Inner (orange) ← click here</div>
+    </div>
+  </div>
+  <button onclick="stopBubble()" style="margin-top:.5rem">Toggle stopPropagation on Inner</button>
+  <span id="stop-label" style="font-size:.85rem; color:#888"> (currently OFF)</span>
+</div>
+
+<!-- ─── 3. Event Delegation ───────────────────────────── -->
+<div class="card">
+  <h2>3. Event Delegation</h2>
+  <p>One listener on the parent — handles all child <code>&lt;li&gt;</code> clicks (including dynamically added ones).</p>
+  <ul id="delegation-list">
+    <li data-id="1">Task A</li>
+    <li data-id="2">Task B</li>
+    <li data-id="3">Task C</li>
+  </ul>
+  <button onclick="addDelegatedItem()">Add New Item (dynamic)</button>
+</div>
+
+<!-- ─── 4. Event Object ───────────────────────────────── -->
+<div class="card">
+  <h2>4. Event Object Properties</h2>
+  <p>Type in the field — inspect the keyboard event object:</p>
+  <input type="text" id="key-input" placeholder="Type here…" />
+  <div id="key-output" style="margin-top:.5rem">…</div>
+</div>
+
+<!-- ─── 5. Preventing Default / Form Submit ──────────── -->
+<div class="card">
+  <h2>5. Preventing Default & Form Submit</h2>
+  <form id="demo-form">
+    <input type="text" id="form-name" placeholder="Your name" required />
+    <button type="submit">Submit</button>
+    <button type="button" onclick="resetForm()">Reset</button>
+  </form>
+  <div id="form-result"></div>
+  <p style="margin-top:.6rem; font-size:.9rem; color:#555">
+    <code>event.preventDefault()</code> stops the form from reloading the page.
+  </p>
+</div>
+
+<!-- ─── 6. Common Event Types ─────────────────────────── -->
+<div class="card">
+  <h2>6. Common Event Types</h2>
+  <div id="mouse-zone" style="background:#e8f0fe; padding:1rem; border-radius:6px; text-align:center; cursor:crosshair; user-select:none;">
+    Mouse zone — move, click, right-click here
+  </div>
+  <p style="margin-top:.5rem; font-size:.9rem; color:#555">
+    Events: <code>mouseenter mouseleave mousemove mousedown mouseup contextmenu</code>
+  </p>
+</div>
+
+<script>
+// ── Utility ──────────────────────────────────────────────
+function log(msg) {
+  const el = document.getElementById("log");
+  el.innerHTML = `<span style="color:#aaa">[${new Date().toLocaleTimeString()}]</span> ${msg}<br>` + el.innerHTML;
+}
+function clearLog() { document.getElementById("log").innerHTML = ""; }
+
+// ── 1. addEventListener ───────────────────────────────────
+document.getElementById("btn-click").addEventListener("click", (e) => {
+  log(`click event on #btn-click | target.id = ${e.target.id}`);
+});
+document.getElementById("btn-dblclick").addEventListener("dblclick", () => {
+  log("dblclick event fired!");
+});
+
+// removeEventListener — listen only once
+function onceHandler() {
+  log("click fired (once) — listener now removed");
+  document.getElementById("btn-remove").removeEventListener("click", onceHandler);
+  document.getElementById("btn-remove").textContent = "Already clicked";
+}
+document.getElementById("btn-remove").addEventListener("click", onceHandler);
+// Alternative: { once: true }
+// document.getElementById("btn-remove").addEventListener("click", handler, { once: true });
+
+// ── 2. Bubbling & Capturing ───────────────────────────────
+let stopOn = false;
+["outer","mid","inner"].forEach(id => {
+  document.getElementById(id).addEventListener("click", (e) => {
+    log(`Bubbling: <strong>#${id}</strong> received click`);
+  });
+  // Capture phase (3rd arg = true)
+  document.getElementById(id).addEventListener("click", (e) => {
+    // log(`Capture: #${id}`); // uncomment to see capture phase
+  }, true);
+});
+document.getElementById("inner").addEventListener("click", (e) => {
+  if (stopOn) {
+    e.stopPropagation();
+    log("stopPropagation() called — event will NOT bubble further");
+  }
+});
+
+function stopBubble() {
+  stopOn = !stopOn;
+  document.getElementById("stop-label").textContent = ` (currently ${stopOn ? "ON" : "OFF"})`;
+}
+
+// ── 3. Event Delegation ───────────────────────────────────
+let itemCount = 3;
+document.getElementById("delegation-list").addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  log(`Delegation: clicked item data-id="${li.dataset.id}" → ${li.textContent.trim()}`);
+  li.classList.add("highlight-anim");
+  setTimeout(() => li.classList.remove("highlight-anim"), 600);
+});
+
+function addDelegatedItem() {
+  itemCount++;
+  const li = document.createElement("li");
+  li.dataset.id = itemCount;
+  li.textContent = `Dynamic Item ${itemCount}`;
+  document.getElementById("delegation-list").appendChild(li);
+  log(`Added dynamic item ${itemCount} — delegation listener picks it up automatically`);
+}
+
+// ── 4. Event Object Properties ────────────────────────────
+document.getElementById("key-input").addEventListener("keydown", (e) => {
+  document.getElementById("key-output").textContent =
+    `key="${e.key}"  code="${e.code}"  keyCode=${e.keyCode}  ctrl=${e.ctrlKey}  shift=${e.shiftKey}  alt=${e.altKey}`;
+  log(`keydown: key="${e.key}" code="${e.code}"`);
+});
+
+// ── 5. Form — preventDefault ──────────────────────────────
+document.getElementById("demo-form").addEventListener("submit", (e) => {
+  e.preventDefault();   // ← stops page reload
+  const name  = document.getElementById("form-name").value.trim();
+  const result = document.getElementById("form-result");
+  if (!name) { result.textContent = "Please enter a name."; result.style.color = "red"; return; }
+  result.style.color = "#1e3a5f";
+  result.textContent = `✓ Form submitted for: ${name} (page did NOT reload thanks to preventDefault)`;
+  log(`Form submitted → name="${name}"`);
+});
+
+function resetForm() {
+  document.getElementById("demo-form").reset();
+  document.getElementById("form-result").textContent = "";
+}
+
+// ── 6. Mouse Events ───────────────────────────────────────
+const zone = document.getElementById("mouse-zone");
+zone.addEventListener("mouseenter",    () => { zone.style.background = "#bbdefb"; log("mouseenter"); });
+zone.addEventListener("mouseleave",    () => { zone.style.background = "#e8f0fe"; log("mouseleave"); });
+zone.addEventListener("mousedown",     (e) => log(`mousedown button=${e.button}`));
+zone.addEventListener("mouseup",       ()  => log("mouseup"));
+zone.addEventListener("contextmenu",   (e) => { e.preventDefault(); log("contextmenu (right-click) prevented"); });
+let moveThrottle;
+zone.addEventListener("mousemove", (e) => {
+  clearTimeout(moveThrottle);
+  moveThrottle = setTimeout(() => {
+    zone.textContent = `Mouse at (${e.offsetX}, ${e.offsetY})`;
+  }, 30);
+});
+</script>
+</body>
+</html>

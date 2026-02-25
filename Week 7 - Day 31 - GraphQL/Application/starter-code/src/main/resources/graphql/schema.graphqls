@@ -2,80 +2,80 @@
 # TODO Task 1: Complete the schema definition
 
 type Query {
-    # TODO: Return all books
-    books: [Book!]!
+  # TODO: Return all books
+  books: [Book!]!
 
-    # TODO: Return a single book by ID (null if not found)
-    book(id: ID!): Book
+  # TODO: Return a single book by ID (null if not found)
+  book(id: ID!): Book
 
-    # TODO: Return all authors
-    authors: [Author!]!
+  # TODO: Return all authors
+  authors: [Author!]!
 
-    # TODO: Return a single author by ID
-    author(id: ID!): Author
+  # TODO: Return a single author by ID
+  author(id: ID!): Author
 
-    # TODO: Search books by title (case-insensitive partial match)
-    searchBooks(titleContains: String!): [Book!]!
+  # TODO: Search books by title (case-insensitive partial match)
+  searchBooks(titleContains: String!): [Book!]!
 }
 
 type Mutation {
-    # TODO: Add a new book (returns the created book)
-    addBook(input: AddBookInput!): Book!
+  # TODO: Add a new book (returns the created book)
+  addBook(input: AddBookInput!): Book!
 
-    # TODO: Update an existing book's details (returns updated book, null if not found)
-    updateBook(id: ID!, input: UpdateBookInput!): Book
+  # TODO: Update an existing book's details (returns updated book, null if not found)
+  updateBook(id: ID!, input: UpdateBookInput!): Book
 
-    # TODO: Delete a book (returns true if deleted, false if not found)
-    deleteBook(id: ID!): Boolean!
+  # TODO: Delete a book (returns true if deleted, false if not found)
+  deleteBook(id: ID!): Boolean!
 
-    # TODO: Add a review to a book
-    addReview(bookId: ID!, input: AddReviewInput!): Review!
+  # TODO: Add a review to a book
+  addReview(bookId: ID!, input: AddReviewInput!): Review!
 }
 
 # TODO Task 1a: Complete the Book type
 type Book {
-    id: ID!
-    title: String!
-    genre: String!
-    publishedYear: Int!
-    # TODO: add author field (Author type, non-null)
-    # TODO: add reviews field ([Review!]!)
-    # TODO: add averageRating field (Float)
+  id: ID!
+  title: String!
+  genre: String!
+  publishedYear: Int!
+  # TODO: add author field (Author type, non-null)
+  # TODO: add reviews field ([Review!]!)
+  # TODO: add averageRating field (Float)
 }
 
 # TODO Task 1b: Define Author type
 type Author {
-    id: ID!
-    name: String!
-    # TODO: add bio field (String, nullable)
-    # TODO: add books field ([Book!]!)
+  id: ID!
+  name: String!
+  # TODO: add bio field (String, nullable)
+  # TODO: add books field ([Book!]!)
 }
 
 # TODO Task 1c: Define Review type
 type Review {
-    id: ID!
-    rating: Int!       # 1-5
-    comment: String
-    reviewer: String!
+  id: ID!
+  rating: Int! # 1-5
+  comment: String
+  reviewer: String!
 }
 
 # TODO Task 1d: Define input types
 input AddBookInput {
-    title: String!
-    genre: String!
-    publishedYear: Int!
-    authorId: ID!
+  title: String!
+  genre: String!
+  publishedYear: Int!
+  authorId: ID!
 }
 
 input UpdateBookInput {
-    # TODO: all fields optional
-    title: String
-    genre: String
-    publishedYear: Int
+  # TODO: all fields optional
+  title: String
+  genre: String
+  publishedYear: Int
 }
 
 input AddReviewInput {
-    rating: Int!       # must be 1-5
-    comment: String
-    reviewer: String!
+  rating: Int! # must be 1-5
+  comment: String
+  reviewer: String!
 }

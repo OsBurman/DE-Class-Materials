@@ -18,6 +18,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     // Optional<Author> findByEmail(String email);
 
     // TODO Task 6b: JPQL — returns list of [Author, post count] pairs
-    // @Query("SELECT a, COUNT(p) FROM Author a LEFT JOIN a.posts p GROUP BY a ORDER BY COUNT(p) DESC")
+    // @Query("SELECT a, COUNT(p) FROM Author a LEFT JOIN a.posts p GROUP BY a ORDER
+    // BY COUNT(p) DESC")
     // List<Object[]> findAuthorsWithPostCount();
 }

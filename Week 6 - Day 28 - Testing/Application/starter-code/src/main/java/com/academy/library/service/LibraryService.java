@@ -9,9 +9,9 @@ import com.academy.library.repository.BookRepository;
  * Library service — manages book checkout and return.
  *
  * ⚠️ TDD INSTRUCTIONS:
- *   DO NOT look at this file first!
- *   Write your tests in LibraryServiceTest.java BEFORE implementing this class.
- *   Follow: Red → Green → Refactor
+ * DO NOT look at this file first!
+ * Write your tests in LibraryServiceTest.java BEFORE implementing this class.
+ * Follow: Red → Green → Refactor
  *
  * The class skeleton is here to help your tests compile.
  * All methods throw UnsupportedOperationException until you implement them.
@@ -27,7 +27,8 @@ public class LibraryService {
     /**
      * Check out a book by ISBN.
      * - If the book doesn't exist: throw BookNotFoundException
-     * - If the book is already checked out (available == false): throw BookNotAvailableException
+     * - If the book is already checked out (available == false): throw
+     * BookNotAvailableException
      * - Otherwise: set available = false, save, and return the book
      *
      * TODO Task 5: Implement this method AFTER writing the tests.

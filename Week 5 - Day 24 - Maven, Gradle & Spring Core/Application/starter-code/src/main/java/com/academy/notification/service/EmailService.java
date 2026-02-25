@@ -21,16 +21,17 @@ public class EmailService implements NotificationService {
     private final NotificationRepository repository;
 
     // TODO Task 2: Implement Constructor Injection
-    //   - Inject NotificationRepository via constructor (use @Autowired on the constructor)
-    //   - Inject email.from and email.smtp.host from application.properties
-    //     using @Value("${email.from}") and @Value("${email.smtp.host}")
+    // - Inject NotificationRepository via constructor (use @Autowired on the
+    // constructor)
+    // - Inject email.from and email.smtp.host from application.properties
+    // using @Value("${email.from}") and @Value("${email.smtp.host}")
     //
     // public EmailService(NotificationRepository repository,
-    //                     @Value("${email.from}") String fromAddress,
-    //                     @Value("${email.smtp.host}") String smtpHost) {
-    //     this.repository = repository;
-    //     this.fromAddress = fromAddress;
-    //     this.smtpHost = smtpHost;
+    // @Value("${email.from}") String fromAddress,
+    // @Value("${email.smtp.host}") String smtpHost) {
+    // this.repository = repository;
+    // this.fromAddress = fromAddress;
+    // this.smtpHost = smtpHost;
     // }
 
     public EmailService(NotificationRepository repository, String fromAddress, String smtpHost) {

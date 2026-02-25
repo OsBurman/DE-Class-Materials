@@ -1,0 +1,12 @@
+{
+  "name": "rest-api-fundamentals",
+  "version": "1.0.0",
+  "description": "Day 23 Part 1 — REST & HTTP Fundamentals with Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

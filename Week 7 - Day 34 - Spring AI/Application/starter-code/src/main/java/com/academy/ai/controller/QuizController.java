@@ -45,8 +45,8 @@ public class QuizController {
     public ResponseEntity<Map<String, Object>> checkAnswer(@RequestBody Map<String, String> body) {
         boolean correct = body.get("userAnswer").equals(body.get("correctAnswer"));
         return ResponseEntity.ok(Map.of(
-            "correct", correct,
-            "message", correct ? "Correct! 🎉" : "Not quite — the correct answer was " + body.get("correctAnswer")
-        ));
+                "correct", correct,
+                "message",
+                correct ? "Correct! 🎉" : "Not quite — the correct answer was " + body.get("correctAnswer")));
     }
 }

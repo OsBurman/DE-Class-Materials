@@ -1,0 +1,41 @@
+# Kubernetes Service
+# A Service provides a stable network endpoint (IP + DNS name) for a set of Pods.
+# Pods are ephemeral — they come and go. The Service abstracts that away.
+#
+# Apply:  kubectl apply -f k8s/service.yaml
+# Check:  kubectl get service kubernetes-demo-service
+#
+# Access locally (minikube):
+#   minikube service kubernetes-demo-service
+#   OR: kubectl port-forward service/kubernetes-demo-service 8080:80
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubernetes-demo-service
+  namespace: default
+  labels:
+    app: kubernetes-demo
+spec:
+  # Routes traffic to any Pod with this label — Pods are selected dynamically
+  selector:
+    app: kubernetes-demo
+
+  # NodePort: Exposes the service on each Node's IP at a static port (30080).
+  # Access via http://<node-ip>:30080  or  minikube service kubernetes-demo-service
+  #
+  # ─────────────────────────────────────────────────────────────────────────────
+  # For cloud deployments, change type to LoadBalancer:
+  #
+  #   type: LoadBalancer
+  #
+  # This provisions a cloud load balancer (AWS ELB, GCP Load Balancer, Azure LB)
+  # and assigns an external IP automatically. The nodePort field can be removed.
+  # ─────────────────────────────────────────────────────────────────────────────
+  type: NodePort
+
+  ports:
+    - protocol: TCP
+      port: 80           # Port the Service listens on (inside the cluster)
+      targetPort: 8080   # Port the container is listening on
+      nodePort: 30080    # External port on each Node (range: 30000–32767)

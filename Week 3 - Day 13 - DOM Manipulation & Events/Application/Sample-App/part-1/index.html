@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 13 Part 1 — DOM Manipulation</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; background: #f5f7fa; }
+    h1 { color: #1e3a5f; }
+    h2 { color: #1e3a5f; border-left: 4px solid #e06c1b; padding-left: .6rem; margin-top: 2rem; }
+    .demo-section { background: white; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    button { background: #1e3a5f; color: white; border: none; padding: .4rem .9rem; border-radius: 4px; cursor: pointer; margin: .2rem; }
+    button:hover { background: #e06c1b; }
+    input[type="text"] { padding: .35rem; border: 1px solid #ccc; border-radius: 4px; width: 200px; }
+    #todo-list { list-style: none; padding: 0; }
+    #todo-list li { display: flex; justify-content: space-between; align-items: center; padding: .4rem .6rem; background: #e8f0fe; margin-bottom: .3rem; border-radius: 4px; }
+    .done { text-decoration: line-through; color: #888; background: #f0f0f0 !important; }
+    #style-box { width: 120px; height: 120px; background: #1e3a5f; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; transition: all .3s; }
+    #traversal-tree { font-family: monospace; background: #f0f0f0; padding: .8rem; border-radius: 4px; }
+    #traversal-tree li { cursor: pointer; padding: 2px 4px; border-radius: 3px; }
+    #traversal-tree li:hover { background: #d0e4ff; }
+    #traversal-output { color: #e06c1b; font-weight: bold; min-height: 1.4rem; margin-top: .4rem; }
+  </style>
+</head>
+<body>
+
+<h1>Day 13 Part 1 — DOM Manipulation</h1>
+<p>Open in browser. All interactions are driven by vanilla JavaScript.</p>
+
+<!-- ─── 1. Selecting Elements ─────────────────────────── -->
+<div class="demo-section">
+  <h2>1. Selecting DOM Elements</h2>
+  <p id="para-id" class="demo-para">This paragraph has <strong>id="para-id"</strong> and <strong>class="demo-para"</strong>.</p>
+  <p class="demo-para">This is another <code>.demo-para</code> element.</p>
+  <button onclick="demoSelecting()">Run Selectors</button>
+  <pre id="selector-output" style="background:#f0f0f0; padding:.5rem; border-radius:4px; min-height:2rem;"></pre>
+</div>
+
+<!-- ─── 2. Create / Modify / Remove Elements ──────────── -->
+<div class="demo-section">
+  <h2>2. Create, Modify & Remove Elements</h2>
+  <div id="todo-container">
+    <input type="text" id="todo-input" placeholder="Enter a task…" />
+    <button onclick="addTodo()">Add Task</button>
+    <button onclick="removeFirst()">Remove First</button>
+    <button onclick="clearAll()">Clear All</button>
+    <ul id="todo-list">
+      <li>Buy groceries <button onclick="toggleDone(this)">✓</button> <button onclick="removeItem(this)">✕</button></li>
+      <li>Read MDN docs <button onclick="toggleDone(this)">✓</button> <button onclick="removeItem(this)">✕</button></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─── 3. DOM Traversal ──────────────────────────────── -->
+<div class="demo-section">
+  <h2>3. DOM Traversal</h2>
+  <ul id="traversal-tree">
+    <li id="t1">Item 1
+      <ul>
+        <li id="t1a">Item 1a</li>
+        <li id="t1b">Item 1b</li>
+      </ul>
+    </li>
+    <li id="t2">Item 2</li>
+    <li id="t3">Item 3</li>
+  </ul>
+  <button onclick="traverseFrom('t1a')">Traverse from Item 1a</button>
+  <div id="traversal-output"></div>
+</div>
+
+<!-- ─── 4. Modify Styles & Classes ───────────────────── -->
+<div class="demo-section">
+  <h2>4. Modifying Styles & Classes</h2>
+  <div id="style-box">Box</div><br/>
+  <button onclick="changeColor()">Change Color</button>
+  <button onclick="changeSize()">Resize</button>
+  <button onclick="rotateBox()">Rotate</button>
+  <button onclick="resetBox()">Reset</button>
+</div>
+
+<!-- ─── 5. Working with Attributes ───────────────────── -->
+<div class="demo-section">
+  <h2>5. Working with Attributes</h2>
+  <img id="demo-img" src="https://via.placeholder.com/300x80?text=Original+Image" alt="Demo" style="width:100%; border-radius:4px;" />
+  <br/>
+  <button onclick="changeAttr()">Change src / alt</button>
+  <button onclick="addAttr()">Add data-loaded</button>
+  <button onclick="readAttr()">Read All Attributes</button>
+  <pre id="attr-output" style="background:#f0f0f0; padding:.5rem; border-radius:4px; margin-top:.5rem; min-height:1.4rem;"></pre>
+</div>
+
+<script>
+// ── 1. Selecting Elements ──────────────────────────────────
+function demoSelecting() {
+  const out = document.getElementById("selector-output");
+  const byId       = document.getElementById("para-id");
+  const byClass    = document.getElementsByClassName("demo-para");
+  const byTag      = document.getElementsByTagName("button");
+  const byQuery    = document.querySelector(".demo-para");
+  const byQueryAll = document.querySelectorAll(".demo-para");
+
+  out.textContent = [
+    `getElementById:         "${byId.textContent.slice(0, 40)}…"`,
+    `getElementsByClassName: ${byClass.length} elements found`,
+    `getElementsByTagName:   ${byTag.length} <button> elements on page`,
+    `querySelector:          "${byQuery.textContent.slice(0, 40)}…"`,
+    `querySelectorAll:       ${byQueryAll.length} .demo-para elements found`
+  ].join("\n");
+}
+
+// ── 2. Create / Modify / Remove ────────────────────────────
+function addTodo() {
+  const input = document.getElementById("todo-input");
+  const text  = input.value.trim();
+  if (!text) return;
+
+  const li = document.createElement("li");   // create element
+  li.innerHTML = `${text} <button onclick="toggleDone(this)">✓</button> <button onclick="removeItem(this)">✕</button>`;
+  document.getElementById("todo-list").appendChild(li);  // insert
+  input.value = "";
+}
+
+function toggleDone(btn) {
+  const li = btn.parentElement;
+  li.classList.toggle("done");                // modify class
+}
+
+function removeItem(btn) {
+  const li = btn.parentElement;
+  li.remove();                                // remove element
+}
+
+function removeFirst() {
+  const list = document.getElementById("todo-list");
+  if (list.firstElementChild) list.firstElementChild.remove();
+}
+
+function clearAll() {
+  document.getElementById("todo-list").innerHTML = "";
+}
+
+// ── 3. DOM Traversal ───────────────────────────────────────
+function traverseFrom(id) {
+  const el  = document.getElementById(id);
+  const out = document.getElementById("traversal-output");
+  const lines = [
+    `el.id:              ${el.id}`,
+    `el.parentElement:   ${el.parentElement?.id || el.parentElement?.tagName}`,
+    `el.parentElement.parentElement: ${el.parentElement?.parentElement?.id || el.parentElement?.parentElement?.tagName}`,
+    `el.nextElementSibling:  ${el.nextElementSibling?.id || "null"}`,
+    `el.previousElementSibling: ${el.previousElementSibling?.id || "null"}`,
+  ];
+  out.textContent = lines.join("  |  ");
+}
+
+// ── 4. Styles & Classes ────────────────────────────────────
+const colors = ["#1e3a5f", "#e06c1b", "#27ae60", "#8e44ad", "#e74c3c"];
+let colorIdx = 0, size = 120, rotation = 0;
+
+function changeColor() {
+  colorIdx = (colorIdx + 1) % colors.length;
+  document.getElementById("style-box").style.background = colors[colorIdx];
+}
+function changeSize() {
+  size = size === 120 ? 160 : 120;
+  const box = document.getElementById("style-box");
+  box.style.width = box.style.height = size + "px";
+}
+function rotateBox() {
+  rotation = (rotation + 45) % 360;
+  document.getElementById("style-box").style.transform = `rotate(${rotation}deg)`;
+}
+function resetBox() {
+  const box = document.getElementById("style-box");
+  box.style.cssText = "";
+  box.style.cssText = "width:120px;height:120px;background:#1e3a5f;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;transition:all .3s";
+  colorIdx = 0; size = 120; rotation = 0;
+}
+
+// ── 5. Attributes ─────────────────────────────────────────
+function changeAttr() {
+  const img = document.getElementById("demo-img");
+  img.setAttribute("src", "https://via.placeholder.com/300x80?text=Changed+Image");
+  img.setAttribute("alt", "Updated alt text");
+}
+function addAttr() {
+  document.getElementById("demo-img").dataset.loaded = "true";
+  readAttr();
+}
+function readAttr() {
+  const img  = document.getElementById("demo-img");
+  const out  = document.getElementById("attr-output");
+  const attrs = [...img.attributes].map(a => `${a.name}="${a.value}"`).join("\n");
+  out.textContent = attrs;
+}
+</script>
+</body>
+</html>

@@ -24,14 +24,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * TODO Task 7: Implement all 5 test methods.
  *
  * Key MockMvc patterns:
- *   mockMvc.perform(get("/api/books/1"))
- *          .andExpect(status().isOk())
- *          .andExpect(jsonPath("$.title").value("Effective Java"));
+ * mockMvc.perform(get("/api/books/1"))
+ * .andExpect(status().isOk())
+ * .andExpect(jsonPath("$.title").value("Effective Java"));
  *
- *   mockMvc.perform(post("/api/books")
- *          .contentType(MediaType.APPLICATION_JSON)
- *          .content(objectMapper.writeValueAsString(book)))
- *          .andExpect(status().isCreated());
+ * mockMvc.perform(post("/api/books")
+ * .contentType(MediaType.APPLICATION_JSON)
+ * .content(objectMapper.writeValueAsString(book)))
+ * .andExpect(status().isCreated());
  */
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -56,36 +56,36 @@ class BookControllerTest {
     @Test
     void getBook_shouldReturn200_withValidId() throws Exception {
         // TODO: stub bookService.findById(1L) to return sampleBook
-        //       perform GET /api/books/1
-        //       andExpect: status 200, jsonPath $.title == "Effective Java"
+        // perform GET /api/books/1
+        // andExpect: status 200, jsonPath $.title == "Effective Java"
     }
 
     @Test
     void getBook_shouldReturn404_whenNotFound() throws Exception {
         // TODO: stub bookService.findById(99L) to throw new BookNotFoundException(99L)
-        //       perform GET /api/books/99
-        //       andExpect: status 404
+        // perform GET /api/books/99
+        // andExpect: status 404
     }
 
     @Test
     void createBook_shouldReturn201_withValidBody() throws Exception {
         // TODO: stub bookService.save(any()) to return sampleBook
-        //       perform POST /api/books with JSON body of sampleBook (without id)
-        //       andExpect: status 201, jsonPath $.id == 1
+        // perform POST /api/books with JSON body of sampleBook (without id)
+        // andExpect: status 201, jsonPath $.id == 1
     }
 
     @Test
     void createBook_shouldReturn400_withMissingTitle() throws Exception {
         // TODO: create a book with null title
-        //       perform POST /api/books
-        //       andExpect: status 400
+        // perform POST /api/books
+        // andExpect: status 400
         // Note: @NotBlank on Book.title needs to be present for this to work
     }
 
     @Test
     void deleteBook_shouldReturn204() throws Exception {
         // TODO: perform DELETE /api/books/1
-        //       andExpect: status 204
-        //       verify bookService.delete(1L) was called
+        // andExpect: status 204
+        // verify bookService.delete(1L) was called
     }
 }

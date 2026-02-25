@@ -23,10 +23,10 @@ class BookGraphQlTest {
     void booksQuery_shouldReturnAllBooks() {
         // TODO
         // graphQlTester.document("{ books { id title genre } }")
-        //     .execute()
-        //     .path("books")
-        //     .entityList(Object.class)
-        //     .hasSizeGreaterThan(3);
+        // .execute()
+        // .path("books")
+        // .entityList(Object.class)
+        // .hasSizeGreaterThan(3);
     }
 
     // TODO Task 4b: Query a book by ID — assert title matches
@@ -40,10 +40,10 @@ class BookGraphQlTest {
     void bookQuery_shouldResolveAuthorField() {
         // TODO
         // graphQlTester.document("{ book(id: \"1\") { title author { name } } }")
-        //     .execute()
-        //     .path("book.author.name")
-        //     .entity(String.class)
-        //     .isEqualTo("J.R.R. Tolkien");
+        // .execute()
+        // .path("book.author.name")
+        // .entity(String.class)
+        // .isEqualTo("J.R.R. Tolkien");
     }
 
     // TODO Task 4d: addBook mutation — assert new book has correct title

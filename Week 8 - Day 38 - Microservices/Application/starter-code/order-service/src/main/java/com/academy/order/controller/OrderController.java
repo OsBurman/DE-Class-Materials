@@ -48,10 +48,9 @@ public class OrderController {
         Map<String, Object> availability = productClient.checkAvailability(productId, quantity);
         if (!(boolean) availability.getOrDefault("available", false)) {
             return ResponseEntity.status(409).body(Map.of(
-                "error", "Product not available",
-                "productId", productId,
-                "requestedQuantity", quantity
-            ));
+                    "error", "Product not available",
+                    "productId", productId,
+                    "requestedQuantity", quantity));
         }
 
         // TODO Step 2: Get product details

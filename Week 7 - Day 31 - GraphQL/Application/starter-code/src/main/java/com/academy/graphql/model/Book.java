@@ -26,7 +26,8 @@ public class Book {
     private List<Review> reviews = new ArrayList<>();
 
     public Double getAverageRating() {
-        if (reviews.isEmpty()) return null;
+        if (reviews.isEmpty())
+            return null;
         return reviews.stream()
                 .mapToInt(Review::getRating)
                 .average()

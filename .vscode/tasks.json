@@ -1,0 +1,10 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Fix workspace - revert starter-code and move Sample-Apps",
+			"type": "shell",
+			"command": "bash /Users/emilyosborne/Documents/DE-Class-Materials/fix_workspace.sh"
+		}
+	]
+}

@@ -35,8 +35,10 @@ public class AuthController {
     private final Set<String> tokenBlacklist = new HashSet<>();
 
     // TODO Task 4a: POST /auth/login
-    // 1. Call authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password))
-    //    — throws BadCredentialsException if invalid (Spring handles 401 automatically)
+    // 1. Call authenticationManager.authenticate(new
+    // UsernamePasswordAuthenticationToken(username, password))
+    // — throws BadCredentialsException if invalid (Spring handles 401
+    // automatically)
     // 2. Load UserDetails via userDetailsService.loadUserByUsername()
     // 3. Generate access and refresh tokens
     // 4. Return LoginResponseDto with both tokens

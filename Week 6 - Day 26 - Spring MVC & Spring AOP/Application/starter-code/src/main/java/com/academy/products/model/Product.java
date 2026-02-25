@@ -20,7 +20,8 @@ public class Product {
 
     private Long id;
 
-    // TODO Task 1: All fields are declared. Your job is in the DTOs and service layer.
+    // TODO Task 1: All fields are declared. Your job is in the DTOs and service
+    // layer.
 
     private String name;
     private String description;

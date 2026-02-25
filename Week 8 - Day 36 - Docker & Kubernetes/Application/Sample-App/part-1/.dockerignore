@@ -1,0 +1,10 @@
+# Exclude files and directories that don't belong in the Docker image.
+# This keeps the build context small and prevents cache-busting from irrelevant changes.
+
+target/          # Maven build output — image gets the JAR from the build stage
+.git/            # Git history is not needed in the image
+.gitignore
+*.md             # Documentation files
+*.iml            # IntelliJ module files
+.idea/           # IntelliJ project files
+.mvn/            # Maven wrapper files (build stage has Maven already)

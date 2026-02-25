@@ -16,16 +16,16 @@ import java.util.concurrent.atomic.AtomicLong;
 public class BookRepository {
 
     private final Map<String, Author> authors = new ConcurrentHashMap<>();
-    private final Map<String, Book>   books   = new ConcurrentHashMap<>();
+    private final Map<String, Book> books = new ConcurrentHashMap<>();
     private final AtomicLong authorIdSeq = new AtomicLong(10);
-    private final AtomicLong bookIdSeq   = new AtomicLong(10);
+    private final AtomicLong bookIdSeq = new AtomicLong(10);
     private final AtomicLong reviewIdSeq = new AtomicLong(100);
 
     public BookRepository() {
         // Seed data
         Author tolkien = Author.builder().id("1").name("J.R.R. Tolkien")
                 .bio("English author and professor.").build();
-        Author orwell  = Author.builder().id("2").name("George Orwell")
+        Author orwell = Author.builder().id("2").name("George Orwell")
                 .bio("English novelist and essayist.").build();
         Author le_guin = Author.builder().id("3").name("Ursula K. Le Guin")
                 .bio("American author of speculative fiction.").build();
@@ -42,7 +42,8 @@ public class BookRepository {
 
         Book nineteen84 = Book.builder().id("3").title("1984")
                 .genre("Dystopian").publishedYear(1949).authorId("2").build();
-        nineteen84.getReviews().add(Review.builder().id("102").rating(5).comment("Chilling and essential").reviewer("Bob").build());
+        nineteen84.getReviews()
+                .add(Review.builder().id("102").rating(5).comment("Chilling and essential").reviewer("Bob").build());
 
         Book lhod = Book.builder().id("4").title("The Left Hand of Darkness")
                 .genre("Science Fiction").publishedYear(1969).authorId("3").build();
@@ -53,14 +54,26 @@ public class BookRepository {
         books.put("4", lhod);
     }
 
-    public List<Author> findAllAuthors()             { return new ArrayList<>(authors.values()); }
-    public Optional<Author> findAuthorById(String id){ return Optional.ofNullable(authors.get(id)); }
+    public List<Author> findAllAuthors() {
+        return new ArrayList<>(authors.values());
+    }
 
-    public List<Book>   findAllBooks()               { return new ArrayList<>(books.values()); }
-    public Optional<Book> findBookById(String id)    { return Optional.ofNullable(books.get(id)); }
+    public Optional<Author> findAuthorById(String id) {
+        return Optional.ofNullable(authors.get(id));
+    }
+
+    public List<Book> findAllBooks() {
+        return new ArrayList<>(books.values());
+    }
+
+    public Optional<Book> findBookById(String id) {
+        return Optional.ofNullable(books.get(id));
+    }
+
     public List<Book> findBooksByAuthorId(String id) {
         return books.values().stream().filter(b -> b.getAuthorId().equals(id)).toList();
     }
+
     public List<Book> searchByTitle(String fragment) {
         String lower = fragment.toLowerCase();
         return books.values().stream()
@@ -69,11 +82,12 @@ public class BookRepository {
     }
 
     public Book saveBook(Book book) {
-        if (book.getId() == null) book = Book.builder()
-                .id(String.valueOf(bookIdSeq.getAndIncrement()))
-                .title(book.getTitle()).genre(book.getGenre())
-                .publishedYear(book.getPublishedYear()).authorId(book.getAuthorId())
-                .reviews(book.getReviews()).build();
+        if (book.getId() == null)
+            book = Book.builder()
+                    .id(String.valueOf(bookIdSeq.getAndIncrement()))
+                    .title(book.getTitle()).genre(book.getGenre())
+                    .publishedYear(book.getPublishedYear()).authorId(book.getAuthorId())
+                    .reviews(book.getReviews()).build();
         books.put(book.getId(), book);
         return book;
     }
@@ -84,7 +98,8 @@ public class BookRepository {
 
     public Review addReview(String bookId, Review review) {
         Book book = books.get(bookId);
-        if (book == null) throw new IllegalArgumentException("Book not found: " + bookId);
+        if (book == null)
+            throw new IllegalArgumentException("Book not found: " + bookId);
         Review saved = Review.builder()
                 .id(String.valueOf(reviewIdSeq.getAndIncrement()))
                 .rating(review.getRating()).comment(review.getComment())

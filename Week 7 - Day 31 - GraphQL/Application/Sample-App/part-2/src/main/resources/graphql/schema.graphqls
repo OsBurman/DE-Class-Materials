@@ -1,0 +1,94 @@
+# Day 31 — Part 2: Advanced GraphQL Schema
+# ==========================================
+# Demonstrates: arguments, enums, interfaces, pagination, fragments
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum SortOrder {
+  ASC
+  DESC
+}
+
+# Interface — shared fields across types
+interface Node {
+  id: ID!
+  createdAt: String!
+}
+
+type Author implements Node {
+  id: ID!
+  createdAt: String!
+  name: String!
+  role: Role!
+  books: [Book!]!
+}
+
+type Book implements Node {
+  id: ID!
+  createdAt: String!
+  title: String!
+  genre: String!
+  rating: Float
+  author: Author!
+  tags: [String!]!
+}
+
+# Pagination support
+type BookConnection {
+  items: [Book!]!
+  totalCount: Int!
+  page: Int!
+  pageSize: Int!
+  hasNextPage: Boolean!
+}
+
+type Query {
+  # Basic queries
+  books: [Book!]!
+  book(id: ID!): Book
+
+  # Arguments demo — filter, sort, paginate in one query
+  searchBooks(
+    genre: String
+    minRating: Float
+    sortBy: String
+    order: SortOrder
+    page: Int
+    pageSize: Int
+  ): BookConnection!
+
+  authors: [Author!]!
+  author(id: ID!): Author
+
+  # Alias demo — run multiple queries with same field
+  recentBooks: [Book!]!
+  topRatedBooks: [Book!]!
+
+  # Reference
+  advancedReference: AdvancedReference!
+}
+
+type Mutation {
+  addBook(input: AddBookInput!): Book!
+  rateBook(id: ID!, rating: Float!): Book
+}
+
+input AddBookInput {
+  title: String!
+  genre: String!
+  authorId: ID!
+  tags: [String!]
+}
+
+type AdvancedReference {
+  topic: String!
+  fragments: String!
+  variables: String!
+  aliases: String!
+  directives: String!
+  nPlusOneProblem: String!
+}

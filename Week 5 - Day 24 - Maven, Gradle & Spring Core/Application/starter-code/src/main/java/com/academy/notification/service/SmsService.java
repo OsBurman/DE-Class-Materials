@@ -18,16 +18,16 @@ public class SmsService implements NotificationService {
     private String apiKey;
 
     // TODO Task 4: Implement Setter Injection
-    //   Add a setter method for gatewayUrl and inject the value from application.properties:
+    // Add a setter method for gatewayUrl and inject the value from
+    // application.properties:
     //
-    //   @Autowired
-    //   @Value("${sms.gateway.url}")
-    //   public void setGatewayUrl(String gatewayUrl) {
-    //       this.gatewayUrl = gatewayUrl;
-    //   }
+    // @Autowired
+    // @Value("${sms.gateway.url}")
+    // public void setGatewayUrl(String gatewayUrl) {
+    // this.gatewayUrl = gatewayUrl;
+    // }
     //
-    //   Add another setter for apiKey using @Value("${sms.api.key}")
-
+    // Add another setter for apiKey using @Value("${sms.api.key}")
 
     @Override
     public boolean send(Notification notification) {

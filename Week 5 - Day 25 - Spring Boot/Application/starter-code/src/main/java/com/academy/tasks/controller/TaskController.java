@@ -42,7 +42,8 @@ public class TaskController {
     // TODO Task 5: Implement GET /api/tasks/{id}
     // - Return 200 with the task if found
     // - Return 404 if not found
-    // Hint: use taskService.getTaskById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build())
+    // Hint: use
+    // taskService.getTaskById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build())
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
         // TODO
@@ -53,9 +54,9 @@ public class TaskController {
     // - Use @Valid to trigger validation
     // - Return 201 Created with a Location header pointing to /api/tasks/{newId}
     // Hint:
-    //   URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-    //       .path("/{id}").buildAndExpand(created.getId()).toUri();
-    //   return ResponseEntity.created(location).body(created);
+    // URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+    // .path("/{id}").buildAndExpand(created.getId()).toUri();
+    // return ResponseEntity.created(location).body(created);
     @PostMapping
     public ResponseEntity<Task> createTask(@Valid @RequestBody Task task) {
         // TODO

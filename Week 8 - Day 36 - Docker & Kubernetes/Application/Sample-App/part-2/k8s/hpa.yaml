@@ -1,0 +1,57 @@
+# HorizontalPodAutoscaler (HPA)
+# Automatically increases or decreases the number of Pod replicas based on metrics.
+#
+# WHY use HPA?
+#   - Handle traffic spikes automatically without manual intervention
+#   - Scale down during low traffic to save resources/cost
+#   - Works with CPU, memory, or custom metrics (e.g., requests per second)
+#
+# PREREQUISITES:
+#   metrics-server must be running in the cluster to collect CPU/memory data.
+#   Enable on minikube:  minikube addons enable metrics-server
+#   Verify:              kubectl get deployment metrics-server -n kube-system
+#
+# Apply:   kubectl apply -f k8s/hpa.yaml
+# Monitor: kubectl get hpa kubernetes-demo-hpa --watch
+# Describe: kubectl describe hpa kubernetes-demo-hpa
+#
+# ─── Testing autoscaling ──────────────────────────────────────────────────────
+# Generate load to trigger scale-up (run in a separate terminal):
+#
+#   kubectl run load-generator \
+#     --image=busybox \
+#     --restart=Never \
+#     -it --rm \
+#     -- sh -c "while true; do wget -q -O- http://kubernetes-demo-service/api/info; done"
+#
+# Watch the HPA react:
+#   kubectl get hpa kubernetes-demo-hpa --watch
+#
+# Stop load (Ctrl+C in load-generator terminal), then watch it scale back down.
+# ─────────────────────────────────────────────────────────────────────────────
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kubernetes-demo-hpa
+  namespace: default
+  labels:
+    app: kubernetes-demo
+spec:
+  # Target the Deployment to scale
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kubernetes-demo
+
+  minReplicas: 2     # Never scale below 2 (matches Deployment replicas for HA)
+  maxReplicas: 10    # Never scale above 10
+
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70    # Scale up when average CPU across all Pods exceeds 70%
+                                    # Scale down when it drops back below threshold

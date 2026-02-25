@@ -1,0 +1,38 @@
+# ConfigMap: Store non-sensitive configuration data as key-value pairs.
+#
+# WHY use ConfigMaps?
+#   - Keeps configuration separate from your container image
+#   - Change config without rebuilding the image
+#   - Different values per environment (dev/staging/prod) using different ConfigMaps
+#   - Values can be injected as environment variables OR mounted as files in a Pod
+#
+# HOW it works here:
+#   The Deployment (deployment.yaml) references this ConfigMap via:
+#     env:
+#       - name: APP_ENV
+#         valueFrom:
+#           configMapKeyRef:
+#             name: app-config
+#             key: APP_ENV
+#
+# Apply:   kubectl apply -f k8s/configmap.yaml
+# View:    kubectl get configmap app-config -o yaml
+# Describe: kubectl describe configmap app-config
+#
+# To update a value:
+#   1. Edit this file
+#   2. kubectl apply -f k8s/configmap.yaml
+#   3. kubectl rollout restart deployment/kubernetes-demo
+#      (Pods must restart to pick up new env var values)
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: default
+  labels:
+    app: kubernetes-demo
+data:
+  APP_ENV: "kubernetes"
+  APP_MESSAGE: "Hello from Kubernetes! This value comes from a ConfigMap."
+  LOG_LEVEL: "INFO"

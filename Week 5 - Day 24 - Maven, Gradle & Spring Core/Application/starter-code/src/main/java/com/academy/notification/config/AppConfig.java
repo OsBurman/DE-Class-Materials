@@ -14,27 +14,30 @@ import org.springframework.context.annotation.PropertySource;
  * Spring Java configuration class.
  *
  * This replaces a beans.xml file entirely.
- * All beans not picked up by @ComponentScan should be declared here as @Bean methods.
+ * All beans not picked up by @ComponentScan should be declared here as @Bean
+ * methods.
  */
 public class AppConfig {
 
-    // TODO Task 8: Add @Bean methods for any beans that can't use @Component/@Service
-    //   Hint: EmailService needs @Value-injected constructor args — declare it as a @Bean here
-    //   so you can pass the @Value properties explicitly.
+    // TODO Task 8: Add @Bean methods for any beans that can't use
+    // @Component/@Service
+    // Hint: EmailService needs @Value-injected constructor args — declare it as a
+    // @Bean here
+    // so you can pass the @Value properties explicitly.
     //
-    //   Example:
-    //   @Bean
-    //   public EmailService emailService(NotificationRepository repository,
-    //                                    @Value("${email.from}") String from,
-    //                                    @Value("${email.smtp.host}") String smtp) {
-    //       return new EmailService(repository, from, smtp);
-    //   }
+    // Example:
+    // @Bean
+    // public EmailService emailService(NotificationRepository repository,
+    // @Value("${email.from}") String from,
+    // @Value("${email.smtp.host}") String smtp) {
+    // return new EmailService(repository, from, smtp);
+    // }
 
     // TODO Task 9: Declare a @Bean for a PropertySourcesPlaceholderConfigurer
-    //   This is required in Spring Core (non-Boot) to resolve @Value placeholders:
+    // This is required in Spring Core (non-Boot) to resolve @Value placeholders:
     //
-    //   @Bean
-    //   public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
-    //       return new PropertySourcesPlaceholderConfigurer();
-    //   }
+    // @Bean
+    // public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
+    // return new PropertySourcesPlaceholderConfigurer();
+    // }
 }

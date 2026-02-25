@@ -22,7 +22,8 @@ public class NotificationController {
     private final List<Map<String, Object>> sentNotifications = new ArrayList<>();
 
     // TODO Task 7a: POST /api/notifications
-    // Body: { "type": "ORDER_CREATED", "recipient": "user@example.com", "message": "..." }
+    // Body: { "type": "ORDER_CREATED", "recipient": "user@example.com", "message":
+    // "..." }
     @PostMapping
     public ResponseEntity<Map<String, Object>> sendNotification(@RequestBody Map<String, Object> body) {
         log.info("Sending notification: type={}, recipient={}", body.get("type"), body.get("recipient"));

@@ -3,19 +3,17 @@
  * Extends BankAccount.
  *
  * TODO: Extend BankAccount and override withdraw() so the
- *       balance cannot drop below minimumBalance.
+ * balance cannot drop below minimumBalance.
  */
 public class SavingsAccount extends BankAccount {
 
     // TODO: Add private double minimumBalance field
 
-
     // TODO: Constructor — call super(accountHolderName, initialBalance)
-    //       and set minimumBalance
+    // and set minimumBalance
     public SavingsAccount(String accountHolderName, double initialBalance, double minimumBalance) {
 
     }
-
 
     // TODO: Override withdraw(double amount)
     // Before withdrawing, check: (balance - amount) >= minimumBalance

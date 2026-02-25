@@ -43,13 +43,13 @@ public class Task {
     private LocalDateTime updatedAt;
 
     // TODO Task 2: Define the Priority enum as a nested enum inside this class
-    //   Values: LOW, MEDIUM, HIGH, CRITICAL
+    // Values: LOW, MEDIUM, HIGH, CRITICAL
     public enum Priority {
         // TODO
     }
 
     // TODO Task 2: Define the Status enum as a nested enum inside this class
-    //   Values: TODO, IN_PROGRESS, DONE, CANCELLED
+    // Values: TODO, IN_PROGRESS, DONE, CANCELLED
     public enum Status {
         // TODO
     }

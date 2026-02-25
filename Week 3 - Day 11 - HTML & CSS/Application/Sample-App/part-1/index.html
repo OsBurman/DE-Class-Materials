@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 Part 1 — HTML Fundamentals</title>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    header { background: #1e3a5f; color: white; padding: 1.5rem; border-radius: 8px; }
+    section { margin-top: 2rem; border: 1px solid #ccc; padding: 1rem; border-radius: 6px; }
+    section h2 { margin-top: 0; color: #1e3a5f; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: .5rem 1rem; text-align: left; }
+    th { background: #1e3a5f; color: white; }
+    tr:nth-child(even) { background: #f5f5f5; }
+    fieldset { border: 1px solid #999; border-radius: 6px; }
+    label { display: block; margin: .5rem 0 .2rem; font-weight: bold; }
+    input, select, textarea { width: 100%; padding: .4rem; box-sizing: border-box; }
+    button[type="submit"] { margin-top: .8rem; padding: .5rem 1.5rem; background: #1e3a5f; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    /* inline vs block callout */
+    .inline-demo span { background: #fffacd; border: 1px solid #ccc; padding: 2px 6px; margin: 2px; }
+    .block-demo div  { background: #e0f0ff; border: 1px solid #89c4f4; padding: 6px; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  Day 11 Part 1 — HTML Structure & Semantic Markup           -->
+<!-- ============================================================ -->
+
+<header>
+  <h1>Day 11 Part 1 — HTML Fundamentals</h1>
+  <p>Open this file directly in your browser. No build step needed.</p>
+</header>
+
+<nav aria-label="Page sections">
+  <ul>
+    <li><a href="#semantic">Semantic Markup</a></li>
+    <li><a href="#inline-block">Inline vs Block</a></li>
+    <li><a href="#table-demo">HTML Table</a></li>
+    <li><a href="#form-demo">HTML Form</a></li>
+  </ul>
+</nav>
+
+<!-- ─── 1. Semantic Markup ─────────────────────────────────── -->
+<section id="semantic">
+  <h2>1. Semantic HTML Tags</h2>
+  <p>Semantic tags describe <em>meaning</em>, not just appearance.
+     They improve accessibility and SEO.</p>
+  <article>
+    <header><h3>What is Semantic HTML?</h3></header>
+    <p>Tags like <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>,
+       <code>&lt;nav&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;main&gt;</code>,
+       <code>&lt;header&gt;</code>, and <code>&lt;footer&gt;</code> give the browser
+       and screen readers meaningful context — unlike a generic <code>&lt;div&gt;</code>.</p>
+    <footer><small>Source: MDN Web Docs</small></footer>
+  </article>
+
+  <!-- Headings h1–h6 -->
+  <h1>h1 — Main title (one per page)</h1>
+  <h2>h2 — Section heading</h2>
+  <h3>h3 — Sub-section</h3>
+  <h4>h4 — Sub-sub-section</h4>
+
+  <!-- Lists -->
+  <h4>Unordered List</h4>
+  <ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+  </ul>
+
+  <h4>Ordered List</h4>
+  <ol>
+    <li>Plan the layout</li>
+    <li>Write HTML structure</li>
+    <li>Apply styles</li>
+  </ol>
+
+  <h4>Image with alt text</h4>
+  <img src="https://via.placeholder.com/300x100?text=Placeholder+Image"
+       alt="A placeholder image" width="300" />
+
+  <h4>Links</h4>
+  <p>
+    <a href="https://developer.mozilla.org" target="_blank">MDN Web Docs ↗</a> &nbsp;|&nbsp;
+    <a href="#form-demo">Jump to Form section</a>
+  </p>
+</section>
+
+<!-- ─── 2. Inline vs Block ────────────────────────────────── -->
+<section id="inline-block">
+  <h2>2. Inline vs Block Elements</h2>
+  <p><strong>Block elements</strong> start on a new line and take full width:</p>
+  <div class="block-demo">
+    <div>&lt;div&gt; 1</div>
+    <div>&lt;div&gt; 2</div>
+    <p>&lt;p&gt; paragraph is also block</p>
+  </div>
+
+  <p><strong>Inline elements</strong> stay in the flow of text:</p>
+  <div class="inline-demo">
+    Normal text
+    <span>&lt;span&gt; 1</span>
+    <strong>bold</strong>
+    <em>italic</em>
+    <span>&lt;span&gt; 2</span>
+    more text.
+  </div>
+</section>
+
+<!-- ─── 3. HTML Table ─────────────────────────────────────── -->
+<section id="table-demo">
+  <h2>3. HTML Table — Student Grades</h2>
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Java</th><th>HTML</th><th>CSS</th><th>Avg</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Alice</td><td>92</td><td>88</td><td>94</td><td>91.3</td></tr>
+      <tr><td>Bob</td><td>78</td><td>95</td><td>87</td><td>86.7</td></tr>
+      <tr><td>Carol</td><td>85</td><td>90</td><td>92</td><td>89.0</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><th>Class Avg</th><td>85.0</td><td>91.0</td><td>91.0</td><td>89.0</td></tr>
+    </tfoot>
+  </table>
+</section>
+
+<!-- ─── 4. HTML Form ──────────────────────────────────────── -->
+<section id="form-demo">
+  <h2>4. HTML Form — Student Registration</h2>
+  <form action="#" method="post" novalidate>
+    <fieldset>
+      <legend>Personal Information</legend>
+
+      <label for="fullName">Full Name *</label>
+      <input type="text" id="fullName" name="fullName" placeholder="e.g. Alice Smith" required />
+
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" placeholder="alice@example.com" required />
+
+      <label for="dob">Date of Birth</label>
+      <input type="date" id="dob" name="dob" />
+
+      <label for="track">Track *</label>
+      <select id="track" name="track" required>
+        <option value="">— select one —</option>
+        <option value="java">Java Full Stack</option>
+        <option value="react">React Front End</option>
+        <option value="angular">Angular Front End</option>
+        <option value="data">Data Engineering</option>
+      </select>
+
+      <label for="experience">Prior Experience</label>
+      <textarea id="experience" name="experience" rows="3"
+                placeholder="Briefly describe any coding experience..."></textarea>
+
+      <label>
+        <input type="checkbox" name="terms" required /> I agree to the terms &amp; conditions
+      </label>
+
+      <button type="submit">Register</button>
+    </fieldset>
+  </form>
+</section>
+
+<footer style="margin-top:2rem; text-align:center; color:#888;">
+  Day 11 Part 1 — HTML Fundamentals | Academy Sample App
+</footer>
+
+</body>
+</html>

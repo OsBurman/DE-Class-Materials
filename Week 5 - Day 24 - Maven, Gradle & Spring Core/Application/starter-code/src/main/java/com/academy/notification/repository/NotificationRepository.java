@@ -19,18 +19,19 @@ import java.util.concurrent.atomic.AtomicLong;
 @Slf4j
 @Repository
 // TODO Task 10: Add the @Scope annotation to make this a PROTOTYPE bean
-//   @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+// @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 //
 // After adding it, run Main.java and observe the log output:
-//   "Same instance? false"   ← should be false (prototype)
+// "Same instance? false" ← should be false (prototype)
 public class NotificationRepository {
 
     private static final AtomicLong idSequence = new AtomicLong(1);
     private final List<Notification> store = new ArrayList<>();
 
     // TODO Task 11: Add @PostConstruct and @PreDestroy lifecycle methods
-    //   @PostConstruct — log "NotificationRepository initialized (id: {this.hashCode()})"
-    //   @PreDestroy    — log "NotificationRepository destroyed"
+    // @PostConstruct — log "NotificationRepository initialized (id:
+    // {this.hashCode()})"
+    // @PreDestroy — log "NotificationRepository destroyed"
 
     /**
      * Persist a notification to the in-memory store.

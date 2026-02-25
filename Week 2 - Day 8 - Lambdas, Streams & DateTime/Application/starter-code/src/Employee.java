@@ -7,16 +7,15 @@ import java.time.LocalDate;
  * No changes needed here — use this as your data model in EmployeeDashboard.
  */
 public record Employee(
-    int id,
-    String name,
-    String department,
-    double salary,
-    LocalDate hireDate,
-    boolean isActive
-) {
+        int id,
+        String name,
+        String department,
+        double salary,
+        LocalDate hireDate,
+        boolean isActive) {
     @Override
     public String toString() {
         return String.format("Employee{id=%d, name='%s', dept='%s', salary=%.2f, hired=%s, active=%b}",
-            id, name, department, salary, hireDate, isActive);
+                id, name, department, salary, hireDate, isActive);
     }
 }

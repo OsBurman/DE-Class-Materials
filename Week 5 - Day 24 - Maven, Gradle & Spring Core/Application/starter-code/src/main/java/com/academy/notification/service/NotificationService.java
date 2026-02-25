@@ -10,6 +10,7 @@ public interface NotificationService {
 
     /**
      * Send the given notification.
+     * 
      * @param notification the notification to send
      * @return true if sent successfully, false otherwise
      */

@@ -22,8 +22,7 @@ public class ChatController {
     private final StudyAssistantService assistantService;
 
     // In-memory session store: sessionId → chat history
-    private final Map<String, java.util.List<org.springframework.ai.chat.messages.Message>> sessions
-        = new ConcurrentHashMap<>();
+    private final Map<String, java.util.List<org.springframework.ai.chat.messages.Message>> sessions = new ConcurrentHashMap<>();
 
     // TODO Task 3a: POST /api/assistant/ask
     // Body: { "question": "..." }

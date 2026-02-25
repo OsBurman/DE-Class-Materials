@@ -5,7 +5,8 @@ import lombok.Getter;
 /**
  * Thrown when a requested product does not exist.
  *
- * TODO Task 7: This exception is declared — you just need to use it in the service
+ * TODO Task 7: This exception is declared — you just need to use it in the
+ * service
  * and handle it in GlobalExceptionHandler.
  */
 @Getter

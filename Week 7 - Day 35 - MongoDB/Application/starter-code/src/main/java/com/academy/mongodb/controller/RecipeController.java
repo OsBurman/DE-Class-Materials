@@ -24,7 +24,8 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
-    // TODO Task 4a: GET /api/recipes — all recipes (or ?category=X or ?tag=X or ?search=X or ?maxMinutes=N)
+    // TODO Task 4a: GET /api/recipes — all recipes (or ?category=X or ?tag=X or
+    // ?search=X or ?maxMinutes=N)
     @GetMapping
     public ResponseEntity<List<Recipe>> getAllRecipes(
             @RequestParam(required = false) String category,
@@ -32,10 +33,14 @@ public class RecipeController {
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Integer maxMinutes) {
 
-        if (category != null) return ResponseEntity.ok(recipeService.getByCategory(category));
-        if (tag      != null) return ResponseEntity.ok(recipeService.getByTag(tag));
-        if (search   != null) return ResponseEntity.ok(recipeService.search(search));
-        if (maxMinutes != null) return ResponseEntity.ok(recipeService.getQuickRecipes(maxMinutes));
+        if (category != null)
+            return ResponseEntity.ok(recipeService.getByCategory(category));
+        if (tag != null)
+            return ResponseEntity.ok(recipeService.getByTag(tag));
+        if (search != null)
+            return ResponseEntity.ok(recipeService.search(search));
+        if (maxMinutes != null)
+            return ResponseEntity.ok(recipeService.getQuickRecipes(maxMinutes));
         return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 

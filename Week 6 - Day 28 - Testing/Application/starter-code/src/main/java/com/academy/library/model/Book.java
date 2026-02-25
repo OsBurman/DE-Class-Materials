@@ -9,7 +9,11 @@ import lombok.*;
  */
 @Entity
 @Table(name = "books")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id

@@ -51,8 +51,10 @@ public class TaskService {
     }
 
     // TODO Task 3: Implement updateTask(Long id, Task updated)
-    // 1. Check if task exists — if not, throw RuntimeException("Task not found: " + id)
-    // 2. Update title, description, priority, status, dueDate from the updated object
+    // 1. Check if task exists — if not, throw RuntimeException("Task not found: " +
+    // id)
+    // 2. Update title, description, priority, status, dueDate from the updated
+    // object
     // 3. Set updatedAt = LocalDateTime.now()
     // 4. Put back in store and return
     public Task updateTask(Long id, Task updated) {
@@ -61,7 +63,8 @@ public class TaskService {
     }
 
     // TODO Task 3: Implement deleteTask(Long id)
-    // 1. Check if task exists — if not, throw RuntimeException("Task not found: " + id)
+    // 1. Check if task exists — if not, throw RuntimeException("Task not found: " +
+    // id)
     // 2. Remove from taskStore
     // 3. Log: "Deleted task #{id}"
     public void deleteTask(Long id) {

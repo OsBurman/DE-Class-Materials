@@ -30,10 +30,11 @@ public class OrderProducerService {
         log.info("Publishing order event: orderId={}, status={}", event.getOrderId(), event.getStatus());
 
         // TODO: use kafkaTemplate.send(topic, key, value)
-        // The key (orderId) ensures all events for the same order go to the same partition
+        // The key (orderId) ensures all events for the same order go to the same
+        // partition
 
-        CompletableFuture<SendResult<String, OrderEvent>> future =
-            kafkaTemplate.send(ordersTopic, event.getOrderId(), event);
+        CompletableFuture<SendResult<String, OrderEvent>> future = kafkaTemplate.send(ordersTopic, event.getOrderId(),
+                event);
 
         future.whenComplete((result, ex) -> {
             if (ex != null) {
@@ -42,9 +43,9 @@ public class OrderProducerService {
             } else {
                 // TODO Task 3c: Log success with partition and offset info
                 log.info("Order event sent: orderId={}, partition={}, offset={}",
-                    event.getOrderId(),
-                    result.getRecordMetadata().partition(),
-                    result.getRecordMetadata().offset());
+                        event.getOrderId(),
+                        result.getRecordMetadata().partition(),
+                        result.getRecordMetadata().offset());
             }
         });
     }

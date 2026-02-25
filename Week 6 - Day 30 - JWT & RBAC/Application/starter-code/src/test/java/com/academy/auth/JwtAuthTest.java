@@ -85,7 +85,7 @@ class JwtAuthTest {
                 .andExpect(status().isOk())
                 .andReturn();
         LoginResponseDto response = objectMapper.readValue(
-            result.getResponse().getContentAsString(), LoginResponseDto.class);
+                result.getResponse().getContentAsString(), LoginResponseDto.class);
         return response.getAccessToken();
     }
 }

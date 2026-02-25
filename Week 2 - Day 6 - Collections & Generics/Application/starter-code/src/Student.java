@@ -1,13 +1,13 @@
 import java.util.Objects;
 
 /**
- * Represents a student. Implements Comparable for natural (alphabetical) ordering.
+ * Represents a student. Implements Comparable for natural (alphabetical)
+ * ordering.
  * Complete all TODOs.
  */
 public class Student implements Comparable<Student> {
 
     // TODO Task 1: Declare fields — studentId (int), name (String), gpa (double)
-
 
     // TODO: Parameterized constructor
     public Student(int studentId, String name, double gpa) {
@@ -15,7 +15,6 @@ public class Student implements Comparable<Student> {
     }
 
     // TODO: Getters for all fields
-
 
     // TODO: Implement compareTo() — natural order is alphabetical by name
     @Override

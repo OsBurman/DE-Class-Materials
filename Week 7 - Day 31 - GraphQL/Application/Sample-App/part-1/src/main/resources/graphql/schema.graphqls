@@ -1,0 +1,96 @@
+# Day 31 — Part 1: GraphQL Schema Definition Language (SDL)
+# ==========================================================
+# GraphQL uses a typed schema to define the API contract.
+# Every field has a type. ! means non-null (required).
+
+# ── Scalar Types ──────────────────────────────────────────
+# Built-in scalars: String, Int, Float, Boolean, ID
+# ID is a special scalar representing a unique identifier
+
+# ── Object Types ──────────────────────────────────────────
+type Student {
+  id: ID!
+  name: String!
+  email: String!
+  major: String!
+  gpa: Float
+  courses: [Course!]!    # List of enrolled courses (one-to-many)
+}
+
+type Course {
+  id: ID!
+  title: String!
+  credits: Int!
+  instructor: String!
+  students: [Student!]!  # Students enrolled in this course
+}
+
+type Department {
+  id: ID!
+  name: String!
+  courses: [Course!]!
+}
+
+# ── Query Type ─────────────────────────────────────────────
+# Defines all available READ operations (like GET in REST)
+type Query {
+  # Student queries
+  students: [Student!]!
+  student(id: ID!): Student
+  studentsByMajor(major: String!): [Student!]!
+
+  # Course queries
+  courses: [Course!]!
+  course(id: ID!): Course
+
+  # Department query
+  departments: [Department!]!
+
+  # Reference query
+  graphqlReference: GraphQlReference!
+}
+
+# ── Mutation Type ──────────────────────────────────────────
+# Defines all WRITE operations (like POST/PUT/DELETE in REST)
+type Mutation {
+  createStudent(input: CreateStudentInput!): Student!
+  updateStudent(id: ID!, input: UpdateStudentInput!): Student
+  deleteStudent(id: ID!): Boolean!
+  enrollStudent(studentId: ID!, courseId: ID!): Student
+}
+
+# ── Input Types ────────────────────────────────────────────
+# Input types are used for mutation arguments (not query results)
+input CreateStudentInput {
+  name: String!
+  email: String!
+  major: String!
+  gpa: Float
+}
+
+input UpdateStudentInput {
+  name: String
+  email: String
+  major: String
+  gpa: Float
+}
+
+# ── Reference Type ─────────────────────────────────────────
+type GraphQlReference {
+  topic: String!
+  vsRest: [Comparison!]!
+  advantages: [String!]!
+  disadvantages: [String!]!
+  coreConcepts: [Concept!]!
+}
+
+type Comparison {
+  feature: String!
+  rest: String!
+  graphql: String!
+}
+
+type Concept {
+  name: String!
+  description: String!
+}
