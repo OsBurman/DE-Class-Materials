@@ -1,0 +1,23 @@
+<div class="card">
+  <img class="avatar" [src]="profile.avatarUrl" [alt]="profile.name" />
+
+  <div class="card-body">
+    <h2 class="card-name">{{ profile.name || 'Your Name' }}</h2>
+    <p class="card-title">{{ profile.title || 'Your Title' }}</p>
+    <p class="card-bio">{{ profile.bio || 'Your bio will appear here...' }}</p>
+
+    <div class="skills-container">
+      @for (skill of profile.skills; track $index) {
+        <span class="skill-badge">{{ skill }}</span>
+      }
+    </div>
+
+    <div class="availability" [class.available]="profile.isAvailableForWork">
+      @if (profile.isAvailableForWork) {
+        ✅ Open to Work
+      } @else {
+        🔴 Not Available
+      }
+    </div>
+  </div>
+</div>

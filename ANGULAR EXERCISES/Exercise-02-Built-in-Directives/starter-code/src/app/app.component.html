@@ -1,0 +1,57 @@
+<div class="app-container">
+
+  <header class="app-header">
+    <h1>📋 Task Manager</h1>
+    <!-- TODO 16: Show a summary badge: "X / Y completed"
+                  Use [ngClass] to apply class 'badge-done' when all tasks are complete -->
+    <span class="badge">
+      <!-- completedCount / totalCount here -->
+    </span>
+  </header>
+
+  <!-- ─── ADD TASK ─── -->
+  <div class="add-task-row">
+    <!-- Use [(ngModel)] for newTaskTitle and call addTask() on Enter and button click -->
+    <input
+      type="text"
+      placeholder="Add a new task..."
+    />
+    <button class="btn-primary">Add Task</button>
+  </div>
+
+  <!-- ─── FILTER BUTTONS ─── -->
+  <!-- TODO 15: Loop over ['all', 'active', 'completed'] with @for -->
+  <!-- TODO 16: Use [ngClass] to apply 'active-filter' when this button matches `filter` -->
+  <div class="filters">
+    <!-- @for loop here -->
+  </div>
+
+  <!-- ─── TASK LIST ─── -->
+  <!-- TODO 10: Show this empty-state div ONLY when filteredTasks is empty (@if) -->
+  <div class="empty-state">
+    <p>🎉 No tasks here!</p>
+  </div>
+
+  <!-- TODO 11: Use @for with track task.id to render each task -->
+  <ul class="task-list">
+    <!-- @for loop here -->
+
+    <!-- Inside the loop: -->
+    <!--
+    <li
+      TODO 12: [ngClass] — apply 'completed' if task.completed, 'priority-low/medium/high' based on task.priority
+      TODO 14: [ngStyle] — set opacity to 0.5 if completed, 1.0 otherwise
+    >
+      <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task.id)" />
+
+      <span class="task-title">{{ task.title }}</span>
+
+      TODO 13: Use @switch on task.priority to show 🟢 (low) 🟡 (medium) 🔴 (high)
+      <span class="priority-icon">...</span>
+
+      <button class="btn-delete" (click)="deleteTask(task.id)">✕</button>
+    </li>
+    -->
+  </ul>
+
+</div>

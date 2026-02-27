@@ -1,0 +1,78 @@
+<div class="page">
+  <header class="app-header">
+    <h1>🛍️ Angular Signal Shop</h1>
+    <div class="header-right">
+      <span class="timer">⏱ {{ elapsed() }}</span>
+      <span class="cart-badge">🛒 {{ cartCount() }} items</span>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- PRODUCT GRID -->
+    <section class="products">
+      <h2>Products</h2>
+      <div class="product-grid">
+        @for (product of products; track product.id) {
+          <div class="product-card">
+            <div class="product-emoji">{{ product.emoji }}</div>
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ product.price | currency }}</p>
+            <button (click)="addToCart(product)">Add to Cart</button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- CART -->
+    <aside class="cart">
+      <h2>🛒 Cart</h2>
+
+      @if (cart().length === 0) {
+        <p class="empty">Your cart is empty.</p>
+      } @else {
+        <ul>
+          @for (item of cart(); track item.product.id) {
+            <li>
+              <span>{{ item.product.emoji }} {{ item.product.name }}</span>
+              <span class="qty">×{{ item.quantity }}</span>
+              <span>{{ item.product.price * item.quantity | currency }}</span>
+              <button (click)="removeFromCart(item.product.id)">✕</button>
+            </li>
+          }
+        </ul>
+
+        <!-- Discount Code -->
+        <div class="discount-row">
+          <input
+            [value]="discountCode()"
+            (input)="setDiscountCode($any($event.target).value)"
+            placeholder="Discount code (try ANGULAR10)"
+          />
+          @if (discount() > 0) {
+            <span class="discount-badge">-{{ discount() * 100 }}% applied!</span>
+          }
+        </div>
+
+        <!-- Order Summary -->
+        <div class="summary">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>{{ subtotal() | currency }}</span>
+          </div>
+          @if (discount() > 0) {
+            <div class="summary-row discount">
+              <span>Discount ({{ discount() * 100 }}%):</span>
+              <span>-{{ subtotal() * discount() | currency }}</span>
+            </div>
+          }
+          <div class="summary-row total">
+            <span>Total:</span>
+            <span>{{ total() | currency }}</span>
+          </div>
+        </div>
+      }
+    </aside>
+
+  </div>
+</div>

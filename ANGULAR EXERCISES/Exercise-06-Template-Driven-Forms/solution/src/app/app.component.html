@@ -1,0 +1,157 @@
+<div class="page">
+  <h1>💼 Job Application</h1>
+
+  @if (submitted) {
+    <div class="success">
+      <div class="success-icon">🎉</div>
+      <h2>Application Submitted!</h2>
+      <p>Thanks <strong>{{ formData.fullName }}</strong>, we'll be in touch at <strong>{{ formData.email }}</strong>.</p>
+      <p class="skills-summary">Skills: {{ formData.skills.join(', ') || 'None selected' }}</p>
+      <button class="btn-submit" (click)="reset(appForm)">Submit Another Application</button>
+    </div>
+  } @else {
+    <form #appForm="ngForm" (ngSubmit)="onSubmit(appForm)" class="application-form" novalidate>
+
+      <!-- FULL NAME -->
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input
+          type="text"
+          [(ngModel)]="formData.fullName"
+          name="fullName"
+          required
+          minlength="2"
+          #fullName="ngModel"
+          [class.invalid]="fullName.invalid && fullName.touched"
+          placeholder="Jane Smith"
+        />
+        @if (fullName.invalid && fullName.touched) {
+          @if (fullName.errors?.['required']) { <span class="error">Full name is required.</span> }
+          @if (fullName.errors?.['minlength']) { <span class="error">Must be at least 2 characters.</span> }
+        }
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label>Email *</label>
+        <input
+          type="email"
+          [(ngModel)]="formData.email"
+          name="email"
+          required
+          email
+          #emailRef="ngModel"
+          [class.invalid]="emailRef.invalid && emailRef.touched"
+          placeholder="jane@example.com"
+        />
+        @if (emailRef.invalid && emailRef.touched) {
+          @if (emailRef.errors?.['required']) { <span class="error">Email is required.</span> }
+          @if (emailRef.errors?.['email']) { <span class="error">Please enter a valid email.</span> }
+        }
+      </div>
+
+      <!-- PHONE -->
+      <div class="form-group">
+        <label>Phone</label>
+        <input
+          type="tel"
+          [(ngModel)]="formData.phone"
+          name="phone"
+          pattern="[0-9+\-\s]+"
+          #phoneRef="ngModel"
+          [class.invalid]="phoneRef.invalid && phoneRef.touched"
+          placeholder="+1 555 000 0000"
+        />
+        @if (phoneRef.invalid && phoneRef.touched) {
+          <span class="error">Please enter a valid phone number.</span>
+        }
+      </div>
+
+      <!-- YEARS OF EXPERIENCE -->
+      <div class="form-group">
+        <label>Years of Experience *</label>
+        <input
+          type="number"
+          [(ngModel)]="formData.yearsOfExperience"
+          name="yearsOfExperience"
+          required
+          min="0"
+          max="50"
+          #yoe="ngModel"
+          [class.invalid]="yoe.invalid && yoe.touched"
+          placeholder="3"
+        />
+        @if (yoe.invalid && yoe.touched) {
+          @if (yoe.errors?.['required']) { <span class="error">Experience is required.</span> }
+          @if (yoe.errors?.['min']) { <span class="error">Cannot be negative.</span> }
+          @if (yoe.errors?.['max']) { <span class="error">Maximum is 50 years.</span> }
+        }
+      </div>
+
+      <!-- COVER LETTER -->
+      <div class="form-group">
+        <label>Cover Letter * <small>(min 50 characters)</small></label>
+        <textarea
+          [(ngModel)]="formData.coverLetter"
+          name="coverLetter"
+          required
+          minlength="50"
+          rows="5"
+          #cover="ngModel"
+          [class.invalid]="cover.invalid && cover.touched"
+          placeholder="Tell us why you want to join..."
+        ></textarea>
+        <div class="char-count">{{ formData.coverLetter.length }} / 50 min</div>
+        @if (cover.invalid && cover.touched) {
+          @if (cover.errors?.['required']) { <span class="error">Cover letter is required.</span> }
+          @if (cover.errors?.['minlength']) { <span class="error">Must be at least 50 characters.</span> }
+        }
+      </div>
+
+      <!-- SKILLS -->
+      <div class="form-group">
+        <label>Skills</label>
+        <div class="skills-checkboxes">
+          @for (skill of availableSkills; track skill) {
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                [checked]="formData.skills.includes(skill)"
+                (change)="toggleSkill(skill, $any($event.target).checked)"
+              />
+              {{ skill }}
+            </label>
+          }
+        </div>
+      </div>
+
+      <!-- TERMS -->
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [(ngModel)]="formData.agreeToTerms"
+            name="agreeToTerms"
+            required
+            #terms="ngModel"
+          />
+          I agree to the Terms and Conditions *
+        </label>
+        @if (terms.invalid && terms.touched) {
+          <span class="error">You must agree to the terms.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn-submit" [disabled]="appForm.invalid">
+        Submit Application
+      </button>
+
+      <p class="form-status">
+        Form status: <strong>{{ appForm.valid ? '✅ Valid' : '❌ Invalid' }}</strong>
+        | Dirty: {{ appForm.dirty }}
+        | Touched: {{ appForm.touched }}
+      </p>
+
+    </form>
+  }
+</div>

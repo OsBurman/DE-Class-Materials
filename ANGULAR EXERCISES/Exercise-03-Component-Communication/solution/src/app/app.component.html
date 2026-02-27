@@ -1,0 +1,16 @@
+<div class="page">
+  <h1>🛍️ Angular Shop</h1>
+  <div class="layout">
+    <main class="product-grid">
+      @for (product of products; track product.id) {
+        <app-product-card
+          [product]="product"
+          (addToCart)="onAddToCart($event)">
+        </app-product-card>
+      }
+    </main>
+    <aside class="cart-sidebar">
+      <app-cart [items]="cartItems" (cartCleared)="onCartCleared()"></app-cart>
+    </aside>
+  </div>
+</div>

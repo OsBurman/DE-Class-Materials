@@ -1,0 +1,137 @@
+<div class="page">
+  <h1>🧑‍💻 Create Account</h1>
+
+  <div class="steps">
+    <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">1 Account</div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">2 Profile</div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep >= 3">3 Social</div>
+  </div>
+
+  @if (!submitted) {
+
+    <!-- STEP 1 -->
+    @if (currentStep === 1) {
+      <form [formGroup]="accountForm" class="form-card">
+        <h2>Account Details</h2>
+
+        <div class="form-group">
+          <label>Username *</label>
+          <input formControlName="username" type="text" placeholder="cool_user_123" [class.invalid]="accountForm.get('username')?.invalid && accountForm.get('username')?.touched" />
+          @if (accountForm.get('username')?.invalid && accountForm.get('username')?.touched) {
+            @if (accountForm.get('username')?.errors?.['required']) { <span class="error">Username is required.</span> }
+            @if (accountForm.get('username')?.errors?.['minlength']) { <span class="error">Must be at least 3 characters.</span> }
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email *</label>
+          <input formControlName="email" type="email" placeholder="you@example.com" [class.invalid]="accountForm.get('email')?.invalid && accountForm.get('email')?.touched" />
+          @if (accountForm.get('email')?.invalid && accountForm.get('email')?.touched) {
+            @if (accountForm.get('email')?.errors?.['required']) { <span class="error">Email is required.</span> }
+            @if (accountForm.get('email')?.errors?.['email']) { <span class="error">Please enter a valid email.</span> }
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Password *</label>
+          <input formControlName="password" type="password" placeholder="min 8 characters" [class.invalid]="accountForm.get('password')?.invalid && accountForm.get('password')?.touched" />
+          @if (accountForm.get('password')?.errors?.['required'] && accountForm.get('password')?.touched) {
+            <span class="error">Password is required.</span>
+          }
+          @if (accountForm.get('password')?.errors?.['minlength'] && accountForm.get('password')?.touched) {
+            <span class="error">Password must be at least 8 characters.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Confirm Password *</label>
+          <input formControlName="confirmPassword" type="password" placeholder="repeat password"
+            [class.invalid]="accountForm.errors?.['passwordsMismatch'] && accountForm.get('confirmPassword')?.touched" />
+          @if (accountForm.errors?.['passwordsMismatch'] && accountForm.get('confirmPassword')?.touched) {
+            <span class="error">Passwords do not match.</span>
+          }
+        </div>
+
+        <button type="button" class="btn-next" (click)="nextStep()">Next: Profile →</button>
+      </form>
+    }
+
+    <!-- STEP 2 -->
+    @if (currentStep === 2) {
+      <form [formGroup]="profileForm" class="form-card">
+        <h2>Your Profile</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input formControlName="firstName" type="text" placeholder="Jane" [class.invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" />
+            @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+              <span class="error">First name is required.</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input formControlName="lastName" type="text" placeholder="Smith" [class.invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" />
+            @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+              <span class="error">Last name is required.</span>
+            }
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth *</label>
+          <input formControlName="dateOfBirth" type="date" [class.invalid]="profileForm.get('dateOfBirth')?.invalid && profileForm.get('dateOfBirth')?.touched" />
+          @if (profileForm.get('dateOfBirth')?.invalid && profileForm.get('dateOfBirth')?.touched) {
+            <span class="error">Date of birth is required.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Bio <small>(max 200 chars)</small></label>
+          <textarea formControlName="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+          <div class="char-count">{{ profileForm.get('bio')?.value?.length || 0 }} / 200</div>
+          @if (profileForm.get('bio')?.errors?.['maxlength']) {
+            <span class="error">Bio cannot exceed 200 characters.</span>
+          }
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-back" (click)="prevStep()">← Back</button>
+          <button type="button" class="btn-next" (click)="nextStep()">Next: Social →</button>
+        </div>
+      </form>
+    }
+
+    <!-- STEP 3 -->
+    @if (currentStep === 3) {
+      <form [formGroup]="socialForm" class="form-card">
+        <h2>Social Links <small>(optional)</small></h2>
+
+        <div formArrayName="links">
+          @for (link of links.controls; track $index) {
+            <div [formGroupName]="$index" class="link-row">
+              <input formControlName="platform" type="text" placeholder="Platform (e.g. GitHub)" />
+              <input formControlName="url" type="url" placeholder="https://..." [class.invalid]="link.get('url')?.invalid && link.get('url')?.touched" />
+              @if (link.get('url')?.errors?.['pattern'] && link.get('url')?.touched) {
+                <span class="error">Must be a valid URL (https://...)</span>
+              }
+              <button type="button" class="btn-remove" (click)="removeLink($index)">✕</button>
+            </div>
+          }
+        </div>
+
+        <button type="button" class="btn-add-link" (click)="addLink()">+ Add Link</button>
+
+        <div class="btn-row">
+          <button type="button" class="btn-back" (click)="prevStep()">← Back</button>
+          <button type="button" class="btn-next" (click)="onSubmit()">🎉 Create Account</button>
+        </div>
+      </form>
+    }
+
+  } @else {
+    <div class="success">
+      <h2>🎉 Account Created!</h2>
+      <p>Welcome, <strong>{{ allData.username }}</strong>! Check your inbox at {{ allData.email }}.</p>
+      <pre>{{ allData | json }}</pre>
+    </div>
+  }
+</div>

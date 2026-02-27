@@ -1,0 +1,32 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: #f7fafc; }
+.page { max-width: 640px; margin: 2rem auto; padding: 1.5rem; }
+h1 { text-align: center; font-size: 2rem; margin-bottom: 2rem; color: #1a202c; }
+
+.application-form { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.form-group { margin-bottom: 1.25rem; }
+label { display: block; font-size: 0.85rem; font-weight: 600; color: #4a5568; margin-bottom: 0.3rem; }
+small { font-weight: 400; color: #718096; }
+
+input[type=text], input[type=email], input[type=tel], input[type=number], textarea {
+  width: 100%; padding: 0.6rem 0.9rem; border: 1.5px solid #cbd5e0; border-radius: 8px; font-size: 0.95rem; transition: border-color 0.2s;
+}
+input:focus, textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.2); }
+input.invalid, textarea.invalid { border-color: #e53e3e; }
+
+.error { display: block; color: #e53e3e; font-size: 0.8rem; margin-top: 0.25rem; }
+.char-count { font-size: 0.78rem; color: #a0aec0; text-align: right; margin-top: 0.2rem; }
+
+.skills-checkboxes { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.checkbox-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; font-weight: 400; cursor: pointer; }
+
+.btn-submit { width: 100%; background: #667eea; color: white; border: none; border-radius: 10px; padding: 0.75rem; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s; }
+.btn-submit:hover:not(:disabled) { background: #5a67d8; }
+.btn-submit:disabled { background: #a0aec0; cursor: not-allowed; }
+.form-status { text-align: center; font-size: 0.8rem; color: #718096; margin-top: 0.75rem; }
+
+.success { background: white; border-radius: 16px; padding: 3rem 2rem; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.success-icon { font-size: 4rem; margin-bottom: 1rem; }
+.success h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #276749; }
+.success p { color: #4a5568; margin-bottom: 0.5rem; }
+.skills-summary { font-size: 0.9rem; color: #718096; margin-bottom: 1.5rem; }

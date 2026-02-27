@@ -1,0 +1,128 @@
+<div class="page">
+  <h1>🧑‍💻 Create Account</h1>
+
+  <!-- TODO 11: Progress indicator showing steps 1, 2, 3 — highlight the current step -->
+  <div class="steps">
+    <div class="step" [class.active]="currentStep >= 1" [class.done]="currentStep > 1">1 Account</div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep >= 2" [class.done]="currentStep > 2">2 Profile</div>
+    <div class="step-line"></div>
+    <div class="step" [class.active]="currentStep >= 3">3 Social</div>
+  </div>
+
+  <!-- ────────────── STEP 1: ACCOUNT ────────────── -->
+  <!-- TODO 12: Bind [formGroup]="accountForm" and use formControlName on each input -->
+  @if (currentStep === 1) {
+    <form class="form-card">
+      <h2>Account Details</h2>
+
+      <div class="form-group">
+        <label>Username *</label>
+        <!-- formControlName="username" -->
+        <input type="text" placeholder="cool_user_123" />
+        <!-- TODO 13: Show errors for required and minlength -->
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <!-- formControlName="email" -->
+        <input type="email" placeholder="you@example.com" />
+        <!-- Show errors for required and email format -->
+      </div>
+
+      <div class="form-group">
+        <label>Password *</label>
+        <!-- formControlName="password" -->
+        <input type="password" placeholder="min 8 characters" />
+        <!-- Show errors for required and minlength -->
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password *</label>
+        <!-- formControlName="confirmPassword" -->
+        <input type="password" placeholder="repeat password" />
+        <!-- TODO 14: Show group-level error:
+             accountForm.errors?.['passwordsMismatch'] && accountForm.get('confirmPassword')?.touched -->
+      </div>
+
+      <button type="button" class="btn-next" (click)="nextStep()">
+        Next: Profile →
+      </button>
+    </form>
+  }
+
+  <!-- ────────────── STEP 2: PROFILE ────────────── -->
+  @if (currentStep === 2) {
+    <form [formGroup]="profileForm" class="form-card">
+      <h2>Your Profile</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name *</label>
+          <input type="text" formControlName="firstName" placeholder="Jane" />
+          @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+            <span class="error">First name is required.</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Last Name *</label>
+          <input type="text" formControlName="lastName" placeholder="Smith" />
+          @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+            <span class="error">Last name is required.</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Date of Birth *</label>
+        <input type="date" formControlName="dateOfBirth" />
+        @if (profileForm.get('dateOfBirth')?.invalid && profileForm.get('dateOfBirth')?.touched) {
+          <span class="error">Date of birth is required.</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Bio <small>(max 200 chars)</small></label>
+        <textarea formControlName="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+        <div class="char-count">{{ profileForm.get('bio')?.value?.length || 0 }} / 200</div>
+        @if (profileForm.get('bio')?.errors?.['maxlength']) {
+          <span class="error">Bio cannot exceed 200 characters.</span>
+        }
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" (click)="prevStep()">← Back</button>
+        <button type="button" class="btn-next" (click)="nextStep()">Next: Social →</button>
+      </div>
+    </form>
+  }
+
+  <!-- ────────────── STEP 3: SOCIAL LINKS ────────────── -->
+  <!-- TODO 15: Use formArrayName="links" and loop over links.controls with @for -->
+  @if (currentStep === 3) {
+    <form [formGroup]="socialForm" class="form-card">
+      <h2>Social Links <small>(optional)</small></h2>
+
+      <div formArrayName="links">
+        <!-- @for loop over links.controls here, each with [formGroupName]="$index" -->
+        <!-- Each link group has: platform (input) and url (input) -->
+        <!-- Plus a remove button: (click)="removeLink($index)" -->
+      </div>
+
+      <button type="button" class="btn-add-link" (click)="addLink()">+ Add Link</button>
+
+      <div class="btn-row">
+        <button type="button" class="btn-back" (click)="prevStep()">← Back</button>
+        <button type="button" class="btn-next" (click)="onSubmit()">🎉 Create Account</button>
+      </div>
+    </form>
+  }
+
+  <!-- SUCCESS SCREEN -->
+  @if (submitted) {
+    <div class="success">
+      <h2>🎉 Account Created!</h2>
+      <pre>{{ allData | json }}</pre>
+    </div>
+  }
+</div>

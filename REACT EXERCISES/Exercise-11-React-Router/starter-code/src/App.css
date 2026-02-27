@@ -1,0 +1,37 @@
+.page { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+nav { background: #1e293b; padding: 0.85rem 2rem; display: flex; align-items: center; gap: 1.5rem; }
+nav .brand { color: #fff; font-weight: 700; font-size: 1.2rem; text-decoration: none; margin-right: auto; }
+nav a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color 0.15s; }
+nav a:hover { color: #fff; }
+nav a.active { color: #818cf8; font-weight: 600; }
+nav .badge { background: #ef4444; color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.4rem; border-radius: 8px; margin-left: 0.25rem; }
+nav .nav-user { color: #94a3b8; font-size: 0.85rem; }
+nav button { background: transparent; border: 1px solid #475569; color: #94a3b8; border-radius: 5px; padding: 0.25rem 0.6rem; cursor: pointer; font-size: 0.8rem; }
+.hero { text-align: center; padding: 4rem 1rem; }
+.hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+.hero p { font-size: 1.1rem; color: #64748b; margin-bottom: 2rem; }
+.btn { display: inline-block; padding: 0.65rem 1.5rem; background: #6366f1; color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; border: none; cursor: pointer; font-size: 0.95rem; }
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+.book-card { background: #fff; border-radius: 10px; padding: 1.25rem; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; display: block; transition: box-shadow 0.15s; }
+.book-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.1); }
+.book-cover { font-size: 4rem; text-align: center; margin-bottom: 0.75rem; }
+.book-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.book-author { font-size: 0.8rem; color: #64748b; margin-bottom: 0.5rem; }
+.book-price { font-weight: 700; color: #6366f1; }
+.book-genre-badge { font-size: 0.7rem; background: #ede9fe; color: #7c3aed; padding: 0.1rem 0.45rem; border-radius: 8px; }
+.book-detail { max-width: 700px; margin: 0 auto; }
+.book-detail .cover-large { font-size: 8rem; text-align: center; margin-bottom: 1rem; }
+.book-detail h1 { font-size: 2rem; margin-bottom: 0.3rem; }
+.book-detail .meta { color: #64748b; margin-bottom: 1rem; }
+.book-detail .description { margin-bottom: 1.5rem; line-height: 1.8; }
+.back-link { color: #6366f1; text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 1.5rem; }
+.cart-item { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #e2e8f0; }
+.empty-cart { text-align: center; padding: 3rem; color: #94a3b8; }
+.login-form { max-width: 400px; margin: 3rem auto; background: #fff; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,.08); }
+.login-form h1 { margin-bottom: 1.5rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.3rem; font-size: 0.9rem; font-weight: 600; }
+.form-group input { width: 100%; padding: 0.55rem 0.75rem; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 0.95rem; }
+.profile-card { background: #fff; border-radius: 12px; padding: 2rem; max-width: 500px; border: 1px solid #e2e8f0; }
+.not-found { text-align: center; padding: 5rem 1rem; }
+.not-found .code { font-size: 6rem; font-weight: 900; color: #e2e8f0; line-height: 1; }

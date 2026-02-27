@@ -1,0 +1,56 @@
+<div class="page">
+  <h1>🏢 Employee Directory</h1>
+
+  <!-- Search box using custom searchFilter pipe -->
+  <input class="search-box" [(ngModel)]="searchQuery" placeholder="Search by name, department, or role..." />
+
+  <p class="count">Showing {{ (employees | searchFilter:searchQuery).length }} of {{ employees.length }} employees</p>
+
+  <!-- Employee table using built-in and custom pipes -->
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Role</th>
+        <th>Salary</th>
+        <th>Joined</th>
+        <th>Bio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- TODO 10: Loop employees through the searchFilter pipe -->
+      @for (emp of employees | searchFilter:searchQuery; track emp.id) {
+        <tr>
+          <!-- TODO 11: Apply titlecase pipe to name, uppercase to department,
+                        currency pipe to salary, date pipe to startDate -->
+          <td>{{ emp.name | titlecase }}</td>
+          <td><span class="dept-badge">{{ emp.department | uppercase }}</span></td>
+          <td>{{ emp.role }}</td>
+          <td>{{ emp.salary | currency:'USD':'symbol':'1.0-0' }}</td>
+          <td>
+            <!-- TODO 12: Use the timeAgo custom pipe and mediumDate built-in -->
+            <span class="date-main">{{ emp.startDate | date:'mediumDate' }}</span>
+            <span class="date-ago">{{ emp.startDate | timeAgo }}</span>
+          </td>
+          <td>
+            <!-- TODO 12: Use the truncate custom pipe with limit 80 -->
+            {{ emp.bio | truncate:80 }}
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <hr />
+
+  <!-- Async pipe demo -->
+  <h2>Async Pipe Demo</h2>
+  <p><em>This section simulates loading data from an API (1.2s delay):</em></p>
+  <!-- TODO 13: Use the async pipe to unwrap employees$ -->
+  @if (employees$ | async; as asyncEmployees) {
+    <p class="async-loaded">✅ Loaded {{ asyncEmployees.length }} employees asynchronously!</p>
+  } @else {
+    <p class="async-loading">⏳ Loading employees...</p>
+  }
+</div>

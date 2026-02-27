@@ -1,0 +1,58 @@
+.counter {
+  background: #f8f9ff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.counter:hover {
+  border-color: #4f46e5;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.1);
+}
+
+.counter-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.counter-emoji { font-size: 1.5rem; }
+.counter-label { font-weight: 600; font-size: 1rem; color: #444; }
+
+.counter-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 1rem;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.counter-value--zero { color: #cbd5e1; }
+
+.counter-controls { display: flex; gap: 0.5rem; justify-content: center; }
+
+.ctrl-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: bold;
+}
+
+.ctrl-btn--dec { background: #fee2e2; color: #dc2626; }
+.ctrl-btn--dec:hover { background: #dc2626; color: white; }
+.ctrl-btn--inc { background: #dcfce7; color: #16a34a; }
+.ctrl-btn--inc:hover { background: #16a34a; color: white; }
+.ctrl-btn--reset { background: #f1f5f9; color: #64748b; }
+.ctrl-btn--reset:hover { background: #64748b; color: white; }

@@ -1,0 +1,14 @@
+<nav>
+  <span class="brand">✅ TaskFlow</span>
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Dashboard</a>
+    <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+    <a routerLink="/tasks/new" class="btn-new">+ New Task</a>
+  </div>
+</nav>
+
+<main>
+  <router-outlet />
+</main>
+
+<app-notification-toast [toasts]="toasts()" />

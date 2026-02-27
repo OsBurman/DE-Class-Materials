@@ -1,0 +1,30 @@
+.app { min-height: 100vh; }
+.app-header { background: #1e293b; color: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+.app-header h1 { font-size: 1.4rem; }
+
+/* Toolbar */
+.toolbar { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 1rem 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.toolbar input[type="text"] { padding: 0.45rem 0.75rem; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 0.9rem; min-width: 200px; }
+.toolbar select { padding: 0.45rem 0.75rem; border: 1.5px solid #e2e8f0; border-radius: 6px; font-size: 0.9rem; background: #fff; }
+.toolbar input[type="range"] { accent-color: #6366f1; }
+.toolbar label { font-size: 0.85rem; color: #64748b; display: flex; align-items: center; gap: 0.4rem; }
+.result-count { margin-left: auto; font-size: 0.85rem; color: #94a3b8; }
+
+/* Products grid */
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 1rem; padding: 1.5rem 2rem; }
+
+/* ProductCard */
+.product-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 1rem; position: relative; }
+.product-card.in-cart { border-color: #6366f1; }
+.product-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
+.product-category { font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem; }
+.product-price { font-weight: 700; color: #6366f1; font-size: 1rem; margin-bottom: 0.3rem; }
+.product-rating { font-size: 0.8rem; color: #f59e0b; margin-bottom: 0.5rem; }
+.product-stock { font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem; }
+.btn-cart { width: 100%; padding: 0.4rem; border-radius: 6px; border: 1.5px solid #6366f1; background: transparent; color: #6366f1; font-size: 0.85rem; font-weight: 600; transition: all 0.15s; }
+.btn-cart.in-cart { background: #6366f1; color: #fff; }
+.render-badge { position: absolute; top: 6px; right: 8px; font-size: 0.7rem; background: #fef3c7; color: #92400e; padding: 0.1rem 0.35rem; border-radius: 8px; }
+
+/* CartSummary */
+.cart-summary { font-size: 0.9rem; color: #94a3b8; }
+.cart-summary strong { color: #fff; }

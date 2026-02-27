@@ -1,0 +1,36 @@
+@if (task) {
+  <div class="detail">
+    <div class="header">
+      <h1>{{ task.title }}</h1>
+      <div class="actions">
+        <button class="btn-edit" (click)="edit()">✏️ Edit</button>
+        <button class="btn-back" (click)="back()">← Back</button>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <span [class]="'badge priority-' + task.priority">{{ task.priority }}</span>
+      <span [class]="'badge status-' + task.status">{{ task.status }}</span>
+      @if (task.dueDate) {
+        <span class="due">Due: {{ task.dueDate }}</span>
+      }
+    </div>
+
+    <p class="description">{{ task.description || 'No description provided.' }}</p>
+
+    @if (task.tags.length > 0) {
+      <div class="tags">
+        @for (tag of task.tags; track tag) {
+          <span class="tag">{{ tag }}</span>
+        }
+      </div>
+    }
+
+    <p class="created">Created {{ task.createdAt | timeAgo }}</p>
+  </div>
+} @else {
+  <div class="not-found">
+    <h2>Task not found.</h2>
+    <button (click)="back()">← Back to Tasks</button>
+  </div>
+}

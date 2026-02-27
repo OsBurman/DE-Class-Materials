@@ -1,0 +1,56 @@
+<div class="form-page">
+  <h1>{{ isEditMode ? 'Edit Task' : 'New Task' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="card">
+
+    <div class="field">
+      <label>Title *</label>
+      <input formControlName="title" placeholder="Task title" />
+      @if (fieldError('title', 'required'))  { <span class="err">Title is required.</span> }
+      @if (fieldError('title', 'minlength')) { <span class="err">Title must be at least 3 characters.</span> }
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea formControlName="description" rows="3" placeholder="Optional description"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Priority *</label>
+        <select formControlName="priority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Status *</label>
+        <select formControlName="status">
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Due Date *</label>
+        <input type="date" formControlName="dueDate" />
+        @if (fieldError('dueDate', 'required')) { <span class="err">Due date is required.</span> }
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Tags <small>(comma-separated)</small></label>
+      <input formControlName="tags" placeholder="angular, frontend, ui" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">
+        {{ isEditMode ? 'Update Task' : 'Create Task' }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

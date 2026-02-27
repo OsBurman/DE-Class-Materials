@@ -1,0 +1,43 @@
+<div class="task-list">
+  <div class="toolbar">
+    <h1>Tasks</h1>
+    <a routerLink="/tasks/new" class="btn-primary">+ New Task</a>
+  </div>
+
+  <div class="controls">
+    <input [(ngModel)]="searchQuery" [ngModelOptions]="{ standalone: true }" (ngModelChange)="searchQuery.set($event)" placeholder="Search tasks…" class="search" />
+    <div class="filters">
+      @for (f of ['all','todo','in-progress','done']; track f) {
+        <button [class.active]="statusFilter() === f" (click)="setFilter(f)">{{ f }}</button>
+      }
+    </div>
+    <select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event)" [ngModelOptions]="{ standalone: true }">
+      <option value="dueDate">Sort: Due Date</option>
+      <option value="priority">Sort: Priority</option>
+      <option value="title">Sort: Title</option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Priority</th><th>Status</th><th>Due Date</th><th>Created</th><th></th></tr>
+    </thead>
+    <tbody>
+      @for (task of filteredTasks() | searchFilter:searchQuery(); track task.id) {
+        <tr>
+          <td><a [routerLink]="['/tasks', task.id]">{{ task.title }}</a></td>
+          <td><span [class]="'badge priority-' + task.priority">{{ task.priority }}</span></td>
+          <td><span [class]="'badge status-' + task.status">{{ task.status }}</span></td>
+          <td>{{ task.dueDate || '—' }}</td>
+          <td>{{ task.createdAt | timeAgo }}</td>
+          <td>
+            <a [routerLink]="['/tasks', task.id, 'edit']" class="link-edit">Edit</a>
+            <button class="btn-delete" (click)="deleteTask(task)">Delete</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6" class="empty">No tasks found.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

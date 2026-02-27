@@ -1,0 +1,60 @@
+<header>
+  <h1>📡 RxJS Real-time Dashboard</h1>
+</header>
+
+<main>
+  <!-- Notification Center -->
+  <section class="panel">
+    <h2>🔔 Notification Center</h2>
+    <div class="notification-controls">
+      <button class="btn info"    (click)="sendInfo()">Info</button>
+      <button class="btn success" (click)="sendSuccess()">Success</button>
+      <button class="btn warning" (click)="sendWarning()">Warning</button>
+      <button class="btn error"   (click)="sendError()">Error</button>
+      <button class="btn clear"   (click)="clearNotifications()">Clear All</button>
+    </div>
+
+    @if (notifications.length === 0) {
+      <p class="empty">No notifications yet — click a button above.</p>
+    }
+
+    <ul class="notifications">
+      @for (n of notifications; track n.id) {
+        <li [class]="'notification ' + n.type">
+          <span class="msg">{{ n.message }}</span>
+          <small class="time">{{ n.timestamp | date:'HH:mm:ss' }}</small>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Stock Ticker -->
+  <section class="panel">
+    <h2>📈 Live Stock Ticker</h2>
+    <table class="stocks">
+      <thead>
+        <tr>
+          <th>Symbol</th><th>Name</th><th>Price</th><th>Change</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (stock of stocks; track stock.symbol) {
+          <tr>
+            <td><strong>{{ stock.symbol }}</strong></td>
+            <td>{{ stock.name }}</td>
+            <td>${{ stock.price | number:'1.2-2' }}</td>
+            <td [class]="stock.change >= 0 ? 'positive' : 'negative'">
+              {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Live Search -->
+  <section class="panel">
+    <h2>🔍 Live Search</h2>
+    <app-live-search />
+  </section>
+</main>

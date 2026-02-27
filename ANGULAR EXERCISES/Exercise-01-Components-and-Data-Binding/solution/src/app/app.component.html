@@ -1,0 +1,61 @@
+<div class="page-wrapper">
+  <h1>🪪 Profile Card Builder</h1>
+
+  <div class="layout">
+
+    <!-- ═══════════ LEFT PANEL: EDITOR FORM ═══════════ -->
+    <section class="editor-panel">
+      <h2>Edit Profile</h2>
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" [(ngModel)]="profile.name" placeholder="Your full name" />
+      </div>
+
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <input id="title" type="text" [(ngModel)]="profile.title" placeholder="e.g. Senior Developer" />
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" rows="3" [(ngModel)]="profile.bio" placeholder="A short bio..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="avatar">Avatar URL</label>
+        <input id="avatar" type="text" [(ngModel)]="profile.avatarUrl" placeholder="https://..." />
+      </div>
+
+      <div class="form-group">
+        <label>Add a Skill</label>
+        <div class="skill-input-row">
+          <input type="text" [(ngModel)]="newSkill" placeholder="e.g. TypeScript" (keyup.enter)="addSkill()" />
+          <button class="btn-add" (click)="addSkill()">+ Add</button>
+        </div>
+      </div>
+
+      <div class="skills-list">
+        @for (skill of profile.skills; track $index) {
+          <span class="skill-tag">
+            {{ skill }}
+            <button (click)="removeSkill($index)">✕</button>
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <button class="btn-toggle" (click)="toggleAvailability()">
+          Toggle Availability (currently: {{ profile.isAvailableForWork ? 'Available ✅' : 'Not Available 🔴' }})
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════ RIGHT PANEL: LIVE PREVIEW ═══════════ -->
+    <section class="preview-panel">
+      <h2>Live Preview</h2>
+      <app-profile-card [profile]="profile" />
+    </section>
+
+  </div>
+</div>

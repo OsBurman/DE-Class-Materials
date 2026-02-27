@@ -1,0 +1,58 @@
+<div class="app-container">
+
+  <header class="app-header">
+    <h1>📋 Task Manager</h1>
+    <span class="badge" [ngClass]="{ 'badge-done': completedCount === totalCount && totalCount > 0 }">
+      {{ completedCount }} / {{ totalCount }} completed
+    </span>
+  </header>
+
+  <div class="add-task-row">
+    <input
+      type="text"
+      placeholder="Add a new task..."
+      [(ngModel)]="newTaskTitle"
+      (keyup.enter)="addTask()"
+    />
+    <button class="btn-primary" (click)="addTask()">Add Task</button>
+  </div>
+
+  <div class="filters">
+    @for (f of filters; track f) {
+      <button
+        [ngClass]="{ 'active-filter': filter === f }"
+        (click)="filter = f">
+        {{ f | titlecase }}
+      </button>
+    }
+  </div>
+
+  @if (filteredTasks.length === 0) {
+    <div class="empty-state">
+      <p>🎉 No tasks here!</p>
+    </div>
+  }
+
+  <ul class="task-list">
+    @for (task of filteredTasks; track task.id) {
+      <li
+        [ngClass]="{ 'completed': task.completed, 'priority-low': task.priority === 'low', 'priority-medium': task.priority === 'medium', 'priority-high': task.priority === 'high' }"
+        [ngStyle]="{ 'opacity': task.completed ? 0.55 : 1 }"
+      >
+        <input type="checkbox" [checked]="task.completed" (change)="toggleTask(task.id)" />
+        <span class="task-title">{{ task.title }}</span>
+
+        <span class="priority-icon">
+          @switch (task.priority) {
+            @case ('low') { 🟢 }
+            @case ('medium') { 🟡 }
+            @case ('high') { 🔴 }
+          }
+        </span>
+
+        <button class="btn-delete" (click)="deleteTask(task.id)">✕</button>
+      </li>
+    }
+  </ul>
+
+</div>

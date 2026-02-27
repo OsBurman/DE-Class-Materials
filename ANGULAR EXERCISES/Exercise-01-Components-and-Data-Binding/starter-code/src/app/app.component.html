@@ -1,0 +1,67 @@
+<div class="page-wrapper">
+  <h1>🪪 Profile Card Builder</h1>
+
+  <div class="layout">
+
+    <!-- ═══════════ LEFT PANEL: EDITOR FORM ═══════════ -->
+    <section class="editor-panel">
+      <h2>Edit Profile</h2>
+
+      <!-- TODO 6: Use [(ngModel)] to bind each input to the matching profile property -->
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <!-- Use two-way binding here -->
+        <input id="name" type="text" placeholder="Your full name" />
+      </div>
+
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <!-- Use two-way binding here -->
+        <input id="title" type="text" placeholder="e.g. Senior Developer" />
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <!-- Use two-way binding here -->
+        <textarea id="bio" rows="3" placeholder="A short bio..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="avatar">Avatar URL</label>
+        <!-- Use two-way binding here -->
+        <input id="avatar" type="text" placeholder="https://..." />
+      </div>
+
+      <!-- TODO 7: Skills input — bind newSkill with [(ngModel)] and call addSkill() on button click -->
+      <div class="form-group">
+        <label>Add a Skill</label>
+        <div class="skill-input-row">
+          <input type="text" placeholder="e.g. TypeScript" />
+          <button class="btn-add">+ Add</button>
+        </div>
+      </div>
+
+      <!-- TODO 8: Loop through profile.skills with @for and show each skill with a remove button -->
+      <div class="skills-list">
+        <!-- @for loop goes here -->
+      </div>
+
+      <!-- TODO 9: Call toggleAvailability() on button click and show current status -->
+      <div class="form-group">
+        <button class="btn-toggle">
+          Toggle Availability (currently: ...)
+        </button>
+      </div>
+    </section>
+
+    <!-- ═══════════ RIGHT PANEL: LIVE PREVIEW ═══════════ -->
+    <section class="preview-panel">
+      <h2>Live Preview</h2>
+
+      <!-- TODO 10: Pass the profile object to the app-profile-card component using property binding -->
+      <!-- <app-profile-card ...></app-profile-card> -->
+    </section>
+
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="dashboard">
+  <h1>Dashboard</h1>
+
+  <div class="stats">
+    <div class="card total">
+      <span class="count">{{ taskService.totalCount() }}</span>
+      <span class="label">Total Tasks</span>
+    </div>
+    <div class="card todo">
+      <span class="count">{{ taskService.todoCount() }}</span>
+      <span class="label">To Do</span>
+    </div>
+    <div class="card progress">
+      <span class="count">{{ taskService.inProgressCount() }}</span>
+      <span class="label">In Progress</span>
+    </div>
+    <div class="card done">
+      <span class="count">{{ taskService.doneCount() }}</span>
+      <span class="label">Done</span>
+    </div>
+  </div>
+
+  <section class="recent">
+    <div class="section-header">
+      <h2>Recent Tasks</h2>
+      <a routerLink="/tasks">View all →</a>
+    </div>
+    <ul>
+      @for (task of taskService.recentTasks(); track task.id) {
+        <li>
+          <a [routerLink]="['/tasks', task.id]">{{ task.title }}</a>
+          <div class="meta">
+            <span [class]="'badge priority-' + task.priority">{{ task.priority }}</span>
+            <span [class]="'badge status-' + task.status">{{ task.status }}</span>
+            <span class="time">{{ task.createdAt | timeAgo }}</span>
+          </div>
+        </li>
+      }
+    </ul>
+  </section>
+</div>
