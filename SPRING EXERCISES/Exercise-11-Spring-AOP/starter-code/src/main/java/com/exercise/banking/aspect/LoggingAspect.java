@@ -15,25 +15,32 @@ public class LoggingAspect {
 
     private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
-    // Define a reusable pointcut expression — targets ALL methods in the service package.
-    // We can reference this pointcut by its method name in the advice annotations below.
+    // Define a reusable pointcut expression — targets ALL methods in the service
+    // package.
+    // We can reference this pointcut by its method name in the advice annotations
+    // below.
     @Pointcut("execution(* com.exercise.banking.service.*.*(..))")
-    public void serviceLayer() {}
+    public void serviceLayer() {
+    }
 
     // TODO 3: Create a @Before advice using the serviceLayer() pointcut.
-    //         Annotate with: @Before("serviceLayer()")
-    //         Method signature: public void logBefore(JoinPoint joinPoint)
-    //         Log: "[BEFORE] Calling: " + joinPoint.getSignature().getName()
-    //              + " with args: " + Arrays.toString(joinPoint.getArgs())
+    // Annotate with: @Before("serviceLayer()")
+    // Method signature: public void logBefore(JoinPoint joinPoint)
+    // Log: "[BEFORE] Calling: " + joinPoint.getSignature().getName()
+    // + " with args: " + Arrays.toString(joinPoint.getArgs())
 
     // TODO 4: Create an @AfterReturning advice.
-    //         Annotate with: @AfterReturning(pointcut = "serviceLayer()", returning = "result")
-    //         Method signature: public void logAfterReturning(JoinPoint joinPoint, Object result)
-    //         Log: "[AFTER RETURNING] " + joinPoint.getSignature().getName() + " returned: " + result
+    // Annotate with: @AfterReturning(pointcut = "serviceLayer()", returning =
+    // "result")
+    // Method signature: public void logAfterReturning(JoinPoint joinPoint, Object
+    // result)
+    // Log: "[AFTER RETURNING] " + joinPoint.getSignature().getName() + " returned:
+    // " + result
 
     // TODO 5: Create an @AfterThrowing advice.
-    //         Annotate with: @AfterThrowing(pointcut = "serviceLayer()", throwing = "ex")
-    //         Method signature: public void logAfterThrowing(JoinPoint joinPoint, Exception ex)
-    //         Log: "[AFTER THROWING] " + joinPoint.getSignature().getName()
-    //              + " threw: " + ex.getMessage()
+    // Annotate with: @AfterThrowing(pointcut = "serviceLayer()", throwing = "ex")
+    // Method signature: public void logAfterThrowing(JoinPoint joinPoint, Exception
+    // ex)
+    // Log: "[AFTER THROWING] " + joinPoint.getSignature().getName()
+    // + " threw: " + ex.getMessage()
 }

@@ -5,11 +5,14 @@ import java.util.Map;
 public class ATM {
     private Map<String, BankAccount> accounts = new HashMap<>();
 
-    public void addAccount(BankAccount a) { accounts.put(a.getId(), a); }
+    public void addAccount(BankAccount a) {
+        accounts.put(a.getId(), a);
+    }
 
     private BankAccount getAccount(String id) throws AccountNotFoundException {
         BankAccount acc = accounts.get(id);
-        if (acc == null) throw new AccountNotFoundException(id);
+        if (acc == null)
+            throw new AccountNotFoundException(id);
         return acc;
     }
 
@@ -33,7 +36,7 @@ public class ATM {
     public void processTransfer(String fromId, String toId, double amount) {
         try (TransactionLogger logger = new TransactionLogger("transaction_log.txt")) {
             BankAccount from = getAccount(fromId);
-            BankAccount to   = getAccount(toId);
+            BankAccount to = getAccount(toId);
             from.transfer(to, amount);
             logger.log(String.format("TRANSFER $%.2f from %s to %s — SUCCESS", amount, fromId, toId));
         } catch (AccountNotFoundException | InsufficientFundsException | DailyLimitExceededException e) {
@@ -55,7 +58,7 @@ class TransactionLogger implements AutoCloseable {
 
     public TransactionLogger(String filename) throws IOException {
         this.filename = filename;
-        this.writer   = new PrintWriter(new FileWriter(filename, true));
+        this.writer = new PrintWriter(new FileWriter(filename, true));
         System.out.println("[Logger] Opened: " + filename);
     }
 
@@ -64,7 +67,8 @@ class TransactionLogger implements AutoCloseable {
         writer.flush();
     }
 
-    @Override public void close() {
+    @Override
+    public void close() {
         writer.close();
         System.out.println("[Logger] Closed: " + filename);
     }

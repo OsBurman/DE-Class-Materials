@@ -16,7 +16,10 @@ import java.util.Map;
 @RequestMapping("/api")
 public class PostController {
     private final PostService postService;
-    public PostController(PostService postService) { this.postService = postService; }
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping("/posts")
     public ResponseEntity<List<PostResponse>> getAllPosts(
@@ -36,7 +39,8 @@ public class PostController {
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @Valid @RequestBody PostRequest request, Principal principal) {
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long id, @Valid @RequestBody PostRequest request,
+            Principal principal) {
         return ResponseEntity.ok(postService.updatePost(id, request, principal.getName()));
     }
 

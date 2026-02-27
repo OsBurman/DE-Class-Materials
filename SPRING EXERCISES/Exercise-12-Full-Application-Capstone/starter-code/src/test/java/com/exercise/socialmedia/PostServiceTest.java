@@ -20,18 +20,18 @@ class PostServiceTest {
     // TODO 11: @InjectMocks PostService postService;
 
     // TODO 11: Write a test for createPost() happy path:
-    //         - stub userRepository.findByUsername to return a User
-    //         - stub postRepository.save to return a Post with id=1 and content
-    //         - call postService.createPost(request, "alice")
-    //         - assert response.getContent() equals the expected content
+    // - stub userRepository.findByUsername to return a User
+    // - stub postRepository.save to return a Post with id=1 and content
+    // - call postService.createPost(request, "alice")
+    // - assert response.getContent() equals the expected content
     @Test
     void createPost_happyPath_returnsPostResponse() {
         // TODO 11: implement
     }
 
     // TODO 11: Write a test for getPostById() when not found:
-    //         - stub postRepository.findById to return Optional.empty()
-    //         - assert ResourceNotFoundException is thrown
+    // - stub postRepository.findById to return Optional.empty()
+    // - assert ResourceNotFoundException is thrown
     @Test
     void getPostById_notFound_throwsResourceNotFoundException() {
         // TODO 11: implement

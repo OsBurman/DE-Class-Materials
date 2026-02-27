@@ -25,16 +25,26 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
 
-    @Mock PostRepository postRepository;
-    @Mock UserRepository userRepository;
-    @Mock TagRepository tagRepository;
-    @Mock LikeRepository likeRepository;
-    @InjectMocks PostService postService;
+    @Mock
+    PostRepository postRepository;
+    @Mock
+    UserRepository userRepository;
+    @Mock
+    TagRepository tagRepository;
+    @Mock
+    LikeRepository likeRepository;
+    @InjectMocks
+    PostService postService;
 
     @Test
     void createPost_happyPath_returnsPostResponse() {
-        User user = new User(); user.setUsername("alice"); user.setId(1L);
-        Post saved = new Post(); saved.setId(1L); saved.setContent("Hello World"); saved.setAuthor(user);
+        User user = new User();
+        user.setUsername("alice");
+        user.setId(1L);
+        Post saved = new Post();
+        saved.setId(1L);
+        saved.setContent("Hello World");
+        saved.setAuthor(user);
 
         when(userRepository.findByUsername("alice")).thenReturn(Optional.of(user));
         when(postRepository.save(any(Post.class))).thenReturn(saved);

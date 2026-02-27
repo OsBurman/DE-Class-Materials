@@ -4,21 +4,21 @@
  * The strategy pattern allows swapping delivery algorithms at runtime.
  *
  * TODO 1: Define interface DeliveryStrategy with:
- *           void deliver(Notification notification);
+ * void deliver(Notification notification);
  *
  * TODO 2: Implement EmailStrategy:
- *           Print "Email: Sending to <recipient> — Subject: <title>"
+ * Print "Email: Sending to <recipient> — Subject: <title>"
  *
  * TODO 3: Implement SmsStrategy:
- *           Print "SMS:   Sending SMS to <recipient> — <body>"
+ * Print "SMS: Sending SMS to <recipient> — <body>"
  *
  * TODO 4: Implement PushStrategy:
- *           Print "Push:  Push notification → device:<recipient> — <title>"
+ * Print "Push: Push notification → device:<recipient> — <title>"
  *
  * TODO 5: Implement NotificationSender:
- *           - field: DeliveryStrategy strategy
- *           - setStrategy(DeliveryStrategy) — swap strategy at runtime
- *           - send(Notification) — delegates to strategy.deliver(n)
+ * - field: DeliveryStrategy strategy
+ * - setStrategy(DeliveryStrategy) — swap strategy at runtime
+ * - send(Notification) — delegates to strategy.deliver(n)
  */
 
 // TODO 1

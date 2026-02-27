@@ -21,16 +21,22 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository) {
-        this.commentRepository = commentRepository; this.postRepository = postRepository; this.userRepository = userRepository;
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository,
+            UserRepository userRepository) {
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public CommentResponse addComment(Long postId, CommentRequest request, String username) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", postId));
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Comment comment = new Comment();
-        comment.setContent(request.getContent()); comment.setPost(post); comment.setAuthor(user);
+        comment.setContent(request.getContent());
+        comment.setPost(post);
+        comment.setAuthor(user);
         return toCommentResponse(commentRepository.save(comment));
     }
 
@@ -41,7 +47,10 @@ public class CommentService {
 
     private CommentResponse toCommentResponse(Comment c) {
         CommentResponse r = new CommentResponse();
-        r.setId(c.getId()); r.setContent(c.getContent());
-        r.setAuthorUsername(c.getAuthor().getUsername()); r.setCreatedAt(c.getCreatedAt()); return r;
+        r.setId(c.getId());
+        r.setContent(c.getContent());
+        r.setAuthorUsername(c.getAuthor().getUsername());
+        r.setCreatedAt(c.getCreatedAt());
+        return r;
     }
 }

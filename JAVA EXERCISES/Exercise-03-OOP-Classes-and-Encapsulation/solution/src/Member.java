@@ -1,20 +1,31 @@
 public class Member {
-    private int    id;
+    private int id;
     private String name;
     private Book[] borrowed;
-    private int    borrowCount;
+    private int borrowCount;
 
     public Member(int id, String name) {
-        this.id          = id;
-        this.name        = name;
-        this.borrowed    = new Book[3];
+        this.id = id;
+        this.name = name;
+        this.borrowed = new Book[3];
         this.borrowCount = 0;
     }
 
-    public int    getId()          { return id;          }
-    public String getName()        { return name;        }
-    public Book[] getBorrowed()    { return borrowed;    }
-    public int    getBorrowCount() { return borrowCount; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Book[] getBorrowed() {
+        return borrowed;
+    }
+
+    public int getBorrowCount() {
+        return borrowCount;
+    }
 
     public boolean borrowBook(Book b) {
         if (borrowCount >= 3) {
@@ -29,7 +40,8 @@ public class Member {
         for (int i = 0; i < borrowCount; i++) {
             if (borrowed[i].getId() == bookId) {
                 // shift left
-                for (int j = i; j < borrowCount - 1; j++) borrowed[j] = borrowed[j + 1];
+                for (int j = i; j < borrowCount - 1; j++)
+                    borrowed[j] = borrowed[j + 1];
                 borrowed[--borrowCount] = null;
                 return true;
             }
@@ -43,7 +55,8 @@ public class Member {
         StringBuilder sb = new StringBuilder();
         sb.append("Member[").append(id).append("] ").append(name).append(" — Borrowed: [");
         for (int i = 0; i < borrowCount; i++) {
-            if (i > 0) sb.append(", ");
+            if (i > 0)
+                sb.append(", ");
             sb.append("'").append(borrowed[i].getTitle()).append("'");
         }
         sb.append("]");

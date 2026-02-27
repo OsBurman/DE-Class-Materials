@@ -12,10 +12,22 @@ public class NoteRequest {
     @Size(max = 2000, message = "Content must not exceed 2000 characters")
     private String content;
 
-    public NoteRequest() {}
+    public NoteRequest() {
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

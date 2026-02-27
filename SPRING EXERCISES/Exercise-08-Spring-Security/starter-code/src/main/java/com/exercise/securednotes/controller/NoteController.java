@@ -21,9 +21,10 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    // TODO 5: Spring automatically injects the Principal parameter — it represents the
-    //         currently authenticated user. Call principal.getName() to get the username.
-    //         Remove the placeholder "unknown" and use principal.getName() instead.
+    // TODO 5: Spring automatically injects the Principal parameter — it represents
+    // the
+    // currently authenticated user. Call principal.getName() to get the username.
+    // Remove the placeholder "unknown" and use principal.getName() instead.
     @GetMapping
     public ResponseEntity<List<NoteResponse>> getNotes(Principal principal) {
         // TODO 5: Replace "unknown" with principal.getName()
@@ -32,7 +33,7 @@ public class NoteController {
 
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody NoteRequest request,
-                                                   Principal principal) {
+            Principal principal) {
         // TODO 5: Replace "unknown" with principal.getName()
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(noteService.createNote(request, "unknown"));
@@ -45,8 +46,8 @@ public class NoteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id,
-                                                   @Valid @RequestBody NoteRequest request,
-                                                   Principal principal) {
+            @Valid @RequestBody NoteRequest request,
+            Principal principal) {
         return ResponseEntity.ok(noteService.updateNote(id, request, principal.getName()));
     }
 

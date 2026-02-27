@@ -24,7 +24,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> getAllTasks(TaskStatus status) {
         // If status is null, return all tasks (taskRepository.findAll())
-        // Otherwise, return tasks filtered by status (taskRepository.findByStatus(status))
+        // Otherwise, return tasks filtered by status
+        // (taskRepository.findByStatus(status))
         // your code here
         return null;
     }

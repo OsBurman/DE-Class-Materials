@@ -28,7 +28,7 @@ public class NoteController {
 
     @PostMapping
     public ResponseEntity<NoteResponse> createNote(@Valid @RequestBody NoteRequest request,
-                                                   Principal principal) {
+            Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(noteService.createNote(request, principal.getName()));
     }
@@ -40,8 +40,8 @@ public class NoteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<NoteResponse> updateNote(@PathVariable Long id,
-                                                   @Valid @RequestBody NoteRequest request,
-                                                   Principal principal) {
+            @Valid @RequestBody NoteRequest request,
+            Principal principal) {
         return ResponseEntity.ok(noteService.updateNote(id, request, principal.getName()));
     }
 

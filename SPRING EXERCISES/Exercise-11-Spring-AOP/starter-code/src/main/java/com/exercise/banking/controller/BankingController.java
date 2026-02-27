@@ -37,19 +37,19 @@ public class BankingController {
 
     @PostMapping("/{id}/deposit")
     public ResponseEntity<AccountResponse> deposit(@PathVariable Long id,
-                                                    @Valid @RequestBody TransactionRequest request) {
+            @Valid @RequestBody TransactionRequest request) {
         return ResponseEntity.ok(bankingService.deposit(id, request));
     }
 
     @PostMapping("/{id}/withdraw")
     public ResponseEntity<AccountResponse> withdraw(@PathVariable Long id,
-                                                     @Valid @RequestBody TransactionRequest request) {
+            @Valid @RequestBody TransactionRequest request) {
         return ResponseEntity.ok(bankingService.withdraw(id, request));
     }
 
     @PostMapping("/transfer")
     public ResponseEntity<Map<String, String>> transfer(@RequestParam Long fromAccountId,
-                                                         @Valid @RequestBody TransactionRequest request) {
+            @Valid @RequestBody TransactionRequest request) {
         bankingService.transfer(fromAccountId, request);
         return ResponseEntity.ok(Map.of("message", "Transfer successful"));
     }

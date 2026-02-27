@@ -1,35 +1,148 @@
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', sans-serif; background: #f7fafc; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f7fafc;
+}
 
-.app-container { max-width: 640px; margin: 2rem auto; padding: 1.5rem; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-h1 { font-size: 1.6rem; }
+.app-container {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+h1 {
+  font-size: 1.6rem;
+}
 
-.badge { background: #e2e8f0; color: #4a5568; padding: 0.3rem 0.8rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
-.badge.badge-done { background: #c6f6d5; color: #276749; }
+.badge {
+  background: #e2e8f0;
+  color: #4a5568;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.badge.badge-done {
+  background: #c6f6d5;
+  color: #276749;
+}
 
-.add-task-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-.add-task-row input { flex: 1; padding: 0.6rem 1rem; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 0.95rem; }
-.btn-primary { background: #667eea; color: white; border: none; border-radius: 8px; padding: 0.6rem 1.2rem; cursor: pointer; font-weight: 600; }
-.btn-primary:hover { background: #5a67d8; }
+.add-task-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.add-task-row input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+.btn-primary {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background: #5a67d8;
+}
 
-.filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-.filters button { flex: 1; padding: 0.5rem; border: 1px solid #cbd5e0; background: white; border-radius: 8px; cursor: pointer; text-transform: capitalize; font-weight: 500; }
-.filters button.active-filter { background: #667eea; color: white; border-color: #667eea; }
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.filters button {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #cbd5e0;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.filters button.active-filter {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
 
-.empty-state { text-align: center; padding: 2rem; color: #a0aec0; font-size: 1.1rem; }
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #a0aec0;
+  font-size: 1.1rem;
+}
 
-.task-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-.task-list li { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 8px; border: 2px solid transparent; transition: all 0.2s; }
-.task-list li:hover { background: #f7fafc; }
+.task-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.task-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+.task-list li:hover {
+  background: #f7fafc;
+}
 
-.priority-low  { border-left: 4px solid #48bb78; }
-.priority-medium { border-left: 4px solid #ecc94b; }
-.priority-high { border-left: 4px solid #fc8181; }
+.priority-low {
+  border-left: 4px solid #48bb78;
+}
+.priority-medium {
+  border-left: 4px solid #ecc94b;
+}
+.priority-high {
+  border-left: 4px solid #fc8181;
+}
 
-.task-list li.completed .task-title { text-decoration: line-through; color: #a0aec0; }
+.task-list li.completed .task-title {
+  text-decoration: line-through;
+  color: #a0aec0;
+}
 
-.task-title { flex: 1; font-size: 0.95rem; }
-.priority-icon { font-size: 1rem; }
-.btn-delete { background: none; border: none; cursor: pointer; color: #a0aec0; font-size: 1rem; padding: 0.2rem 0.4rem; border-radius: 4px; }
-.btn-delete:hover { color: #e53e3e; background: #fff5f5; }
+.task-title {
+  flex: 1;
+  font-size: 0.95rem;
+}
+.priority-icon {
+  font-size: 1rem;
+}
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #a0aec0;
+  font-size: 1rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+.btn-delete:hover {
+  color: #e53e3e;
+  background: #fff5f5;
+}

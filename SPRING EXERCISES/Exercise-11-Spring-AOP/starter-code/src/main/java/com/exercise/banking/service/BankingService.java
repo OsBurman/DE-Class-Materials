@@ -45,8 +45,8 @@ public class BankingService {
     }
 
     // TODO 10: Add @Audited(action = "DEPOSIT") annotation above this method.
-    //          When deposit() is called, the AuditAspect will intercept it
-    //          and log the audit entry because of this annotation.
+    // When deposit() is called, the AuditAspect will intercept it
+    // and log the audit entry because of this annotation.
     @Transactional
     public AccountResponse deposit(Long accountId, TransactionRequest request) {
         Account account = accountRepository.findById(accountId)
@@ -85,8 +85,10 @@ public class BankingService {
         to.setBalance(to.getBalance().add(request.getAmount()));
         accountRepository.save(from);
         accountRepository.save(to);
-        recordTransaction(fromAccountId, "TRANSFER_OUT", request.getAmount(), "Transfer to account " + to.getAccountNumber());
-        recordTransaction(to.getId(), "TRANSFER_IN", request.getAmount(), "Transfer from account " + from.getAccountNumber());
+        recordTransaction(fromAccountId, "TRANSFER_OUT", request.getAmount(),
+                "Transfer to account " + to.getAccountNumber());
+        recordTransaction(to.getId(), "TRANSFER_IN", request.getAmount(),
+                "Transfer from account " + from.getAccountNumber());
     }
 
     public List<TransactionResponse> getTransactions(Long accountId) {
@@ -105,15 +107,22 @@ public class BankingService {
 
     private AccountResponse toAccountResponse(Account a) {
         AccountResponse r = new AccountResponse();
-        r.setId(a.getId()); r.setAccountNumber(a.getAccountNumber());
-        r.setOwnerName(a.getOwnerName()); r.setBalance(a.getBalance()); r.setCreatedAt(a.getCreatedAt());
+        r.setId(a.getId());
+        r.setAccountNumber(a.getAccountNumber());
+        r.setOwnerName(a.getOwnerName());
+        r.setBalance(a.getBalance());
+        r.setCreatedAt(a.getCreatedAt());
         return r;
     }
 
     private TransactionResponse toTransactionResponse(Transaction t) {
         TransactionResponse r = new TransactionResponse();
-        r.setId(t.getId()); r.setAccountId(t.getAccountId()); r.setType(t.getType());
-        r.setAmount(t.getAmount()); r.setDescription(t.getDescription()); r.setCreatedAt(t.getCreatedAt());
+        r.setId(t.getId());
+        r.setAccountId(t.getAccountId());
+        r.setType(t.getType());
+        r.setAmount(t.getAmount());
+        r.setDescription(t.getDescription());
+        r.setCreatedAt(t.getCreatedAt());
         return r;
     }
 }

@@ -15,7 +15,8 @@ public class AdminController {
     private final PostRepository postRepository;
 
     public AdminController(UserRepository userRepository, PostRepository postRepository) {
-        this.userRepository = userRepository; this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
 
     @GetMapping("/stats")
@@ -23,7 +24,6 @@ public class AdminController {
     public ResponseEntity<Map<String, Object>> getStats() {
         return ResponseEntity.ok(Map.of(
                 "totalUsers", userRepository.count(),
-                "totalPosts", postRepository.count()
-        ));
+                "totalPosts", postRepository.count()));
     }
 }

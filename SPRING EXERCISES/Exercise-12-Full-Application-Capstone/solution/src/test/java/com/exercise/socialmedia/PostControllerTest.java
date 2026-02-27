@@ -19,8 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(PostController.class)
 class PostControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @MockBean PostService postService;
+    @Autowired
+    MockMvc mockMvc;
+    @MockBean
+    PostService postService;
 
     @Test
     @WithMockUser

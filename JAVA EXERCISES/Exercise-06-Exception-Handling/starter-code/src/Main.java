@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
         ATM atm = new ATM();
         atm.addAccount(new BankAccount("ACC001", "Alice", 1000.00, 500.00));
-        atm.addAccount(new BankAccount("ACC002", "Bob",    250.00, 500.00));
+        atm.addAccount(new BankAccount("ACC002", "Bob", 250.00, 500.00));
 
         atm.printAllAccounts();
 

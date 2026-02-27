@@ -8,7 +8,14 @@ public class CommentRequest {
     @Size(max = 500, message = "Comment must not exceed 500 characters")
     private String content;
 
-    public CommentRequest() {}
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public CommentRequest() {
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

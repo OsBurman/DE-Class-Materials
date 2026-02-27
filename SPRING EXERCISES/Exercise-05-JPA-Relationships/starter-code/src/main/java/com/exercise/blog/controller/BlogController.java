@@ -26,34 +26,53 @@ public class BlogController {
     }
 
     // GET /api/authors
-    public ResponseEntity<List<Author>> getAllAuthors() { return null; }
+    public ResponseEntity<List<Author>> getAllAuthors() {
+        return null;
+    }
 
     // POST /api/authors
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) { return null; }
+    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+        return null;
+    }
 
     // GET /api/authors/{id}/posts
-    public ResponseEntity<List<Post>> getPostsByAuthor(@PathVariable Long id) { return null; }
+    public ResponseEntity<List<Post>> getPostsByAuthor(@PathVariable Long id) {
+        return null;
+    }
 
     // GET /api/posts?page=0&size=5
     public ResponseEntity<Page<Post>> getAllPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) { return null; }
+            @RequestParam(defaultValue = "5") int size) {
+        return null;
+    }
 
     // GET /api/posts/{id}
-    public ResponseEntity<Post> getPostById(@PathVariable Long id) { return null; }
+    public ResponseEntity<Post> getPostById(@PathVariable Long id) {
+        return null;
+    }
 
-    // POST /api/posts  — request body should include authorId field
-    //   { "title": "...", "content": "...", "authorId": 1 }
-    //   Use @RequestBody Map<String, Object> payload to extract authorId and post fields
-    public ResponseEntity<Post> createPost(@RequestBody Map<String, Object> payload) { return null; }
+    // POST /api/posts — request body should include authorId field
+    // { "title": "...", "content": "...", "authorId": 1 }
+    // Use @RequestBody Map<String, Object> payload to extract authorId and post
+    // fields
+    public ResponseEntity<Post> createPost(@RequestBody Map<String, Object> payload) {
+        return null;
+    }
 
-    // POST /api/posts/{id}/tags  — request body: { "name": "spring-boot" }
+    // POST /api/posts/{id}/tags — request body: { "name": "spring-boot" }
     public ResponseEntity<Post> addTagToPost(@PathVariable Long id,
-                                              @RequestBody Map<String, String> body) { return null; }
+            @RequestBody Map<String, String> body) {
+        return null;
+    }
 
     // GET /api/tags
-    public ResponseEntity<List<Tag>> getAllTags() { return null; }
+    public ResponseEntity<List<Tag>> getAllTags() {
+        return null;
+    }
 
     // GET /api/tags/{id}/posts
-    public ResponseEntity<List<Post>> getPostsByTag(@PathVariable Long id) { return null; }
+    public ResponseEntity<List<Post>> getPostsByTag(@PathVariable Long id) {
+        return null;
+    }
 }

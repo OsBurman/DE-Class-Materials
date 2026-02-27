@@ -23,24 +23,27 @@ public class ProductRepositoryTest {
     @BeforeEach
     void setUp() {
         productRepository.deleteAll();
-        productRepository.save(new Product("Gaming Laptop", "High-end gaming laptop", new BigDecimal("1499.99"), "Electronics", 20));
-        productRepository.save(new Product("Office Laptop", "Business laptop", new BigDecimal("799.99"), "Electronics", 30));
-        productRepository.save(new Product("Mechanical Keyboard", "RGB keyboard", new BigDecimal("89.99"), "Accessories", 100));
+        productRepository.save(
+                new Product("Gaming Laptop", "High-end gaming laptop", new BigDecimal("1499.99"), "Electronics", 20));
+        productRepository
+                .save(new Product("Office Laptop", "Business laptop", new BigDecimal("799.99"), "Electronics", 30));
+        productRepository
+                .save(new Product("Mechanical Keyboard", "RGB keyboard", new BigDecimal("89.99"), "Accessories", 100));
         productRepository.save(new Product("Mouse", "Wireless mouse", new BigDecimal("39.99"), "Accessories", 150));
     }
 
     // TODO 14: Test findByNameContainingIgnoreCase.
-    //          Search for "laptop" (lowercase) and assert 2 products are returned.
-    //          Use assertThat(results).hasSize(2)
+    // Search for "laptop" (lowercase) and assert 2 products are returned.
+    // Use assertThat(results).hasSize(2)
     @Test
     void findByNameContainingIgnoreCase_returnsMatchingProducts() {
         // TODO 14: implement this test
     }
 
     // TODO 15: Test findByCategory.
-    //          Find all "Electronics" products and assert 2 are returned.
-    //          Also assert one of them has name "Gaming Laptop":
-    //          assertThat(results).extracting(Product::getName).contains("Gaming Laptop")
+    // Find all "Electronics" products and assert 2 are returned.
+    // Also assert one of them has name "Gaming Laptop":
+    // assertThat(results).extracting(Product::getName).contains("Gaming Laptop")
     @Test
     void findByCategory_returnsCorrectProducts() {
         // TODO 15: implement this test

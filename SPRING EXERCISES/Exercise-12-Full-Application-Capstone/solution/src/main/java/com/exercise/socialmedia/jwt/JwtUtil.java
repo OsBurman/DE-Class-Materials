@@ -32,7 +32,12 @@ public class JwtUtil {
     }
 
     public boolean isTokenValid(String token) {
-        try { getClaims(token); return true; } catch (Exception e) { return false; }
+        try {
+            getClaims(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private Claims getClaims(String token) {

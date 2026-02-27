@@ -15,24 +15,30 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest req) {
+    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex,
+            HttpServletRequest req) {
         Map<String, String> errors = new HashMap<>();
-        for (FieldError fe : ex.getBindingResult().getFieldErrors()) errors.put(fe.getField(), fe.getDefaultMessage());
+        for (FieldError fe : ex.getBindingResult().getFieldErrors())
+            errors.put(fe.getField(), fe.getDefaultMessage());
         return ResponseEntity.status(400).body(Map.of("status", 400, "error", "Validation Failed", "errors", errors));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(404, "Not Found", ex.getMessage(), req.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.of(404, "Not Found", ex.getMessage(), req.getRequestURI()));
     }
 
     @ExceptionHandler(InsufficientFundsException.class)
-    public ResponseEntity<ErrorResponse> handleInsufficientFunds(InsufficientFundsException ex, HttpServletRequest req) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.of(400, "Insufficient Funds", ex.getMessage(), req.getRequestURI()));
+    public ResponseEntity<ErrorResponse> handleInsufficientFunds(InsufficientFundsException ex,
+            HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.of(400, "Insufficient Funds", ex.getMessage(), req.getRequestURI()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest req) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.of(500, "Internal Server Error", "Unexpected error", req.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ErrorResponse.of(500, "Internal Server Error", "Unexpected error", req.getRequestURI()));
     }
 }

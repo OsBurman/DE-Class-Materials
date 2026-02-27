@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 /**
- * Exercise 01 — Java Fundamentals  (SOLUTION)
+ * Exercise 01 — Java Fundamentals (SOLUTION)
  * Personal Finance Tracker
  */
 public class Main {
@@ -12,7 +12,7 @@ public class Main {
         System.out.println("=== Personal Finance Tracker ===");
 
         // --- TODO 1 solution ---
-        double[] expenses   = new double[10];
+        double[] expenses = new double[10];
         String[] categories = new String[10];
         int count = 0;
 
@@ -30,26 +30,27 @@ public class Main {
             System.out.print("Category (Food/Rent/Transport/Entertainment/Other): ");
             String cat = scanner.nextLine().trim();
 
-            if (cat.equalsIgnoreCase("done")) break;
+            if (cat.equalsIgnoreCase("done"))
+                break;
 
             System.out.print("Amount: $");
             double amount = scanner.nextDouble();
             scanner.nextLine();
 
-            expenses[count]   = amount;
+            expenses[count] = amount;
             categories[count] = cat;
             count++;
         } while (count < 10);
 
         // --- TODO 3 solution: compute totals ---
-        double total       = 0.0;
-        double maxAmount   = 0.0;
+        double total = 0.0;
+        double maxAmount = 0.0;
         String maxCategory = "N/A";
 
         for (int i = 0; i < count; i++) {
             total += expenses[i];
             if (expenses[i] > maxAmount) {
-                maxAmount   = expenses[i];
+                maxAmount = expenses[i];
                 maxCategory = categories[i];
             }
         }
@@ -58,20 +59,20 @@ public class Main {
         // --- TODO 4 solution: enhanced switch for emoji labels ---
         for (int i = 0; i < count; i++) {
             categories[i] = switch (categories[i].toLowerCase()) {
-                case "food"          -> "🍔 Food";
-                case "rent"          -> "🏠 Rent";
-                case "transport"     -> "🚗 Transport";
+                case "food" -> "🍔 Food";
+                case "rent" -> "🏠 Rent";
+                case "transport" -> "🚗 Transport";
                 case "entertainment" -> "🎬 Entertainment";
-                default              -> "📦 Other";
+                default -> "📦 Other";
             };
         }
         // Update maxCategory label too
         maxCategory = switch (maxCategory.toLowerCase()) {
-            case "food"          -> "🍔 Food";
-            case "rent"          -> "🏠 Rent";
-            case "transport"     -> "🚗 Transport";
+            case "food" -> "🍔 Food";
+            case "rent" -> "🏠 Rent";
+            case "transport" -> "🚗 Transport";
             case "entertainment" -> "🎬 Entertainment";
-            default              -> "📦 Other";
+            default -> "📦 Other";
         };
 
         // --- TODO 5 solution: budget status ---
@@ -80,13 +81,13 @@ public class Main {
 
         // --- TODO 6 solution: formatted report ---
         System.out.println("\n======== MONTHLY SUMMARY ========");
-        System.out.printf("%-17s %s%n",      "Name:",            name);
-        System.out.printf("%-17s $%,.2f%n",  "Monthly Income:",  income);
-        System.out.printf("%-17s $%,.2f%n",  "Total Expenses:",  total);
-        System.out.printf("%-17s $%,.2f%n",  "Remaining:",       remaining);
+        System.out.printf("%-17s %s%n", "Name:", name);
+        System.out.printf("%-17s $%,.2f%n", "Monthly Income:", income);
+        System.out.printf("%-17s $%,.2f%n", "Total Expenses:", total);
+        System.out.printf("%-17s $%,.2f%n", "Remaining:", remaining);
         System.out.printf("%-17s $%,.2f (%s)%n", "Highest Expense:", maxAmount, maxCategory);
-        System.out.printf("%-17s $%,.2f%n",  "Average Expense:", average);
-        System.out.printf("%-17s %s%n",      "Budget Status:",   status);
+        System.out.printf("%-17s $%,.2f%n", "Average Expense:", average);
+        System.out.printf("%-17s %s%n", "Budget Status:", status);
         System.out.println("=================================");
 
         scanner.close();

@@ -26,21 +26,22 @@ public class SecurityConfig {
     }
 
     // TODO 6: Configure SecurityFilterChain:
-    //         - csrf.disable()
-    //         - sessionManagement → STATELESS
-    //         - authorizeHttpRequests:
-    //             .requestMatchers("/api/auth/**").permitAll()
-    //             .requestMatchers("/api/admin/**").hasRole("ADMIN")
-    //             .anyRequest().authenticated()
-    //         - Add jwtAuthFilter BEFORE UsernamePasswordAuthenticationFilter:
-    //           .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-    //         - Return http.build()
+    // - csrf.disable()
+    // - sessionManagement → STATELESS
+    // - authorizeHttpRequests:
+    // .requestMatchers("/api/auth/**").permitAll()
+    // .requestMatchers("/api/admin/**").hasRole("ADMIN")
+    // .anyRequest().authenticated()
+    // - Add jwtAuthFilter BEFORE UsernamePasswordAuthenticationFilter:
+    // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+    // - Return http.build()
 
     // TODO 7: Create AuthenticationManager bean:
-    //         public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-    //             return config.getAuthenticationManager();
-    //         }
-    //         Spring uses this to authenticate username/password during login.
+    // public AuthenticationManager
+    // authenticationManager(AuthenticationConfiguration config) throws Exception {
+    // return config.getAuthenticationManager();
+    // }
+    // Spring uses this to authenticate username/password during login.
 
     @Bean
     public PasswordEncoder passwordEncoder() {

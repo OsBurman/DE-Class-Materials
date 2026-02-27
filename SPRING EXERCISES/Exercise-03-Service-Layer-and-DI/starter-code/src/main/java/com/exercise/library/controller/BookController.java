@@ -15,8 +15,9 @@ import java.util.NoSuchElementException;
 public class BookController {
 
     // TODO 13: Declare a `private final BookService bookService` field.
-    //          Inject it via constructor. Notice we use the INTERFACE type BookService,
-    //          not the concrete BookServiceImpl — this is the dependency inversion principle!
+    // Inject it via constructor. Notice we use the INTERFACE type BookService,
+    // not the concrete BookServiceImpl — this is the dependency inversion
+    // principle!
 
     // your constructor here
 
@@ -41,16 +42,16 @@ public class BookController {
     }
 
     // TODO 14e: PUT /api/books/{id}/checkout
-    //           Call bookService.checkOutBook(id)
-    //           If IllegalStateException: return 400 Bad Request with the error message
-    //           Hint: Map.of("error", e.getMessage()) as the body
+    // Call bookService.checkOutBook(id)
+    // If IllegalStateException: return 400 Bad Request with the error message
+    // Hint: Map.of("error", e.getMessage()) as the body
     public ResponseEntity<?> checkOutBook(@PathVariable Long id) {
         // your code here
         return null;
     }
 
     // TODO 14f: PUT /api/books/{id}/return
-    //           Same pattern as checkOutBook but calls returnBook
+    // Same pattern as checkOutBook but calls returnBook
     public ResponseEntity<?> returnBook(@PathVariable Long id) {
         // your code here
         return null;

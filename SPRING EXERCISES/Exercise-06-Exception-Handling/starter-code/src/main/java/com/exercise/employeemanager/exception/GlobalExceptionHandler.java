@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     // TODO 11: Handle ResourceNotFoundException
-    //   - Add @ExceptionHandler(ResourceNotFoundException.class) on this method
-    //   - Method signature: public ResponseEntity<ErrorResponse> handleNotFound(
-    //         ResourceNotFoundException ex, HttpServletRequest request)
-    //   - Return: ResponseEntity.status(404).body(ErrorResponse.of(404, "Not Found", ex.getMessage(), request.getRequestURI()))
+    // - Add @ExceptionHandler(ResourceNotFoundException.class) on this method
+    // - Method signature: public ResponseEntity<ErrorResponse> handleNotFound(
+    // ResourceNotFoundException ex, HttpServletRequest request)
+    // - Return: ResponseEntity.status(404).body(ErrorResponse.of(404, "Not Found",
+    // ex.getMessage(), request.getRequestURI()))
     public ResponseEntity<ErrorResponse> handleNotFound(
             ResourceNotFoundException ex, HttpServletRequest request) {
         // your code here
@@ -21,8 +22,9 @@ public class GlobalExceptionHandler {
     }
 
     // TODO 12: Handle DuplicateResourceException → 409 Conflict
-    //   - Add @ExceptionHandler(DuplicateResourceException.class)
-    //   - Return: ResponseEntity.status(409).body(ErrorResponse.of(409, "Conflict", ex.getMessage(), request.getRequestURI()))
+    // - Add @ExceptionHandler(DuplicateResourceException.class)
+    // - Return: ResponseEntity.status(409).body(ErrorResponse.of(409, "Conflict",
+    // ex.getMessage(), request.getRequestURI()))
     public ResponseEntity<ErrorResponse> handleDuplicate(
             DuplicateResourceException ex, HttpServletRequest request) {
         // your code here
@@ -36,10 +38,12 @@ public class GlobalExceptionHandler {
         return null;
     }
 
-    // TODO 14: Catch-all handler for any other Exception → 500 Internal Server Error
-    //   - Add @ExceptionHandler(Exception.class)
-    //   - Message: "An unexpected error occurred"
-    //   IMPORTANT: This should be the LAST handler — more specific handlers take priority.
+    // TODO 14: Catch-all handler for any other Exception → 500 Internal Server
+    // Error
+    // - Add @ExceptionHandler(Exception.class)
+    // - Message: "An unexpected error occurred"
+    // IMPORTANT: This should be the LAST handler — more specific handlers take
+    // priority.
     public ResponseEntity<ErrorResponse> handleGeneric(
             Exception ex, HttpServletRequest request) {
         // your code here

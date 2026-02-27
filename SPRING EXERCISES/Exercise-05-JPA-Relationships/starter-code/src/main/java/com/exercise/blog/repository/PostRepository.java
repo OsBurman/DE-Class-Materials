@@ -15,13 +15,14 @@ import java.util.List;
 public interface PostRepository {
 
     // TODO 13: Add: Page<Post> findByAuthorId(Long authorId, Pageable pageable)
-    //          Spring generates: SELECT * FROM posts WHERE author_id = ? LIMIT ? OFFSET ?
+    // Spring generates: SELECT * FROM posts WHERE author_id = ? LIMIT ? OFFSET ?
 
     // TODO 14: Add: List<Post> findByTagsId(Long tagId)
-    //          Spring generates a JOIN with post_tags to find posts that have a given tag
+    // Spring generates a JOIN with post_tags to find posts that have a given tag
 
     // TODO 15: Add a custom @Query to search posts by keyword in title OR content:
-    //          Method name: searchPosts(@Param("keyword") String keyword)
-    //          JPQL: SELECT p FROM Post p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-    //                OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+    // Method name: searchPosts(@Param("keyword") String keyword)
+    // JPQL: SELECT p FROM Post p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%',
+    // :keyword, '%'))
+    // OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
 }

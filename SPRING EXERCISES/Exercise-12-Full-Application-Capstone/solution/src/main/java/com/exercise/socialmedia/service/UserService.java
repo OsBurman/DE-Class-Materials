@@ -48,8 +48,11 @@ public class UserService {
 
     private UserProfileResponse toProfileResponse(User user) {
         UserProfileResponse r = new UserProfileResponse();
-        r.setId(user.getId()); r.setUsername(user.getUsername()); r.setEmail(user.getEmail());
-        r.setBio(user.getBio()); r.setCreatedAt(user.getCreatedAt());
+        r.setId(user.getId());
+        r.setUsername(user.getUsername());
+        r.setEmail(user.getEmail());
+        r.setBio(user.getBio());
+        r.setCreatedAt(user.getCreatedAt());
         r.setFollowersCount(user.getFollowers().size());
         r.setFollowingCount(user.getFollowing().size());
         r.setPostsCount(user.getPosts().size());

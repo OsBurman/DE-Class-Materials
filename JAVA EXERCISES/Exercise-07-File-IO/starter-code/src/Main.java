@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Exercise 07 — File I/O  (STARTER)
+ * Exercise 07 — File I/O (STARTER)
  * Todo List Manager with file persistence.
  *
  * Fill in each TODO. The application compiles as-is.
@@ -14,68 +14,69 @@ public class Main {
     // ── TodoItem ────────────────────────────────────────────────────
     static class TodoItem implements Serializable {
         private static final long serialVersionUID = 1L;
-        int     id;
-        String  title;
+        int id;
+        String title;
         boolean done;
-        String  priority;   // HIGH / MEDIUM / LOW
-        String  createdAt;
+        String priority; // HIGH / MEDIUM / LOW
+        String createdAt;
 
         TodoItem(int id, String title, String priority) {
-            this.id        = id;
-            this.title     = title;
-            this.priority  = priority;
-            this.done      = false;
+            this.id = id;
+            this.title = title;
+            this.priority = priority;
+            this.done = false;
             this.createdAt = java.time.LocalDate.now().toString();
         }
 
         // Serialize to CSV line: id,title,done,priority,createdAt
         String toCsv() {
-            return id + "," + title.replace(",","；") + "," + done + "," + priority + "," + createdAt;
+            return id + "," + title.replace(",", "；") + "," + done + "," + priority + "," + createdAt;
         }
 
         // TODO 1: Implement static fromCsv(String line)
-        //   Split on "," (limit 5), parse each field, return a new TodoItem.
-        //   Set item.done = Boolean.parseBoolean(parts[2])
+        // Split on "," (limit 5), parse each field, return a new TodoItem.
+        // Set item.done = Boolean.parseBoolean(parts[2])
         static TodoItem fromCsv(String line) {
             return null; // your code here
         }
 
-        @Override public String toString() {
+        @Override
+        public String toString() {
             return String.format("[%s] #%d %-30s (%s) %s",
-                done ? "✓" : " ", id, title, priority, done ? "" : createdAt);
+                    done ? "✓" : " ", id, title, priority, done ? "" : createdAt);
         }
     }
 
     // ── TODO 2: Implement saveToCsv(List<TodoItem> items, String filename) ──
-    //   Use BufferedWriter / FileWriter.
-    //   Write a header line: "id,title,done,priority,createdAt"
-    //   Then write each item's toCsv() on its own line.
+    // Use BufferedWriter / FileWriter.
+    // Write a header line: "id,title,done,priority,createdAt"
+    // Then write each item's toCsv() on its own line.
     static void saveToCsv(List<TodoItem> items, String filename) throws IOException {
         // your code here
     }
 
     // ── TODO 3: Implement loadFromCsv(String filename) ──────────────
-    //   Use BufferedReader / FileReader.
-    //   Skip the header line.
-    //   For each remaining line, call TodoItem.fromCsv(line) and add to list.
-    //   Return an empty list if the file does not exist.
+    // Use BufferedReader / FileReader.
+    // Skip the header line.
+    // For each remaining line, call TodoItem.fromCsv(line) and add to list.
+    // Return an empty list if the file does not exist.
     static List<TodoItem> loadFromCsv(String filename) throws IOException {
         return new ArrayList<>(); // your code here
     }
 
     // ── TODO 4: Implement saveToTextReport(List<TodoItem>, String filename) ─
-    //   Use the NIO Files.writeString() or Files.write() API.
-    //   Format a human-readable report with sections:
-    //     "=== Todo Report ==="
-    //     "Pending:" (list undone items)
-    //     "Completed:" (list done items)
-    //     "Total: X pending, Y done"
+    // Use the NIO Files.writeString() or Files.write() API.
+    // Format a human-readable report with sections:
+    // "=== Todo Report ==="
+    // "Pending:" (list undone items)
+    // "Completed:" (list done items)
+    // "Total: X pending, Y done"
     static void saveToTextReport(List<TodoItem> items, String filename) throws IOException {
         // your code here (use Path.of(filename), Files.writeString(), or Files.write())
     }
 
     // ── TODO 5: Implement serializeItems / deserializeItems ─────────
-    //   Use ObjectOutputStream / ObjectInputStream.
+    // Use ObjectOutputStream / ObjectInputStream.
     static void serializeItems(List<TodoItem> items, String filename) throws IOException {
         // your code here
     }
@@ -86,8 +87,8 @@ public class Main {
     }
 
     // ── TODO 6: Implement appendToLog(String message, String logFile) ─
-    //   Use FileWriter(filename, true) (append mode) wrapped in BufferedWriter.
-    //   Write: "[timestamp] message\n"
+    // Use FileWriter(filename, true) (append mode) wrapped in BufferedWriter.
+    // Write: "[timestamp] message\n"
     static void appendToLog(String message, String logFile) throws IOException {
         // your code here
     }
@@ -95,19 +96,18 @@ public class Main {
     // ── Main ─────────────────────────────────────────────────────────
     public static void main(String[] args) {
         List<TodoItem> todos = new ArrayList<>(List.of(
-            new TodoItem(1, "Buy groceries",          "HIGH"),
-            new TodoItem(2, "Finish Java exercise",   "HIGH"),
-            new TodoItem(3, "Read a book",             "LOW"),
-            new TodoItem(4, "Call the dentist",        "MEDIUM"),
-            new TodoItem(5, "Go for a run",            "MEDIUM")
-        ));
+                new TodoItem(1, "Buy groceries", "HIGH"),
+                new TodoItem(2, "Finish Java exercise", "HIGH"),
+                new TodoItem(3, "Read a book", "LOW"),
+                new TodoItem(4, "Call the dentist", "MEDIUM"),
+                new TodoItem(5, "Go for a run", "MEDIUM")));
         todos.get(0).done = true;
         todos.get(1).done = true;
 
-        String csvFile    = "todos.csv";
+        String csvFile = "todos.csv";
         String reportFile = "todos_report.txt";
-        String binFile    = "todos.ser";
-        String logFile    = "todos.log";
+        String binFile = "todos.ser";
+        String logFile = "todos.log";
 
         try {
             // Save and reload CSV

@@ -21,7 +21,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> getAllTasks(TaskStatus status) {
-        if (status == null) return taskRepository.findAll();
+        if (status == null)
+            return taskRepository.findAll();
         return taskRepository.findByStatus(status);
     }
 
@@ -68,7 +69,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public boolean deleteTask(Long id) {
-        if (!taskRepository.existsById(id)) return false;
+        if (!taskRepository.existsById(id))
+            return false;
         taskRepository.deleteById(id);
         return true;
     }

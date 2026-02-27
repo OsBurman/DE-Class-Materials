@@ -83,8 +83,10 @@ public class BankingService {
         to.setBalance(to.getBalance().add(request.getAmount()));
         accountRepository.save(from);
         accountRepository.save(to);
-        recordTransaction(fromAccountId, "TRANSFER_OUT", request.getAmount(), "Transfer to account " + to.getAccountNumber());
-        recordTransaction(to.getId(), "TRANSFER_IN", request.getAmount(), "Transfer from account " + from.getAccountNumber());
+        recordTransaction(fromAccountId, "TRANSFER_OUT", request.getAmount(),
+                "Transfer to account " + to.getAccountNumber());
+        recordTransaction(to.getId(), "TRANSFER_IN", request.getAmount(),
+                "Transfer from account " + from.getAccountNumber());
     }
 
     public List<TransactionResponse> getTransactions(Long accountId) {
@@ -94,21 +96,31 @@ public class BankingService {
 
     private void recordTransaction(Long accountId, String type, BigDecimal amount, String description) {
         Transaction t = new Transaction();
-        t.setAccountId(accountId); t.setType(type); t.setAmount(amount); t.setDescription(description);
+        t.setAccountId(accountId);
+        t.setType(type);
+        t.setAmount(amount);
+        t.setDescription(description);
         transactionRepository.save(t);
     }
 
     private AccountResponse toAccountResponse(Account a) {
         AccountResponse r = new AccountResponse();
-        r.setId(a.getId()); r.setAccountNumber(a.getAccountNumber());
-        r.setOwnerName(a.getOwnerName()); r.setBalance(a.getBalance()); r.setCreatedAt(a.getCreatedAt());
+        r.setId(a.getId());
+        r.setAccountNumber(a.getAccountNumber());
+        r.setOwnerName(a.getOwnerName());
+        r.setBalance(a.getBalance());
+        r.setCreatedAt(a.getCreatedAt());
         return r;
     }
 
     private TransactionResponse toTransactionResponse(Transaction t) {
         TransactionResponse r = new TransactionResponse();
-        r.setId(t.getId()); r.setAccountId(t.getAccountId()); r.setType(t.getType());
-        r.setAmount(t.getAmount()); r.setDescription(t.getDescription()); r.setCreatedAt(t.getCreatedAt());
+        r.setId(t.getId());
+        r.setAccountId(t.getAccountId());
+        r.setType(t.getType());
+        r.setAmount(t.getAmount());
+        r.setDescription(t.getDescription());
+        r.setCreatedAt(t.getCreatedAt());
         return r;
     }
 }

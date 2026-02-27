@@ -20,7 +20,7 @@ public class TaskController {
 
     // TODO: inject TaskService
 
-    // GET /api/tasks?status=PENDING  (status is optional)
+    // GET /api/tasks?status=PENDING (status is optional)
     public ResponseEntity<List<Task>> getAllTasks(
             @RequestParam(required = false) TaskStatus status) {
         // your code here
@@ -33,7 +33,7 @@ public class TaskController {
         return null;
     }
 
-    // GET /api/tasks/priority/{level}   e.g. /priority/HIGH
+    // GET /api/tasks/priority/{level} e.g. /priority/HIGH
     public ResponseEntity<List<Task>> getTasksByPriority(@PathVariable Priority priority) {
         // your code here
         return null;

@@ -1,11 +1,11 @@
 public class Main {
     public static void main(String[] args) {
         Shape[] shapes = {
-            new Circle(5.0, "Red"),
-            new Rectangle(4.0, 6.0, "Blue"),
-            new Triangle(3.0, 4.0, 5.0, "Green"),
-            new Circle(2.5, "Yellow"),
-            new Rectangle(8.0, 3.0, "Purple")
+                new Circle(5.0, "Red"),
+                new Rectangle(4.0, 6.0, "Blue"),
+                new Triangle(3.0, 4.0, 5.0, "Green"),
+                new Circle(2.5, "Yellow"),
+                new Rectangle(8.0, 3.0, "Purple")
         };
 
         System.out.println("=== Shape Gallery ===");

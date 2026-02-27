@@ -71,7 +71,7 @@ public class BlogController {
 
     @PostMapping("/posts/{id}/tags")
     public ResponseEntity<Post> addTagToPost(@PathVariable Long id,
-                                              @RequestBody Map<String, String> body) {
+            @RequestBody Map<String, String> body) {
         try {
             return ResponseEntity.ok(blogService.addTagToPost(id, body.get("name")));
         } catch (NoSuchElementException e) {

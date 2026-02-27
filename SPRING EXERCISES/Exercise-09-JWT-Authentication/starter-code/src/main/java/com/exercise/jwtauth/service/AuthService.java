@@ -21,7 +21,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+            JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -29,24 +29,29 @@ public class AuthService {
     }
 
     // TODO 8: Implement register:
-    //         1. Check for duplicate username → throw RuntimeException("Username taken")
-    //         2. Check for duplicate email → throw RuntimeException("Email in use")
-    //         3. Create User, set username/email, set password = passwordEncoder.encode(request.getPassword())
-    //         4. Save user
-    //         5. Return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()),
-    //                                    user.getUsername(), user.getRole())
+    // 1. Check for duplicate username → throw RuntimeException("Username taken")
+    // 2. Check for duplicate email → throw RuntimeException("Email in use")
+    // 3. Create User, set username/email, set password =
+    // passwordEncoder.encode(request.getPassword())
+    // 4. Save user
+    // 5. Return new AuthResponse(jwtUtil.generateToken(user.getUsername(),
+    // user.getRole()),
+    // user.getUsername(), user.getRole())
     public AuthResponse register(RegisterRequest request) {
         // TODO 8: implement this
         throw new UnsupportedOperationException("TODO 8: implement register");
     }
 
     // TODO 9: Implement login:
-    //         1. Authenticate: authenticationManager.authenticate(
-    //                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()))
-    //            (If credentials wrong, Spring throws AuthenticationException → 401)
-    //         2. Load the user: userRepository.findByUsername(request.getUsername()).orElseThrow(...)
-    //         3. Return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()),
-    //                                    user.getUsername(), user.getRole())
+    // 1. Authenticate: authenticationManager.authenticate(
+    // new UsernamePasswordAuthenticationToken(request.getUsername(),
+    // request.getPassword()))
+    // (If credentials wrong, Spring throws AuthenticationException → 401)
+    // 2. Load the user:
+    // userRepository.findByUsername(request.getUsername()).orElseThrow(...)
+    // 3. Return new AuthResponse(jwtUtil.generateToken(user.getUsername(),
+    // user.getRole()),
+    // user.getUsername(), user.getRole())
     public AuthResponse login(LoginRequest request) {
         // TODO 9: implement this
         throw new UnsupportedOperationException("TODO 9: implement login");

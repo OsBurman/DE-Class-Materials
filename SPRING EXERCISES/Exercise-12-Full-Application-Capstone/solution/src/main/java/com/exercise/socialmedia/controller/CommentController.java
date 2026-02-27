@@ -15,13 +15,17 @@ import java.util.List;
 @RequestMapping("/api/posts/{postId}/comments")
 public class CommentController {
     private final CommentService commentService;
-    public CommentController(CommentService commentService) { this.commentService = commentService; }
+
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @PostMapping
     public ResponseEntity<CommentResponse> addComment(@PathVariable Long postId,
-                                                       @Valid @RequestBody CommentRequest request,
-                                                       Principal principal) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.addComment(postId, request, principal.getName()));
+            @Valid @RequestBody CommentRequest request,
+            Principal principal) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(commentService.addComment(postId, request, principal.getName()));
     }
 
     @GetMapping

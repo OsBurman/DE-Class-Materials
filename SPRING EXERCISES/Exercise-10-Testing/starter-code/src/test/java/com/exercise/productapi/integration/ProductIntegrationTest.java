@@ -31,13 +31,14 @@ public class ProductIntegrationTest {
     private ObjectMapper objectMapper;
 
     // TODO 17: Implement a full create-then-retrieve integration test.
-    //          Step 1: Create a product via POST /api/products
-    //          Step 2: Extract the ID from the response
-    //          Step 3: GET /api/products/{id} and verify the product name matches
+    // Step 1: Create a product via POST /api/products
+    // Step 2: Extract the ID from the response
+    // Step 3: GET /api/products/{id} and verify the product name matches
     //
-    //          Hint: You can chain assertions or use andReturn() to extract response data:
-    //          String responseBody = mockMvc.perform(...).andReturn().getResponse().getContentAsString()
-    //          Then parse it: objectMapper.readTree(responseBody).get("id").asLong()
+    // Hint: You can chain assertions or use andReturn() to extract response data:
+    // String responseBody =
+    // mockMvc.perform(...).andReturn().getResponse().getContentAsString()
+    // Then parse it: objectMapper.readTree(responseBody).get("id").asLong()
     @Test
     void createProduct_thenRetrieveById_returnsCorrectProduct() throws Exception {
         // TODO 17: implement this full integration test

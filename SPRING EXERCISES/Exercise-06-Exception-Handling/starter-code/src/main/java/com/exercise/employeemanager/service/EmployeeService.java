@@ -33,8 +33,9 @@ public class EmployeeService {
 
     public Employee createEmployee(Employee employee) {
         // TODO 16: Check if email already exists using existsByEmail()
-        //          If yes: throw new DuplicateResourceException("Email already in use: " + employee.getEmail())
-        //          If no: save and return
+        // If yes: throw new DuplicateResourceException("Email already in use: " +
+        // employee.getEmail())
+        // If no: save and return
         return null;
     }
 
@@ -56,7 +57,8 @@ public class EmployeeService {
     public Employee promoteEmployee(Long id) {
         // TODO 17a: Find by id or throw ResourceNotFoundException("Employee", id)
         // TODO 17b: If employee.getLevel() >= 5:
-        //           throw new BusinessRuleException("Employee is already at the maximum level (5)")
+        // throw new BusinessRuleException("Employee is already at the maximum level
+        // (5)")
         // TODO 17c: Increment level by 1, save, return
         return null;
     }

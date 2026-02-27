@@ -20,9 +20,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository; this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil; this.authenticationManager = authenticationManager;
+            JwtUtil jwtUtil, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
     }
 
     public AuthResponse register(RegisterRequest request) {
@@ -36,12 +38,15 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setBio(request.getBio());
         userRepository.save(user);
-        return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()), user.getUsername(), user.getRole());
+        return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()), user.getUsername(),
+                user.getRole());
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()), user.getUsername(), user.getRole());
+        return new AuthResponse(jwtUtil.generateToken(user.getUsername(), user.getRole()), user.getUsername(),
+                user.getRole());
     }
 }

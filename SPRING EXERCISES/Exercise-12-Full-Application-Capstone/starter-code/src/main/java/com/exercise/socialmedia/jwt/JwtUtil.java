@@ -18,7 +18,7 @@ public class JwtUtil {
     }
 
     // TODO 1: Implement generateToken, extractUsername, isTokenValid
-    //         (See Exercise 09 for the full implementation pattern)
+    // (See Exercise 09 for the full implementation pattern)
     public String generateToken(String username, String role) {
         throw new UnsupportedOperationException("TODO 1: implement generateToken");
     }

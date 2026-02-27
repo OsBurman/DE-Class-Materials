@@ -56,16 +56,17 @@ public class ProductRepository {
     // ─── Custom Queries ───────────────────────────────────────────────────────
 
     // TODO 9: Implement findByCategory(String category)
-    //         Return all products whose category equals the given category (case-insensitive).
-    //         Hint: Use stream().filter(...).collect(Collectors.toList())
+    // Return all products whose category equals the given category
+    // (case-insensitive).
+    // Hint: Use stream().filter(...).collect(Collectors.toList())
     public List<Product> findByCategory(String category) {
         // your code here
         return Collections.emptyList();
     }
 
     // TODO 10: Implement findByNameContainingIgnoreCase(String name)
-    //          Return all products whose name CONTAINS the keyword (case-insensitive).
-    //          Hint: Use String.toLowerCase() and String.contains()
+    // Return all products whose name CONTAINS the keyword (case-insensitive).
+    // Hint: Use String.toLowerCase() and String.contains()
     public List<Product> findByNameContainingIgnoreCase(String name) {
         // your code here
         return Collections.emptyList();

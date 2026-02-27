@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RestController                         // SOLUTION TODO 1
-@RequestMapping("/api/products")        // SOLUTION TODO 1
+@RestController // SOLUTION TODO 1
+@RequestMapping("/api/products") // SOLUTION TODO 1
 public class ProductController {
 
     private final ProductRepository productRepository;
 
-    // SOLUTION TODO 2 — constructor injection, no @Autowired needed (single constructor)
+    // SOLUTION TODO 2 — constructor injection, no @Autowired needed (single
+    // constructor)
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -71,7 +72,8 @@ public class ProductController {
         return ResponseEntity.notFound().build();
     }
 
-    // SOLUTION TODO 8 — must be declared BEFORE /{id} in the class to avoid ambiguity
+    // SOLUTION TODO 8 — must be declared BEFORE /{id} in the class to avoid
+    // ambiguity
     @GetMapping("/search")
     public ResponseEntity<List<Product>> searchByName(@RequestParam String name) {
         List<Product> results = productRepository.findByNameContainingIgnoreCase(name);

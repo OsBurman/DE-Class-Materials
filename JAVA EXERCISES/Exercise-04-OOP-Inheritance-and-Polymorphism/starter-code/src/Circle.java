@@ -1,5 +1,5 @@
 /**
- * Exercise 04 — OOP Part 2  (STARTER)
+ * Exercise 04 — OOP Part 2 (STARTER)
  * Circle shape.
  */
 // TODO 4: Extend Shape and implement Drawable
@@ -12,9 +12,11 @@ public class Circle extends Shape {
         this.radius = radius;
     }
 
-    public double getRadius() { return radius; }
+    public double getRadius() {
+        return radius;
+    }
 
-    // TODO 5a: Override area()    → π * r²   (use Math.PI)
+    // TODO 5a: Override area() → π * r² (use Math.PI)
     @Override
     public double area() {
         return 0.0; // your code here
@@ -27,14 +29,14 @@ public class Circle extends Shape {
     }
 
     // TODO 6: Override draw() from Drawable
-    //   Print a simple circle: "  ( o )  radius=5.0"
+    // Print a simple circle: " ( o ) radius=5.0"
     @Override
     public void draw() {
         // your code here
     }
 
     // TODO 7: Override toString()
-    //   "Circle[radius=5.0, color=Red]"
+    // "Circle[radius=5.0, color=Red]"
     @Override
     public String toString() {
         return "Circle(not implemented)";

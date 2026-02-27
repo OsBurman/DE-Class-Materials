@@ -14,6 +14,7 @@ class EventBus {
 
     public void publish(String eventType, Object data) {
         List<EventListener> subs = listeners.getOrDefault(eventType, Collections.emptyList());
-        for (EventListener l : subs) l.onEvent(eventType, data);
+        for (EventListener l : subs)
+            l.onEvent(eventType, data);
     }
 }

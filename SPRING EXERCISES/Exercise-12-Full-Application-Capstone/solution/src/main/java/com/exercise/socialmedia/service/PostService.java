@@ -25,9 +25,11 @@ public class PostService {
     private final LikeRepository likeRepository;
 
     public PostService(PostRepository postRepository, UserRepository userRepository,
-                       TagRepository tagRepository, LikeRepository likeRepository) {
-        this.postRepository = postRepository; this.userRepository = userRepository;
-        this.tagRepository = tagRepository; this.likeRepository = likeRepository;
+            TagRepository tagRepository, LikeRepository likeRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.tagRepository = tagRepository;
+        this.likeRepository = likeRepository;
     }
 
     @Audited(action = "CREATE_POST")
@@ -52,7 +54,8 @@ public class PostService {
     }
 
     public List<PostResponse> getAllPosts(int page, int size) {
-        return postRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(page, size, Sort.by("createdAt").descending()))
+        return postRepository
+                .findAllByOrderByCreatedAtDesc(PageRequest.of(page, size, Sort.by("createdAt").descending()))
                 .stream().map(this::toPostResponse).collect(Collectors.toList());
     }
 
@@ -60,7 +63,8 @@ public class PostService {
         User currentUser = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
         List<User> following = new ArrayList<>(currentUser.getFollowing());
-        if (following.isEmpty()) return List.of();
+        if (following.isEmpty())
+            return List.of();
         return postRepository.findFeedPosts(following).stream()
                 .map(this::toPostResponse).collect(Collectors.toList());
     }
@@ -68,7 +72,8 @@ public class PostService {
     @Transactional
     public PostResponse updatePost(Long id, PostRequest request, String username) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", id));
-        if (!post.getAuthor().getUsername().equals(username)) throw new UnauthorizedException("You can only edit your own posts");
+        if (!post.getAuthor().getUsername().equals(username))
+            throw new UnauthorizedException("You can only edit your own posts");
         post.setContent(request.getContent());
         return toPostResponse(postRepository.save(post));
     }
@@ -76,16 +81,20 @@ public class PostService {
     @Transactional
     public void deletePost(Long id, String username) {
         Post post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post", id));
-        if (!post.getAuthor().getUsername().equals(username)) throw new UnauthorizedException("You can only delete your own posts");
+        if (!post.getAuthor().getUsername().equals(username))
+            throw new UnauthorizedException("You can only delete your own posts");
         postRepository.delete(post);
     }
 
     @Transactional
     public PostResponse likePost(Long postId, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", postId));
         if (!likeRepository.existsByPostIdAndUserId(postId, user.getId())) {
-            Like like = new Like(); like.setPost(post); like.setUser(user);
+            Like like = new Like();
+            like.setPost(post);
+            like.setUser(user);
             likeRepository.save(like);
         }
         return toPostResponse(post);
@@ -93,7 +102,8 @@ public class PostService {
 
     @Transactional
     public PostResponse unlikePost(Long postId, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException("Post", postId));
         likeRepository.findByPostIdAndUserId(postId, user.getId()).ifPresent(likeRepository::delete);
         return toPostResponse(post);
@@ -101,11 +111,14 @@ public class PostService {
 
     private PostResponse toPostResponse(Post post) {
         PostResponse r = new PostResponse();
-        r.setId(post.getId()); r.setContent(post.getContent());
+        r.setId(post.getId());
+        r.setContent(post.getContent());
         r.setAuthorUsername(post.getAuthor().getUsername());
         r.setTags(post.getTags().stream().map(Tag::getName).collect(Collectors.toList()));
-        r.setLikeCount(post.getLikes().size()); r.setCommentCount(post.getComments().size());
-        r.setCreatedAt(post.getCreatedAt()); r.setUpdatedAt(post.getUpdatedAt());
+        r.setLikeCount(post.getLikes().size());
+        r.setCommentCount(post.getComments().size());
+        r.setCreatedAt(post.getCreatedAt());
+        r.setUpdatedAt(post.getUpdatedAt());
         return r;
     }
 }

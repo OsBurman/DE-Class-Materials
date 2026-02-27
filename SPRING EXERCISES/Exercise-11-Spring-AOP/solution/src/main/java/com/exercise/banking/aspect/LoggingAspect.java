@@ -15,7 +15,8 @@ public class LoggingAspect {
     private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Pointcut("execution(* com.exercise.banking.service.*.*(..))")
-    public void serviceLayer() {}
+    public void serviceLayer() {
+    }
 
     @Before("serviceLayer()")
     public void logBefore(JoinPoint joinPoint) {

@@ -30,18 +30,23 @@ public class JwtAuthenticationFilter {
 
     // TODO 4: Make this class extend OncePerRequestFilter (above)
     //
-    // TODO 5: Implement doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain):
-    //         1. Get header: String authHeader = request.getHeader("Authorization")
-    //         2. If authHeader != null && authHeader.startsWith("Bearer "):
-    //            a. Extract token: String token = authHeader.substring(7)
-    //            b. String username = jwtUtil.extractUsername(token)
-    //            c. Check: username != null && jwtUtil.isTokenValid(token)
-    //               && SecurityContextHolder.getContext().getAuthentication() == null
-    //            d. Load UserDetails: UserDetails userDetails = userDetailsService.loadUserByUsername(username)
-    //            e. Create auth token:
-    //               UsernamePasswordAuthenticationToken authToken =
-    //                   new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities())
-    //            f. Set details: authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request))
-    //            g. Set on context: SecurityContextHolder.getContext().setAuthentication(authToken)
-    //         3. Always call: filterChain.doFilter(request, response)
+    // TODO 5: Implement doFilterInternal(HttpServletRequest, HttpServletResponse,
+    // FilterChain):
+    // 1. Get header: String authHeader = request.getHeader("Authorization")
+    // 2. If authHeader != null && authHeader.startsWith("Bearer "):
+    // a. Extract token: String token = authHeader.substring(7)
+    // b. String username = jwtUtil.extractUsername(token)
+    // c. Check: username != null && jwtUtil.isTokenValid(token)
+    // && SecurityContextHolder.getContext().getAuthentication() == null
+    // d. Load UserDetails: UserDetails userDetails =
+    // userDetailsService.loadUserByUsername(username)
+    // e. Create auth token:
+    // UsernamePasswordAuthenticationToken authToken =
+    // new UsernamePasswordAuthenticationToken(userDetails, null,
+    // userDetails.getAuthorities())
+    // f. Set details: authToken.setDetails(new
+    // WebAuthenticationDetailsSource().buildDetails(request))
+    // g. Set on context:
+    // SecurityContextHolder.getContext().setAuthentication(authToken)
+    // 3. Always call: filterChain.doFilter(request, response)
 }

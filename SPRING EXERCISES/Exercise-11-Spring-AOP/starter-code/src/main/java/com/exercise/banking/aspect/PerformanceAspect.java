@@ -14,16 +14,18 @@ public class PerformanceAspect {
 
     // TODO 7: Create an @Around advice targeting all service methods.
     //
-    //         @Around("execution(* com.exercise.banking.service.*.*(..))")
-    //         public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    // @Around("execution(* com.exercise.banking.service.*.*(..))")
+    // public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws
+    // Throwable {
     //
-    //         Steps:
-    //         1. long start = System.currentTimeMillis();
-    //         2. Object result = joinPoint.proceed();  ← executes the actual service method
-    //         3. long end = System.currentTimeMillis();
-    //         4. Log: "[PERF] " + joinPoint.getSignature().getName() + " completed in " + (end - start) + " ms"
-    //         5. return result;
+    // Steps:
+    // 1. long start = System.currentTimeMillis();
+    // 2. Object result = joinPoint.proceed(); ← executes the actual service method
+    // 3. long end = System.currentTimeMillis();
+    // 4. Log: "[PERF] " + joinPoint.getSignature().getName() + " completed in " +
+    // (end - start) + " ms"
+    // 5. return result;
     //
-    //         IMPORTANT: @Around MUST call joinPoint.proceed() and return its result,
-    //         otherwise the actual method never executes!
+    // IMPORTANT: @Around MUST call joinPoint.proceed() and return its result,
+    // otherwise the actual method never executes!
 }

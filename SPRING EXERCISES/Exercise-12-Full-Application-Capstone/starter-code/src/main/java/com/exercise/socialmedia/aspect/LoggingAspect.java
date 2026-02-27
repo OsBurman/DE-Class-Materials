@@ -15,7 +15,8 @@ public class LoggingAspect {
     private static final Logger log = LoggerFactory.getLogger(LoggingAspect.class);
 
     @Pointcut("execution(* com.exercise.socialmedia.service.*.*(..))")
-    public void serviceLayer() {}
+    public void serviceLayer() {
+    }
 
     // TODO 9: Add @Before advice — log method name + args
     // TODO 9: Add @AfterThrowing advice — log method name + exception message

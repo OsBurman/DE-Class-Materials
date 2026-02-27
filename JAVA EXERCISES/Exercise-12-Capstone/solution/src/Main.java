@@ -5,9 +5,9 @@ public class Main {
         try {
             Bank bank = Bank.getInstance();
 
-            SavingsAccount alice  = (SavingsAccount)  bank.createAccount("Alice", "savings",  5000.0);
-            CheckingAccount bob   = (CheckingAccount) bank.createAccount("Bob",   "checking", 1000.0);
-            SavingsAccount carol  = (SavingsAccount)  bank.createAccount("Carol", "savings",  6000.0);
+            SavingsAccount alice = (SavingsAccount) bank.createAccount("Alice", "savings", 5000.0);
+            CheckingAccount bob = (CheckingAccount) bank.createAccount("Bob", "checking", 1000.0);
+            SavingsAccount carol = (SavingsAccount) bank.createAccount("Carol", "savings", 6000.0);
 
             System.out.println("Created accounts:");
             System.out.println("  " + alice);
@@ -34,10 +34,16 @@ public class Main {
             System.out.println(Analytics.getAccountReport(bank.getAllAccounts()));
 
             System.out.println("--- Error Handling ---");
-            try { bank.getAccount("XXX-999"); }
-            catch (BankException.AccountNotFoundException e) { System.out.println("Caught: " + e.getMessage()); }
-            try { alice.withdraw(999_999.0); }
-            catch (BankException.InsufficientFundsException e) { System.out.println("Caught: " + e.getMessage()); }
+            try {
+                bank.getAccount("XXX-999");
+            } catch (BankException.AccountNotFoundException e) {
+                System.out.println("Caught: " + e.getMessage());
+            }
+            try {
+                alice.withdraw(999_999.0);
+            } catch (BankException.InsufficientFundsException e) {
+                System.out.println("Caught: " + e.getMessage());
+            }
 
         } catch (BankException e) {
             System.err.println("Unexpected bank error: " + e.getMessage());

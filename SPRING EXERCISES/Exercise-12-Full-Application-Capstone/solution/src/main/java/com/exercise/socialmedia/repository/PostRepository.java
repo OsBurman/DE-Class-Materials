@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthorOrderByCreatedAtDesc(User author);
+
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     @Query("SELECT p FROM Post p WHERE p.author IN :authors ORDER BY p.createdAt DESC")

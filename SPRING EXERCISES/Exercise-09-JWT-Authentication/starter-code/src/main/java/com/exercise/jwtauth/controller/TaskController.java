@@ -28,15 +28,15 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@Valid @RequestBody TaskRequest request,
-                                                    Principal principal) {
+            Principal principal) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(taskService.createTask(request, principal.getName()));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id,
-                                                    @Valid @RequestBody TaskRequest request,
-                                                    Principal principal) {
+            @Valid @RequestBody TaskRequest request,
+            Principal principal) {
         return ResponseEntity.ok(taskService.updateTask(id, request, principal.getName()));
     }
 

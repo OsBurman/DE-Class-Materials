@@ -42,8 +42,7 @@ public class StudentController {
                 s.getId(),
                 s.getFirstName() + " " + s.getLastName(),
                 s.getMajor(),
-                s.getGpa()
-        );
+                s.getGpa());
     }
 
     // ─── Endpoints ────────────────────────────────────────────────────────────
@@ -79,12 +78,15 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentResponse> updateStudent(@PathVariable Long id,
-                                                          @RequestBody StudentUpdateRequest request) {
+            @RequestBody StudentUpdateRequest request) {
         return studentRepository.findById(id)
                 .map(student -> {
-                    if (request.getMajor() != null)     student.setMajor(request.getMajor());
-                    if (request.getYearLevel() != null) student.setYearLevel(request.getYearLevel());
-                    if (request.getEmail() != null)     student.setEmail(request.getEmail());
+                    if (request.getMajor() != null)
+                        student.setMajor(request.getMajor());
+                    if (request.getYearLevel() != null)
+                        student.setYearLevel(request.getYearLevel());
+                    if (request.getEmail() != null)
+                        student.setEmail(request.getEmail());
                     return ResponseEntity.ok(toResponse(studentRepository.save(student)));
                 })
                 .orElse(ResponseEntity.notFound().build());

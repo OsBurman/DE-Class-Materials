@@ -9,7 +9,8 @@ public class Product {
     private String category;
     private int stock;
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(Long id, String name, String description, double price, String category, int stock) {
         this.id = id;
@@ -20,16 +21,51 @@ public class Product {
         this.stock = stock;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 }

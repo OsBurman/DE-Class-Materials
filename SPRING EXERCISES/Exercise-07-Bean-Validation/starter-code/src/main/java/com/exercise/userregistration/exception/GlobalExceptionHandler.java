@@ -14,11 +14,13 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // TODO 11: Handle MethodArgumentNotValidException — this is thrown when @Valid fails.
-    //          Steps:
-    //          1. Get all field errors: ex.getBindingResult().getFieldErrors()
-    //          2. For each FieldError, put fieldError.getField() → fieldError.getDefaultMessage() into a Map
-    //          3. Return ResponseEntity.status(400).body(ValidationErrorResponse.of(errors))
+    // TODO 11: Handle MethodArgumentNotValidException — this is thrown when @Valid
+    // fails.
+    // Steps:
+    // 1. Get all field errors: ex.getBindingResult().getFieldErrors()
+    // 2. For each FieldError, put fieldError.getField() →
+    // fieldError.getDefaultMessage() into a Map
+    // 3. Return ResponseEntity.status(400).body(ValidationErrorResponse.of(errors))
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationErrors(
             MethodArgumentNotValidException ex, HttpServletRequest request) {

@@ -23,12 +23,12 @@ public class UserController {
     }
 
     // TODO 12: Add @Valid before @RequestBody on the register and login methods.
-    //          @Valid tells Spring MVC to run Bean Validation on the request body
-    //          BEFORE the method body executes. If validation fails, Spring throws
-    //          MethodArgumentNotValidException, which your GlobalExceptionHandler catches.
+    // @Valid tells Spring MVC to run Bean Validation on the request body
+    // BEFORE the method body executes. If validation fails, Spring throws
+    // MethodArgumentNotValidException, which your GlobalExceptionHandler catches.
     //
-    //          Without @Valid: validation annotations are IGNORED!
-    //          With @Valid: invalid requests never reach service code.
+    // Without @Valid: validation annotations are IGNORED!
+    // With @Valid: invalid requests never reach service code.
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRegistrationRequest request) {
         // TODO 12: Add @Valid before @RequestBody above ↑
@@ -38,7 +38,8 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
         // TODO 12: Add @Valid before @RequestBody above ↑
-        // Simplified login — just verify username exists (no real auth yet, that's Exercise 08)
+        // Simplified login — just verify username exists (no real auth yet, that's
+        // Exercise 08)
         return ResponseEntity.ok(Map.of("message", "Login successful (auth coming in Exercise 08!)"));
     }
 

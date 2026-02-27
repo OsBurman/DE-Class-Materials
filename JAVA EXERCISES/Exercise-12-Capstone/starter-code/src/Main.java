@@ -8,9 +8,9 @@ public class Main {
             Bank bank = Bank.getInstance();
 
             // Create accounts
-            SavingsAccount alice = (SavingsAccount) bank.createAccount("Alice",   "savings",  5000.0);
-            CheckingAccount bob  = (CheckingAccount) bank.createAccount("Bob",    "checking", 1000.0);
-            SavingsAccount carol = (SavingsAccount) bank.createAccount("Carol",   "savings",  6000.0);
+            SavingsAccount alice = (SavingsAccount) bank.createAccount("Alice", "savings", 5000.0);
+            CheckingAccount bob = (CheckingAccount) bank.createAccount("Bob", "checking", 1000.0);
+            SavingsAccount carol = (SavingsAccount) bank.createAccount("Carol", "savings", 6000.0);
 
             System.out.println("Created accounts:");
             System.out.println("  " + alice);
