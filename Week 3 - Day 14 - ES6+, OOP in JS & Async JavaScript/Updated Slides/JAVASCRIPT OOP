@@ -1,0 +1,364 @@
+[SLIDE 1: Title Slide — "Modern JavaScript: ES6+, OOP & Modules"]
+Slide should show: Title, your name, today's date, and a simple visual of interconnected JS concepts.
+
+"Good morning/afternoon everyone. Today is one of my favorite lessons because we're covering the features that genuinely transform how you write JavaScript. Everything you've learned so far has been building to this. By the end of today you'll be writing code that looks professional, reads cleanly, and follows real-world patterns used at companies like Google, Meta, and Airbnb.
+We have a lot to cover so I want to be upfront — I'll pause for questions at the end of each section, but if something is confusing don't wait. Raise your hand. Today's material connects, so if you lose the thread early it becomes harder to follow later.
+Here's our roadmap for the session."
+
+[SLIDE 2: Agenda Slide]
+Slide should show: A visual roadmap with 6 stops: 1) ES6 Core Features, 2) Prototypes & the Prototype Chain, 3) Classes & OOP Patterns, 4) ES Modules, 5) Map & Set, 6) Advanced Built-ins Overview. A note at the bottom: Async JavaScript — the event loop, Promises, and async/await — is covered in its own dedicated session.
+
+"Six sections today. Async JavaScript gets its own full hour in a separate session — everything we do today is the foundation that session builds on. Let's go."
+
+
+---
+
+
+SECTION 1: ES6 CORE FEATURES (15 minutes)
+
+[SLIDE 3: Section Header — "ES6 Core Features: Writing Cleaner Code"]
+Slide should show: Section header with four sub-topics listed below it: Default Parameters, Spread & Rest, Destructuring, Enhanced Object Literals.
+
+"ES6 — also called ES2015 — was the biggest update JavaScript ever received. It didn't change what JavaScript could do fundamentally, but it changed how elegantly you could do it. These aren't obscure features — they're in every modern codebase you'll ever read or work in. Let's walk through each one."
+
+
+DEFAULT PARAMETERS
+
+[SLIDE 4: Default Parameters — The Old Way vs. The New Way]
+Slide should show: Two code blocks side by side. Left block — the pre-ES6 approach: function greet(name) { name = name || 'stranger'; return 'Hello ' + name; }. Right block — the ES6 approach: function greet(name = 'stranger') { return 'Hello ' + name; }. A label under each: "Before ES6" and "ES6+".
+
+"Default parameters let you define fallback values directly in the function signature. Before ES6, you'd write name = name || 'stranger' inside the function body. That works, but it has a subtle bug: if someone passes in an empty string or zero — both falsy values — the fallback triggers even though the caller did pass something. The ES6 version doesn't have that problem. The default only kicks in for undefined — not for falsy values."
+
+[SLIDE 5: Default Parameters — Rules & Gotchas]
+Slide should show: Three code examples stacked. (1) Passing undefined triggers the default: greet(undefined) → uses 'stranger'. (2) Passing null does NOT trigger the default: greet(null) → name is null. (3) Using an earlier parameter as a default for a later one: function createBox(width = 10, height = width).
+
+"Two things I want you to lock in here. First — passing undefined triggers the default. Passing null does not. null is an explicit value in JavaScript, so the function treats it as intentional. This trips people up constantly. Second — you can reference earlier parameters in later defaults. function createBox(width = 10, height = width) means if you only pass width, height automatically matches it. That's a clean pattern for things like square dimensions, padding, and grid layouts."
+
+
+SPREAD & REST OPERATORS
+
+[SLIDE 6: Spread & Rest — Same Syntax, Opposite Jobs]
+Slide should show: A single header slide. Large text: "... — Three dots. Two completely different jobs depending on where you use them." Below, two labels side by side: "SPREAD — expands an iterable into individual elements" and "REST — collects individual elements into an array." A simple arrow diagram showing the direction: array → elements for spread, elements → array for rest.
+
+"Before we look at code I want to give you the mental model first. Spread and rest are the same three-dot syntax. What makes them different is context — where they appear in your code. Spread is about expanding. Rest is about collecting. Keep that in your head as we go through the examples."
+
+[SLIDE 7: Spread — With Functions & Arrays]
+Slide should show: Three code examples. (1) Spread in a function call: const nums = [3, 1, 4, 1, 5]; Math.max(...nums); — with a comment: "same as Math.max(3, 1, 4, 1, 5)". (2) Copying an array: const original = [1, 2, 3]; const copy = [...original]; — with a comment: "new array, not a reference". (3) Merging arrays: const merged = [...arr1, ...arr2];
+
+"Spread expands an iterable into individual elements. The most common use case for beginners is passing an array to a function that expects separate arguments — Math.max is the classic example. You can also use spread to copy an array. This is important: const copy = [...original] gives you a brand new array in memory. If you did const copy = original instead, you'd have two variables pointing at the same array — change one, change both. Spread avoids that. And merging arrays with spread is cleaner than concat."
+
+[SLIDE 8: Spread — With Objects]
+Slide should show: Three code examples. (1) Copying an object: const copy = { ...original }. (2) Merging two objects: const merged = { ...defaults, ...userSettings }; — with a comment: "userSettings keys overwrite defaults keys". (3) Adding a property while copying: const updated = { ...person, age: 31 }; — with a comment: "original person object is unchanged".
+
+"Spread works on objects too — same idea, different brackets. Copying an object with spread gives you a shallow copy, which is enough for most cases. When you merge two objects, the right-hand one wins on any key conflict — so in { ...defaults, ...userSettings }, any key that exists in both will use the value from userSettings. The third example is one you'll write constantly in React: you want to update one property on an object without mutating the original. Spread the whole object in, then override just the key you want to change."
+
+[SLIDE 9: Rest — In Function Parameters]
+Slide should show: Two code examples. (1) Rest collecting all arguments: function sum(...nums) { return nums.reduce((total, n) => total + n, 0); } — with a comment: "nums is a real array". (2) Rest collecting remaining arguments after named ones: function log(level, ...messages) { } — with a comment: "level is the first arg, messages is everything else".
+
+"Rest is the mirror image of spread. When three dots appear in a function's parameter list, they collect all remaining arguments into a real array. This replaces the old arguments object, which was array-like but not an actual array — you couldn't call .map() or .filter() on it without converting it first. Rest parameters are real arrays from the start. The second example is a powerful pattern: name your first one or two parameters explicitly, then use rest to capture everything after. You see this constantly in logging functions, event handlers, and middleware."
+
+
+DESTRUCTURING
+
+[SLIDE 10: Destructuring — What It Is & Why It Exists]
+Slide should show: A before/after comparison. Before: const name = person.name; const age = person.age; const role = person.role; — three separate lines. After: const { name, age, role } = person; — one line. A label: "Same result. One line."
+
+"Destructuring is a shorthand for pulling values out of arrays or objects into variables. That's it. Before it existed you'd write three assignment lines to get three values out of an object. Now you write one. It reads like you're describing the shape of the data you want, and JavaScript unpacks it for you. Once you're used to it you won't want to go back."
+
+[SLIDE 11: Array Destructuring]
+Slide should show: Four code examples stacked. (1) Basic: const [first, second] = [10, 20]; (2) Skipping elements: const [first, , third] = [10, 20, 30]; — comment: "blank comma skips the middle value". (3) Default values: const [a = 0, b = 0] = [5]; — comment: "b gets 0 because the array has no second element". (4) Combining with rest: const [head, ...tail] = [1, 2, 3, 4]; — comment: "head = 1, tail = [2, 3, 4]".
+
+"For arrays, position is what matters. The first variable gets the first element, the second variable gets the second, and so on. You can skip positions with a blank comma. You can set defaults inline so you don't get undefined if the array is shorter than expected. And you can combine with rest to grab everything after a certain point — head and tail is a classic pattern from functional programming."
+
+[SLIDE 12: Object Destructuring — Basics]
+Slide should show: Three code examples. (1) Basic extraction: const { name, age } = person; (2) Renaming on extraction: const { name: fullName, age: years } = person; — comment: "variables are now fullName and years, not name and age". (3) Default values: const { role = 'user', theme = 'light' } = settings; — comment: "uses defaults if keys are missing from settings".
+
+"For objects, the key name is what matters — not position. You write the key names inside the curly braces and JavaScript pulls those values out. Renaming is useful when you're destructuring from two different objects that happen to have the same key names — you extract both but give them different variable names so they don't clash. Defaults work here too: if the key doesn't exist on the object at all, the variable gets the default value instead of undefined."
+
+[SLIDE 13: Object Destructuring — Nested & Function Parameters]
+Slide should show: Two code examples. (1) Nested destructuring: const { address: { city, zip } } = user; — comment: "pulling city and zip out of user.address". (2) Destructuring in a function parameter: function displayUser({ name, age, role = 'user' }) { } — comment: "caller passes the whole object, function unpacks what it needs".
+
+"You can nest destructuring as deep as your data goes. If you have a user object with an address object inside it, you can go straight to city and zip in one line. The function parameter pattern is one of the most practically important things on this slide. When a function accepts an object, you can destructure it right in the signature. The function's interface becomes self-documenting — you can see exactly what properties it expects. This is how React components work with props. Every functional component you write will use this pattern."
+
+[SLIDE 14: Destructuring — Common Real-World Uses]
+Slide should show: Three short real-world examples. (1) Swapping variables: [a, b] = [b, a]; — comment: "no temp variable needed". (2) Destructuring an API response: const { data, status, headers } = await axios.get(url); (3) Destructuring in a for...of loop: for (const { name, score } of students) { }
+
+"Three patterns you'll write in real projects constantly. Swapping two variables without a temp variable — one line, clean. Pulling what you need out of an API response immediately — you don't want to write response.data.user.name ten times, you extract what you need upfront. And looping over an array of objects while destructuring each one inline — instead of student.name inside the loop, you just have name. These feel small but they add up across a whole codebase."
+
+
+ENHANCED OBJECT LITERALS
+
+[SLIDE 15: Enhanced Object Literals]
+Slide should show: Three side-by-side before/after comparisons. (1) Shorthand properties — Before: { name: name, age: age } / After: { name, age }. (2) Shorthand methods — Before: { greet: function() {} } / After: { greet() {} }. (3) Computed property names — Before: const obj = {}; obj[dynamicKey] = value; / After: const obj = { [dynamicKey]: value };
+
+"Three small improvements that you'll use every day. Shorthand properties: if your variable name already matches the key you want, just write it once. Shorthand methods: drop the colon and the function keyword, just write the name and the parens. And computed property names: you can use any expression inside square brackets as a key — a variable, a function call, a template literal, anything. The computed property pattern is what makes it possible to build objects dynamically from data, which comes up constantly when working with APIs and state."
+
+Pause here — 2 minutes for questions on Section 1 before moving on.
+
+
+---
+
+
+SECTION 2: PROTOTYPES & THE PROTOTYPE CHAIN (12 minutes)
+
+[SLIDE 16: Section Header — "Prototypes: The Foundation of Everything in JavaScript OOP"]
+Slide should show: Large centered statement: "JavaScript does not have classes at its core. It has objects linked to other objects." Below: "ES6 class syntax is a cleaner way to write the same prototype-based system that has always existed."
+
+"This section is the most important conceptual foundation in this entire lesson. If you understand prototypes, every other OOP concept in JavaScript will make sense. If you skip over this and just memorize class syntax, you'll be confused when things don't work the way you expect. I need you to stay with me here."
+
+[SLIDE 17: What Is a Prototype?]
+Slide should show: A simple two-box diagram. Box 1: myDog object — properties: name: 'Rex', breed: 'Lab'. Arrow labeled "[[Prototype]] link" pointing to Box 2: Dog.prototype — methods: bark(), fetch(). A caption: "When you access myDog.bark(), JavaScript doesn't find it on myDog — it follows the prototype link and finds it there."
+
+"Every object in JavaScript has a hidden internal link to another object called its prototype. You don't see this link in your code directly — it's maintained by the JavaScript engine. When you try to access a property on an object and it's not there, JavaScript doesn't stop and return undefined immediately. It follows that prototype link and looks there. This automatic lookup is called the prototype chain."
+
+[SLIDE 18: The Full Prototype Chain]
+Slide should show: A vertical chain diagram with four levels. Level 1: myDog — { name: 'Rex' }. Arrow down to Level 2: Dog.prototype — { bark(), fetch() }. Arrow down to Level 3: Animal.prototype — { breathe(), eat() }. Arrow down to Level 4: Object.prototype — { toString(), hasOwnProperty(), valueOf() }. Arrow down to: null — "End of chain."
+
+"This is the full picture. When you access any property on any object, JavaScript starts at the bottom — your object itself — and walks up this chain until it finds it or hits null at the top and returns undefined. This is why every object you ever create in JavaScript automatically has methods like toString() and hasOwnProperty() — they live at the very top of every object's prototype chain on Object.prototype. You didn't define them. They're inherited."
+
+[SLIDE 19: Property Lookup — Step by Step]
+Slide should show: A walkthrough using myDog.toString() as the example. Step 1: "Does myDog have a toString property? No." Step 2: "Does Dog.prototype have a toString property? No." Step 3: "Does Animal.prototype have a toString property? No." Step 4: "Does Object.prototype have a toString property? Yes — found it." Each step has a checkmark (no) or star (yes).
+
+"Let's trace through exactly what happens when you call myDog.toString(). JavaScript starts at myDog itself — not there. Moves up to Dog.prototype — not there. Moves up to Animal.prototype — not there. Moves up to Object.prototype — found. This traversal happens every time you access a property. The engine is fast so you never notice it, but it's real. Understanding this lookup process is what makes JavaScript's object model make sense."
+
+[SLIDE 20: Constructor Functions — Creating Objects Before ES6]
+Slide should show: Code example. A constructor function: function Dog(name, breed) { this.name = name; this.breed = breed; } Adding a method to the prototype: Dog.prototype.bark = function() { return this.name + ' says woof'; }; Creating an instance: const rex = new Dog('Rex', 'Lab'); An instanceof check: rex instanceof Dog // true.
+
+"Before ES6 classes existed, you'd create object blueprints with constructor functions. It's just a regular function — but called with the new keyword. By convention, constructor functions start with a capital letter to signal they should be called with new. Methods go on Dog.prototype, not inside the constructor. If you put methods inside the constructor, every instance gets its own copy of that function in memory — wasteful. On the prototype, all instances share one copy."
+
+[SLIDE 21: What the new Keyword Actually Does]
+Slide should show: Four numbered steps in a box. 1. Creates a brand new empty object {}. 2. Sets that object's [[Prototype]] to Dog.prototype. 3. Runs the constructor function with this pointing to the new object. 4. Returns the new object automatically. Below: A warning box — "If you forget new, this becomes the global object (window in browsers) — or throws in strict mode. Always use new with constructor functions."
+
+"The new keyword is doing four things you don't see. First, it creates an empty object. Second, it wires up the prototype link. Third, it runs your constructor with this pointing at that new object so your assignments land on it. Fourth, it hands that object back to you. This is important: you don't write return this inside the constructor. new handles the return. The gotcha is forgetting new — if you call Dog('Rex') without it, this points at the global scope and you silently pollute it with name and breed properties. In strict mode it throws an error. Either way it's a bug. Capital letter convention exists precisely to remind you to use new."
+
+[SLIDE 22: Prototype-Based Inheritance with Constructor Functions]
+Slide should show: Full code example. Animal constructor function. Dog constructor function calling Animal.call(this, name) — comment: "borrows the parent constructor". Dog.prototype = Object.create(Animal.prototype) — comment: "links the prototype chain". Dog.prototype.constructor = Dog — comment: "restores the constructor reference that Object.create wiped". A new Dog instance at the bottom.
+
+"Setting up inheritance manually requires three exact steps and if you miss one the chain breaks. First: call the parent constructor with .call(this) inside the child — this copies the parent's instance properties onto the child. Second: use Object.create(Animal.prototype) to link the chain — not new Animal(), because new Animal() would run the constructor and require arguments you may not have. Third: restore Dog.prototype.constructor back to Dog, because Object.create replaces the whole prototype object and loses the constructor reference. It's verbose. It's error-prone. You should understand it because it's what's happening under the hood — but ES6 classes exist precisely so you don't have to write this by hand."
+
+Pause — questions on prototypes before we move into classes.
+
+
+---
+
+
+SECTION 3: CLASSES AND OOP PATTERNS (18 minutes)
+
+[SLIDE 23: Section Header — "ES6 Classes: Same System, Cleaner Syntax"]
+Slide should show: Side-by-side comparison taking up the full slide. Left side: the full constructor function + Object.create inheritance pattern from the previous section. Right side: the equivalent ES6 class doing the same thing. Both produce identical prototype chains.
+
+"ES6 classes are syntactic sugar. I want to be very direct about that. They don't create a new kind of object. They don't change how prototypes work. They generate the exact same prototype chain you saw on the last slide. The left and right blocks here produce identical results — the class version just took a fraction of the time to write and is immediately readable to any developer who looks at it."
+
+[SLIDE 24: Class Syntax — The Constructor]
+Slide should show: A class with just the constructor shown and labeled. class Dog { constructor(name, breed) { this.name = name; this.breed = breed; } } Labels pointing to: the class keyword, the class name, the constructor method, and this.name = name labeled as "instance property."
+
+"The constructor is the function that runs when you call new Dog(). It's where you receive arguments and use this to attach properties to the new instance. A few rules: there can only be one constructor per class. If you don't write one at all, JavaScript provides a default empty constructor for you. And this inside a constructor always refers to the new object being created."
+
+[SLIDE 25: Class Syntax — Instance Methods]
+Slide should show: The Dog class with two instance methods added: bark() { return this.name + ' says woof'; } and fetch(item) { return this.name + ' fetches ' + item; } A label: "Instance methods go on the prototype automatically — all instances share one copy."
+
+"Instance methods are defined directly in the class body — no commas between them, no function keyword, nothing extra. Every method you define here automatically lands on Dog.prototype, just like we did manually with Dog.prototype.bark in the constructor function approach. All instances of Dog share these methods in memory. The class syntax is just generating that same prototype setup for you."
+
+[SLIDE 26: Class Syntax — Static Methods]
+Slide should show: The Dog class with a static method added: static create(name, breed) { return new Dog(name, breed); } Below, calling it: const rex = Dog.create('Rex', 'Lab'); — comment: "called on the class, not on an instance". A second example: static validate(name) { return typeof name === 'string' && name.length > 0; }
+
+"Static methods belong to the class itself, not to any instance. You call Dog.create(), not rex.create(). They don't have access to instance properties because there's no this pointing to an instance — this inside a static method refers to the class itself. The most common use case for static methods is factory methods — a cleaner way to create objects with validation or defaults built in. Utility functions that are logically related to the class but don't need an instance also belong as statics."
+
+[SLIDE 27: Class Syntax — Getters & Setters]
+Slide should show: A class with a private-style field and accessor pair. get fullName() { return this.firstName + ' ' + this.lastName; } — comment: "looks like a property access from outside: person.fullName". set age(value) { if (value < 0) throw new Error('Age cannot be negative'); this._age = value; } — comment: "intercepts assignment: person.age = 25".
+
+"Getters and setters let you intercept property reads and writes without changing the calling code. A getter looks like a method but is accessed like a property — no parentheses. You define get fullName() but call it as person.fullName, not person.fullName(). This is great for computed properties that derive their value from other properties. Setters intercept assignment — person.age = 25 triggers your set age function where you can validate before storing the value. Together these give you controlled access to a class's internals while keeping a clean external interface."
+
+[SLIDE 28: Inheritance — extends]
+Slide should show: A parent class Animal with a constructor and a speak() method. A child class Dog extends Animal. The Dog class with its own constructor. A comment on extends: "Sets up the prototype chain — Dog.prototype links to Animal.prototype automatically."
+
+"extends does the prototype chain wiring for you — the same thing that took three manual steps with constructor functions. When you write class Dog extends Animal, JavaScript sets up Dog.prototype to inherit from Animal.prototype. That's it. One keyword replaces all three of those manual steps. Dog instances can now access everything on Animal.prototype through the chain."
+
+[SLIDE 29: Inheritance — super() in the Constructor]
+Slide should show: Dog's constructor with super(name) called on the first line. A large warning callout: "super() must be called before you use this in a child constructor. Forgetting it throws: ReferenceError: Must call super constructor in derived class before accessing 'this'." Below: what super() does — "calls Animal's constructor with this pointing to the Dog instance being created."
+
+"super() inside a constructor calls the parent class's constructor. And this is absolutely required — it's not optional. You must call super() before you access this in a child constructor. The reason is that the parent constructor is what sets up the instance, and until that runs, JavaScript considers the object uninitialized. Try to touch this before calling super() and you get a ReferenceError. Always put super() on the first line of a child constructor. That's the safe rule."
+
+[SLIDE 30: Inheritance — Method Overriding & super.method()]
+Slide should show: Two versions of a Dog class override side by side. Left: speak() { return 'Rex barks loudly'; } — comment: "completely replaces the parent method". Right: speak() { return super.speak() + ' and wags tail'; } — comment: "runs the parent method first, then adds to it". Output shown for each.
+
+"Overriding a method is as simple as defining it again in the child class. The child's version takes precedence because JavaScript finds it first when walking up the prototype chain. But if you want the parent's behavior too — not instead of it, in addition to it — you use super.methodName(). This is the extend pattern: run the parent's logic, then layer on your own. A Dog's speak might call Animal's speak to get the basic output, then append something breed-specific."
+
+[SLIDE 31: The Four Pillars of OOP]
+Slide should show: Four labeled boxes in a grid. (1) Encapsulation — "Hide internal state. Expose only what's necessary." (2) Abstraction — "Simplify complex systems. Expose a clean interface, hide the details." (3) Inheritance — "Share behavior between related classes through the prototype chain." (4) Polymorphism — "Different types respond to the same method call in their own way."
+
+"These four pillars are the vocabulary of object-oriented design. They're not JavaScript-specific — they show up in every OOP language. What makes JavaScript interesting is how it implements them. Inheritance is prototype-based, not class-based at its core. Polymorphism doesn't require interfaces or type declarations. Let's look at how each pillar actually looks in JavaScript code."
+
+[SLIDE 32: Encapsulation — Private Fields]
+Slide should show: A BankAccount class. Private field declared at top: #balance = 0; Constructor and a deposit() method and a getBalance() method that use #balance. Below the class, an attempt to access #balance from outside: account.#balance — marked with a red X and comment: "SyntaxError at parse time — not even a runtime error." A contrast note: "Before ES2022, developers used _balance by convention — underscore meant 'please don't touch this' but nothing enforced it."
+
+"Private class fields use the # prefix and they are truly private — not by convention but enforced by the language itself. The engine rejects any attempt to read or write a # field from outside the class at parse time — before the code even runs. This is a big deal. For years JavaScript developers used an underscore prefix as a social convention to signal 'this is internal, don't touch it,' but nothing stopped you from touching it. # actually stops you. Use private fields for anything that's internal state — balances, passwords, cache data, internal counters."
+
+[SLIDE 33: Encapsulation — Public Class Fields]
+Slide should show: A User class with public class fields declared above the constructor: name = ''; role = 'user'; isActive = true; Then a constructor below. A note: "Public class fields make the object's shape visible at the top of the class — you can see all instance properties in one place without reading the constructor."
+
+"Public class fields are declared at the top of the class body before the constructor. They're essentially shorthand for this.name = '' inside the constructor, but because they're up top they make the object's shape immediately obvious. Any developer reading your class can see all the instance properties at a glance without scrolling through constructor code. It's a readability win and it's now standard practice."
+
+[SLIDE 34: Polymorphism in Practice]
+Slide should show: Three classes — Animal, Dog, Cat — each with a speak() method returning different things. Then: const animals = [new Dog(), new Cat(), new Dog()]; animals.forEach(animal => console.log(animal.speak())); Output shown. Comment: "Same call. Three different behaviors. No type checking needed."
+
+"Polymorphism means one interface, multiple implementations. The forEach loop calls .speak() on every element without knowing or caring what type of animal it is. JavaScript checks each object's prototype chain at runtime and calls the right speak(). No interfaces. No type annotations. No switch statements checking what kind of animal it is. This is duck typing — if it has a speak() method, we can call speak() on it. That's the JavaScript way."
+
+[SLIDE 35: Abstraction in Practice]
+Slide should show: A DatabaseConnection class. Private fields: #host, #port, #connection. A public connect() method that internally calls three private methods: #validateConfig(), #openSocket(), #authenticate(). From the outside, a caller just writes: db.connect(). Comment: "The caller doesn't know or care how connect() works internally. That complexity is hidden."
+
+"Abstraction means the outside world gets a simple interface and the messy details stay hidden. Your DatabaseConnection class might do a dozen things internally to open a connection — validate the config, open a socket, authenticate, set up a connection pool. None of that should be the caller's concern. They call db.connect() and it either works or it doesn't. Private fields and private methods (also prefixed with #) are your tools for keeping internal complexity invisible."
+
+[SLIDE 36: Composition Over Inheritance]
+Slide should show: Two contrasting examples. Left side labeled "Inheritance approach" — a chain: Vehicle → Car → ElectricCar → ElectricSportsCar. A note below: "Adding features requires extending the chain. Gets fragile." Right side labeled "Composition approach" — an ElectricCar class that receives hasBattery, hasTurbo as mixins/capabilities. A note: "Add capabilities like building blocks. More flexible."
+
+"Deep inheritance chains are brittle. When you inherit from a parent, you inherit everything — the good parts and the parts that don't apply. And if the parent changes, every child is affected. Composition says: instead of inheriting all the behavior of a parent, give an object exactly the capabilities it needs, assembled from focused, reusable pieces. JavaScript's flexibility — objects are just objects, you can attach anything to anything — makes composition especially natural here. This is a principle, not a syntax feature, but it's one of the most important design decisions you'll make when building systems."
+
+Pause — questions on Classes and OOP before we move on.
+
+
+---
+
+
+SECTION 4: ES MODULES (10 minutes)
+
+[SLIDE 37: Section Header — "ES Modules: Organizing Real Applications"]
+Slide should show: The problem statement: a visualization of one enormous single JavaScript file with hundreds of functions all in global scope — arrows showing everything can see everything. Label: "The old way — one file, global scope, naming collisions everywhere."
+
+"As your applications grow you cannot keep everything in one file. And even when you split into multiple files the old way — multiple script tags in HTML — everything lands in the same global scope. That means functions in file A can accidentally overwrite variables in file B. There's no way to say 'this is mine, you don't get access to it.' Modules solve this."
+
+[SLIDE 38: What Modules Give You]
+Slide should show: Three benefits listed with a diagram for each. (1) Scope isolation — each module file has its own scope. Variables do not leak into the global namespace. (2) Explicit dependencies — you declare exactly what you need with import. Nothing is implicit. (3) Explicit exports — you declare exactly what you share with export. Everything else is private to the module by default.
+
+"Modules give you three things. Scope isolation: every module file is its own private scope. A variable declared in math.js does not exist in app.js unless you explicitly export and import it. Explicit dependencies: your import statements at the top of a file tell you exactly what that file depends on — no mystery globals. Explicit exports: everything in a module is private by default. You have to opt in to sharing it. This combination makes large codebases manageable."
+
+[SLIDE 39: Named Exports — Exporting]
+Slide should show: A math.js file with three export styles. (1) Inline export: export const PI = 3.14159; (2) Export on function declaration: export function add(a, b) { return a + b; } (3) Grouped export at the bottom of the file: export { multiply, subtract }; A note: "All three styles produce the same result — named exports."
+
+"There are three ways to write named exports and they all do the same thing. You can put export directly on a declaration. You can export functions when you define them. Or you can write all your exports in one grouped statement at the bottom of the file — many developers prefer this because it gives you one place to see everything a module exposes."
+
+[SLIDE 40: Named Exports — Importing]
+Slide should show: Three import examples. (1) Basic named import: import { add, PI } from './math.js'; (2) Renaming on import: import { add as addNumbers } from './math.js'; (3) Importing everything as a namespace object: import * as MathUtils from './math.js'; — then used as MathUtils.add(2, 3). A note: "File extension .js is required in native ES Modules."
+
+"On the import side you use curly braces and the exact same name used in the export. You can rename with as — useful when two modules export something with the same name. And you can import everything as a namespace object with * as — then access things as properties on that object. That third pattern is helpful when you're using a lot of things from one module and don't want a long destructuring list."
+
+[SLIDE 41: Default Exports]
+Slide should show: Two files. File 1 — UserCard.js: export default function UserCard(props) { } with a comment: "One default export per file." File 2 — app.js showing two different valid imports of the same default: import UserCard from './UserCard.js'; and import Card from './UserCard.js'; — comment: "Importer chooses the name." Below: a mixed example file showing both a default and named exports together.
+
+"Default exports — one per file. When you import a default, you don't use curly braces and you can name it whatever you want. This is the pattern React components follow: every component file has one default export — the component itself. Named exports in the same file are for secondary things like helper functions or constants. You can have both in one file. Understanding which things are default and which are named is what lets you read any import statement in any codebase."
+
+[SLIDE 42: Named vs. Default — When to Use Which]
+Slide should show: A two-column guide. Left column "Use Named Exports when": exporting multiple things from one file, exporting utility functions and constants, the name should be consistent across the codebase. Right column "Use Default Exports when": one thing is the clear main export of the file, it's a React/Vue component, the consumer should have naming flexibility.
+
+"There's ongoing debate about this in the community but here's practical guidance. Named exports are better for utility files — a math.js or validators.js that exports many things. Default exports are better for files that have one clear purpose — a component file, a class file, a single hook. The most important thing is consistency within a project. Pick a convention and stick to it."
+
+[SLIDE 43: Module Bundlers — The Why]
+Slide should show: Diagram — many source files on the left, a bundler box in the middle (labeled Webpack / Vite / Rollup), optimized output files on the right going to a browser. Three labels on the bundler: Tree Shaking, Code Splitting, Minification.
+
+"For production applications you run your code through a bundler. Vite has become the standard for new projects — it's extremely fast in development because it skips bundling during dev and only bundles for production. What do bundlers do? Tree shaking: any code you exported but never imported anywhere gets removed from the final bundle. Code splitting: your app gets broken into chunks that load on demand — users only download the code for pages they actually visit. Minification: variable names get shortened and whitespace is removed to shrink file size. You don't need to configure these deeply today but you need to understand why they exist."
+
+Pause — questions on Modules before we move on.
+
+
+---
+
+
+SECTION 5: MAP AND SET (10 minutes)
+
+[SLIDE 44: Section Header — "Map and Set: The Right Tool for the Right Job"]
+Slide should show: Two contrast rows. Row 1: "Object — keys must be strings or symbols / Map — keys can be anything." Row 2: "Array — allows duplicates, O(n) membership check / Set — unique values only, O(1) membership check."
+
+"Objects and arrays are the workhorses of JavaScript. But they have specific limitations. Map and Set were introduced in ES6 specifically to address those limitations. The key question to always ask is: am I using an object for a schema — a fixed set of named properties — or am I using it as a data store where I'm adding and removing entries dynamically? If it's the second one, Map is almost always the better choice."
+
+[SLIDE 45: Map — Basics & Key Differences]
+Slide should show: Code block creating a Map and using its core API. const map = new Map(); map.set('name', 'Alice'); map.set(42, 'answer'); map.set(someObject, 'metadata'); map.get('name'); map.has(42); map.delete('name'); map.size; A callout box: "Any value can be a key — string, number, object, function, anything."
+
+"A Map stores key-value pairs just like an object, but with one critical difference: keys can be any type. An object forces every key to be a string or symbol — even if you write obj[42], the 42 gets converted to the string '42'. A Map preserves the actual type of your keys. This opens up use cases that are impossible with plain objects: using DOM elements as keys to store associated metadata, using objects as keys in a cache, using numbers as true numeric keys."
+
+[SLIDE 46: Map — Iteration]
+Slide should show: Three iteration examples. (1) for...of over entries: for (const [key, value] of map) { } (2) Iterating just keys: for (const key of map.keys()) { } (3) Iterating just values: for (const value of map.values()) { } A note: "Maps maintain insertion order. Iterating always returns entries in the order they were added."
+
+"Maps are directly and predictably iterable. You can loop over entries, keys, or values. The destructuring in for (const [key, value] of map) is the pattern you'll use most often — it's clean and gives you both sides of each pair in one line. Insertion order is guaranteed by the spec — the first thing you added comes out first when you iterate. This makes Maps reliable for ordered data structures."
+
+[SLIDE 47: Map — When to Use It vs. Plain Object]
+Slide should show: Decision guide in two columns. "Use Map when": keys are dynamic or non-string, you're frequently adding/removing entries, you need to iterate in insertion order reliably, you need .size without Object.keys().length, the data is a collection rather than a schema. "Use plain object when": keys are known, fixed, string property names, you're defining the shape of a data structure, you need JSON serialization (Map doesn't serialize to JSON automatically).
+
+"Here's the practical decision guide. The most important signal is this: if you're building something with a fixed set of known property names, use an object. If you're building a dynamic key-value store where entries come and go, use a Map. The other gotcha worth knowing: Map does not serialize to JSON automatically. JSON.stringify(map) gives you {} — an empty object. If you need to send map data over the wire you'll need to convert it first."
+
+[SLIDE 48: Set — Basics & Unique Values]
+Slide should show: Code block. const set = new Set([1, 2, 3, 2, 1]); — comment: "duplicate values are silently ignored". set.size // 3. set.add(4); set.has(2); // true. set.delete(3); A one-liner deduplication: const unique = [...new Set(array)]; — comment: "most common real-world use of Set."
+
+"A Set is a collection of unique values. Period. Add a duplicate and nothing happens — no error, no second copy, it's just silently ignored. The most common use you'll see day-to-day is the deduplication one-liner: spread an array into a Set to remove duplicates, then spread it back into an array. It's two characters and it handles the problem cleanly."
+
+[SLIDE 49: Set — Performance & Iteration]
+Slide should show: Performance comparison. Array.includes() — O(n): "scans every element until it finds a match or reaches the end." Set.has() — O(1): "checks directly, independent of size." A code example of looping over a Set with for...of. A note: "Sets are iterable. Insertion order is preserved."
+
+"The performance difference between Array.includes() and Set.has() matters at scale. includes() scans every element in order — if you have 100,000 items and the one you're looking for is last, it checked 100,000 items. Set.has() is a constant-time lookup — it doesn't matter if your Set has 10 items or 10 million, the lookup takes the same time. If you have a large collection and you're checking membership frequently, converting it to a Set is a real performance improvement, not just a style choice."
+
+[SLIDE 50: Set — Real-World Uses]
+Slide should show: Three practical examples. (1) Deduplicating tags from a form: const tags = [...new Set(rawTags)]. (2) Tracking visited pages in a router: const visited = new Set(); visited.add('/home'); if (!visited.has('/about')) { }. (3) Finding unique values from two arrays (union): const union = new Set([...arr1, ...arr2]).
+
+"Three real patterns. Deduplicating form input — users often submit duplicate tags and you want to silently clean that up before saving. Tracking visited state — a Set is perfect for this because you only care about membership, not order or count. And computing a union of two arrays — spread both into one Set and every duplicate across both arrays disappears. There are similar patterns for intersection and difference that are worth knowing but follow the same idea."
+
+Pause — questions on Map and Set before we move on.
+
+
+---
+
+
+SECTION 6: ADVANCED BUILT-INS OVERVIEW (6 minutes)
+
+[SLIDE 51: Section Header — "Advanced Built-ins: Know They Exist"]
+Slide should show: Section header with a framing statement: "You won't use these every day as a beginner. But you will encounter them in real codebases. Know what each one is, what problem it solves, and where to look when you need it."
+
+"Five more features. I'm not going deep on any of these today — that's not the goal. The goal is that when you see Symbol, or Proxy, or WeakMap in a codebase, you don't panic. You know what category of thing it is and why it exists."
+
+[SLIDE 52: Symbol]
+Slide should show: Two code examples. (1) Creating symbols: const id = Symbol('id'); const id2 = Symbol('id'); id === id2 // false — comment: "always unique, even with the same description". (2) Using a symbol as a property key: const user = { [Symbol('id')]: 123, name: 'Alice' }; — comment: "symbol keys don't show up in for...in or Object.keys()".
+
+"Symbol is a primitive type that always produces a unique value. Symbol('id') and another Symbol('id') are not equal — ever. The string you pass in is just a description for debugging, not an identifier. Symbols are used as property keys when you want to guarantee no key collision — useful when multiple libraries might add properties to the same object and you don't want them to overwrite each other. The most important built-in symbol is Symbol.iterator, which is what makes an object work with for...of."
+
+[SLIDE 53: The Iterator Protocol]
+Slide should show: The definition: "An object is iterable if it has a [Symbol.iterator] method that returns an iterator. An iterator is an object with a next() method that returns { value, done }." A list: "Built-in iterables: Array, String, Map, Set, NodeList." Below: a simple custom iterable showing the [Symbol.iterator] method structure.
+
+"The iterator protocol is the contract that makes for...of work. Arrays work with for...of. Strings work with for...of. Maps and Sets work with for...of. They all implement the same protocol: a [Symbol.iterator] method that returns an object with a next() function. Each call to next() returns the next value and a boolean saying whether iteration is done. You can implement this on your own objects to make them iterable. You won't need to write custom iterables often, but knowing this is why for...of works is important."
+
+[SLIDE 54: Generators]
+Slide should show: Code example of a simple generator. function* count() { yield 1; yield 2; yield 3; } const gen = count(); gen.next() // { value: 1, done: false }. gen.next() // { value: 2, done: false }. gen.next() // { value: 4, done: true }. A use case note: "Infinite sequences — a generator that yields IDs forever, stopping only when you stop calling next()."
+
+"Generators are functions that can pause and resume. The function* syntax declares a generator. yield pauses the function and returns a value. The next time you call .next() on the generator, it picks up right where it left off. This makes generators perfect for lazy sequences — producing values one at a time on demand rather than all at once. An infinite ID generator, a paginated data fetcher, a custom iterator — these are all natural uses for generators."
+
+[SLIDE 55: WeakMap & WeakSet]
+Slide should show: Side-by-side comparison. Left: Map and Set — "Hold strong references. Object keys/values prevent garbage collection." Right: WeakMap and WeakSet — "Hold weak references. If no other reference to the key exists, it can be garbage collected." Use case example: const metadata = new WeakMap(); metadata.set(domElement, { clicks: 0 }); — comment: "When domElement is removed from the DOM, the metadata is automatically cleaned up."
+
+"WeakMap and WeakSet are like Map and Set but with one key difference: they hold weak references to their keys. If the only thing keeping an object in memory is being a key in a Map, that object cannot be garbage collected — the Map holds a strong reference to it. WeakMap doesn't. If there are no other references to the key object, the garbage collector can clean it up, and the WeakMap entry disappears automatically. This is critical for caching, for storing metadata about DOM elements, and for any pattern where you attach data to objects that have their own lifecycle you don't control."
+
+[SLIDE 56: Proxy & Reflect]
+Slide should show: A minimal Proxy example. const handler = { get(target, key) { console.log('Getting ' + key); return target[key]; }, set(target, key, value) { if (typeof value !== 'number') throw new TypeError('Only numbers allowed'); target[key] = value; return true; } }; const proxy = new Proxy({}, handler); A note: "Vue 3's entire reactivity system — the thing that makes templates re-render when data changes — is built on Proxy."
+
+"Proxy lets you wrap an object and intercept fundamental operations on it — reading a property, writing a property, calling a function, checking if a property exists, anything. You define a handler object with trap methods for the operations you want to intercept. Reflect is the companion API that gives you the default implementations of those same operations — it's how you call through to the original behavior inside a trap. Together these are what makes modern reactivity systems work. When you use Vue 3 or MobX and your UI updates automatically when data changes, Proxy is what's detecting those changes."
+
+Pause — final questions on the advanced built-ins.
+
+
+---
+
+
+CLOSING (3 minutes)
+
+[SLIDE 57: Key Takeaways]
+Slide should show: Six numbered takeaways, one per section, each a single sentence.
+
+"Let me leave you with the six things I most want you to carry out of here.
+One — ES6 features like destructuring, spread/rest, and default parameters are not optional extras. They're the baseline of modern JavaScript and you'll see them in every codebase you touch.
+Two — JavaScript's inheritance model is prototype-based. ES6 classes are a cleaner surface over that same system, not a replacement for it. Understand both.
+Three — The four OOP pillars and private class fields give you the tools to write code that's intentional, maintainable, and well-encapsulated.
+Four — ES Modules give every file its own scope and make dependencies explicit. Bundlers like Vite build on top of that to produce optimized production code.
+Five — Map and Set are purpose-built for specific use cases. Knowing when to reach for them over objects and arrays is a mark of experience.
+Six — Symbol, Generators, WeakMap/WeakSet, and Proxy/Reflect are advanced tools. Know what they are and what problem each one solves — you'll know when to go deeper."
+
+[SLIDE 58: What's Coming Next]
+Slide should show: A preview card for the next session: "Next Session — Async JavaScript: The Event Loop, Promises, and async/await." Below it: "Everything from today feeds into that session. Modules connect to how async code is organized. Classes and prototypes show up in every library we'll use."
+
+"Next session is Async JavaScript and it gets its own full hour. Everything we did today is the foundation — the module system, the class patterns, the object model. Make sure your notes are solid because we're building on all of it.
+We have [X] coming up that covers classes and modules together. Any final questions?"
