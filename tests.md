@@ -2,13 +2,18 @@
 
 ## HackerRank Tests
 
+### Profiling Assessments
+| Test Name | Topics | Duration | Link | Notes |
+|-----------|--------|----------|------|-------|
+| Java Profiling Assessment | OOP, Access modifiers, overloading, interfaces, abstract classes | 120 min | [Link](https://www.hackerrank.com/work/tests/2181142) |  |
+
+### Misc Exams
 | Test Name | Topics | Duration | Link | Notes |
 |-----------|--------|----------|------|-------|
 | Software Engineer Coding Challenge | Java (OOP, Streams, Multithreading), Spring Boot (Basic CRUD Design) | 150 min | [Link](https://www.hackerrank.com/work/tests/2150834) | `synchronous` function tagging |
 | Assimilation Assessment | SQL, Spring Boot (Basic CRUD Design) | 150 min | [Link](https://www.hackerrank.com/work/tests/589891) | Rolling Window, `SELECT CASE`, MCQs: `SUBSTR`,`INSTR`, `DECODE`. MCQs quite challenging |
 
 ### Final Exams
-
 | Test Name | Topics | Duration | Link | Notes |
 |-----------|--------|----------|------|-------|
 | Core Java Hackerrank | Java | 120 min | [Link](https://www.hackerrank.com/work/tests/2146489) | Lambda Expressions, Functional Interfaces, String Arrays, Inheritance, Interfaces, Generics, Polymorphism, Java Streams, Iterators, Concurrent Threads, Collections, Custom exceptions |
